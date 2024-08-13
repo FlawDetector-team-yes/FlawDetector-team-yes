@@ -1,4 +1,7 @@
+//tailwind.config.ts
+
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 const config: Config = {
   content: [
@@ -56,6 +59,173 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function ({ addComponents }) {
+      const filledBtn = {
+        ".fill-radius-8px-lg": {
+          backgroundColor: "#6100FF",
+          fontFamily: "inter",
+          fontWeight: "600",
+          width: "196px",
+          height: "56px",
+          borderRadius: "8px",
+          padding: "8px 20px 8px 20px",
+          color: "#ffffff",
+        },
+        ".fill-radius-8px-md": {
+          backgroundColor: "#6100FF",
+          fontFamily: "inter",
+          fontWeight: "300",
+          width: "113px",
+          height: "56px",
+          borderRadius: "8px",
+          padding: "16px 20px 16px 20px",
+          color: "#ffffff",
+        },
+        ".fill-radius-8px-sm": {
+          backgroundColor: "#6100FF",
+          fontFamily: "inter",
+          fontWeight: "300",
+          width: "101px",
+          height: "40px",
+          borderRadius: "8px",
+          padding: "8px 20px 8px 20px",
+          color: "#ffffff",
+        },
+        ".fill-radius-999px-lg": {
+          backgroundColor: "#6100FF",
+          fontFamily: "inter",
+          fontWeight: "300",
+          width: "121px",
+          height: "56px",
+          borderRadius: "999px",
+          padding: "16px 24px 16px 24px",
+          color: "#ffffff",
+        },
+        ".fill-radius-999px-sm": {
+          backgroundColor: "#6100FF",
+          fontFamily: "inter",
+          fontWeight: "300",
+          width: "101px",
+          height: "40px",
+          borderRadius: "999px",
+          padding: "8px 20px 8px 20px",
+          color: "#ffffff",
+        },
+      };
+      const outlineBtn = {
+        ".out-radius-8px-lg": {
+          backgroundColor: "#ffffff",
+          fontFamily: "inter",
+          fontWeight: "600",
+          width: "196px",
+          height: "56px",
+          border: "1px solid #C9A8FF",
+          borderRadius: "8px",
+          padding: "8px 20px 8px 20px",
+          color: "#6100FF",
+        },
+        ".out-radius-8px-md": {
+          backgroundColor: "#ffffff",
+          fontFamily: "inter",
+          fontWeight: "300",
+          width: "113px",
+          height: "56px",
+          border: "1px solid #C9A8FF",
+          borderRadius: "8px",
+          padding: "16px 20px 16px 20px",
+          color: "#6100FF",
+        },
+        ".out-radius-8px-sm": {
+          backgroundColor: "#ffffff",
+          fontFamily: "inter",
+          fontWeight: "300",
+          width: "101px",
+          height: "40px",
+          border: "1px solid #C9A8FF",
+          borderRadius: "8px",
+          padding: "8px 20px 8px 20px",
+          color: "#6100FF",
+        },
+        ".out-radius-999px-lg": {
+          backgroundColor: "#ffffff",
+          fontFamily: "inter",
+          fontWeight: "300",
+          width: "121px",
+          height: "56px",
+          border: "1px solid #C9A8FF",
+          borderRadius: "999px",
+          padding: "16px 24px 16px 24px",
+          color: "#6100FF",
+        },
+        ".out-radius-999px-sm": {
+          backgroundColor: "#ffffff",
+          fontFamily: "inter",
+          fontWeight: "300",
+          width: "101px",
+          height: "40px",
+          border: "1px solid #C9A8FF",
+          borderRadius: "999px",
+          padding: "8px 20px 8px 20px",
+          color: "#6100FF",
+        },
+      };
+      const tonalBtn = {
+        ".tonal-radius-8px-lg": {
+          backgroundColor: "#f2ebff",
+          fontFamily: "inter",
+          fontWeight: "600",
+          width: "196px",
+          height: "56px",
+          borderRadius: "8px",
+          padding: "8px 20px 8px 20px",
+          color: "#6100FF",
+        },
+        ".tonal-radius-8px-md": {
+          backgroundColor: "#f2ebff",
+          fontFamily: "inter",
+          fontWeight: "300",
+          width: "113px",
+          height: "56px",
+          borderRadius: "8px",
+          padding: "16px 20px 16px 20px",
+          color: "#6100FF",
+        },
+        ".tonal-radius-8px-sm": {
+          backgroundColor: "#f2ebff",
+          fontFamily: "inter",
+          fontWeight: "300",
+          width: "101px",
+          height: "40px",
+          borderRadius: "8px",
+          padding: "8px 20px 8px 20px",
+          color: "#6100FF",
+        },
+        ".tonal-radius-999px-lg": {
+          backgroundColor: "#f2ebff",
+          fontFamily: "inter",
+          fontWeight: "300",
+          width: "121px",
+          height: "56px",
+          borderRadius: "999px",
+          padding: "16px 24px 16px 24px",
+          color: "#6100FF",
+        },
+        ".tonal-radius-999px-sm": {
+          backgroundColor: "#f2ebff",
+          fontFamily: "inter",
+          fontWeight: "300",
+          width: "101px",
+          height: "40px",
+          borderRadius: "999px",
+          padding: "8px 20px 8px 20px",
+          color: "#6100FF",
+        },
+      };
+      addComponents(filledBtn);
+      addComponents(outlineBtn);
+      addComponents(tonalBtn);
+    }),
+  ],
 };
 export default config;
