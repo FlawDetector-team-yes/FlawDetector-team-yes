@@ -2,11 +2,11 @@ import Support from "../common/Support";
 
 function ServiceArticle() {
   return (
-    <div className="item-middle h-full">
+    <article className="item-middle h-[1280px]">
       <div className="inline-flex h-[817px] items-center justify-start gap-[124px]">
         <div className="inline-flex h-[808px] flex-col items-start justify-between">
           <div className="flex flex-col items-start justify-start gap-[30px] text-left">
-            <h2 className="font-['Inter'] text-6xl font-bold leading-[80px] text-[#6100ff]">
+            <h2 className="font-['Inter'] text-6xl font-bold leading-[80px] text-primary-500">
               서비스이용에
               <br />
               문제가 생겼나요?
@@ -38,7 +38,7 @@ function ServiceArticle() {
         </div>
         <Support />
       </div>
-    </div>
+    </article>
   );
 }
 export default ServiceArticle;

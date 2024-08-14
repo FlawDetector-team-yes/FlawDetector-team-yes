@@ -5,9 +5,9 @@ function CaretDoubleDown() {
   const onClick = () => {};
 
   return (
-    <button onClick={onClick}>
+    <button onClick={onClick} className="animate-bounce">
       <Image
-        src="./images/CaretDoubleDown.svg"
+        src="/images/CaretDoubleDown.svg"
         alt="CaretDoubleDown"
         width={56}
         height={56}

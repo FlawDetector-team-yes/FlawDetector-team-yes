@@ -1,18 +1,20 @@
 import Image from "next/image";
+import CheckingImg from "/public/images/Checking.svg";
 
 function ThirdArticle() {
   const checking = `bg-[url('../../public/images/Checking.svg')]`;
   return (
-    <div className="z-0 -mb-10 flex h-full justify-center gap-80 align-middle">
+    <div className="relative z-0 flex h-[1280px] justify-center gap-80 align-middle">
       <Image
-        src="./images/Checking.svg"
+        className=""
+        src={CheckingImg}
         alt="Checking"
         width={725}
         height={977}
       />
       <div className="item-middle">
         <div className="inline-flex h-[280px] flex-col items-end justify-center gap-[34px]">
-          <h2 className="text-right font-['Inter'] text-6xl font-bold leading-[80px] text-[#6100ff]">
+          <h2 className="text-right font-['Inter'] text-6xl font-bold leading-[80px] text-primary-500">
             최신 보안 동향을
             <br />
             실시간으로 확인하세요.

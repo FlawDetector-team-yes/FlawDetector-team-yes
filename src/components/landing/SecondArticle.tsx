@@ -4,10 +4,10 @@ function SecondArticle() {
   return (
     <div
       id="target-section"
-      className="item-middle h-full gap-[350px] bg-[#f2ebff]"
+      className="item-middle h-[1280px] gap-[350px] bg-primary-50"
     >
       <div className="inline-flex flex-col items-start justify-center gap-[60px] text-left">
-        <h2 className="font-['Inter'] text-[80px] font-bold text-[#6100ff]">
+        <h2 className="font-['Inter'] text-[80px] font-bold text-primary-500">
           쉽고 편하게 <br />
           취약점을 발견하다
         </h2>

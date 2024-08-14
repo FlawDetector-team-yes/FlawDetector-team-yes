@@ -11,7 +11,7 @@ type Card = {
 
 function Card({ children, color, bgColor, labelText, image }: Card) {
   return (
-    <div className="item-middle flex h-[461.26px] w-[339.32px] flex-col gap-8 rounded-[40px] bg-white">
+    <div className="item-middle flex h-[461.26px] w-[339.32px] flex-col gap-8 rounded-[40px] bg-white shadow-2xl shadow-black">
       <Label color={color} bgColor={bgColor}>
         {labelText}
       </Label>
