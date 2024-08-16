@@ -3,6 +3,14 @@ import fileImg from "../../../public/images/file.png";
 import closeImg from "../../../public/images/x-mark-off.png";
 
 type TProgressBarProps = React.ComponentPropsWithoutRef<"button">;
+/**
+ * `InputChips` 컴포넌트는 파일 이름을 표시하고 닫기 버튼을 포함하는 사용자 인터페이스 요소를 렌더링합니다.
+ * 이 컴포넌트는 버튼 역할을 하며, 전달된 속성과 자식 요소를 포함합니다.
+ *
+ * @param {React.ButtonHTMLAttributes<HTMLButtonElement>} props - 컴포넌트에 전달되는 속성
+ * @param {React.ReactNode} props.children - 버튼에 표시할 내용
+ * @returns {JSX.Element} - 렌더링된 버튼 컴포넌트
+ */
 export default function InputChips({ children, ...rest }: TProgressBarProps) {
   return (
     <>
