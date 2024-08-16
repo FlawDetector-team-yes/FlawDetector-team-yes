@@ -1,32 +1,20 @@
 import { ReactNode } from "react";
 
-function Label({
-  children,
-  color,
-  bgColor,
-}: {
+interface LabelProps {
   children: ReactNode;
   color: string;
   bgColor: string;
-}) {
+}
+
+function Label({ children, color, bgColor }: LabelProps) {
   return (
     <div
-      className={
-        "inline-flex h-[46px] items-center justify-center gap-2.5 rounded-[999px] border px-3 py-2"
-      }
-      style={{
-        borderColor: color,
-        backgroundColor: bgColor,
-      }}
+      className="inline-flex h-[46px] items-center justify-center gap-2.5 rounded-full border px-3 py-2"
+      style={{ borderColor: color, backgroundColor: bgColor }}
     >
-      <div
-        className={`text-center font-['Inter'] text-xl font-medium leading-[30px]`}
-        style={{
-          color: color,
-        }}
-      >
+      <span className="text-center text-xl font-medium" style={{ color }}>
         {children}
-      </div>
+      </span>
     </div>
   );
 }
