@@ -23,3 +23,9 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #999999;
 }
+
+@layer components {
+  .item-middle {
+    @apply flex items-center justify-center;
+  }
+}
