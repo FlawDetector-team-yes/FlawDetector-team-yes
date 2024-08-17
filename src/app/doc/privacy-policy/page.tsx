@@ -1,7 +1,7 @@
 function PrivacyPolicyPage() {
   return (
-    <div className="mx-auto mb-[60px] flex w-[65vw] flex-col gap-[20px]">
-      <h1 className="pb-5 pt-10 text-xl font-semibold">개인정보 처리방침</h1>
+    <div className="mx-auto mb-[70px] flex w-[65vw] flex-col gap-[20px]">
+      <h1 className="pb-5 pt-10 text-2xl font-semibold">개인정보 처리방침</h1>
       <div className="flex flex-col gap-5 text-sm">
         <p>
           스팩스페이스 (이하 "회사")는 개인정보를 소중하게 생각하고 개인정보를
@@ -22,7 +22,7 @@ function PrivacyPolicyPage() {
           "회사"의 개인정보처리방침은 다음과 같은 내용을 포함하고 있습니다.
         </p>
       </div>
-      <div className="border-stroke-10 border-b pb-10">
+      <div className="border-b border-stroke-10 pb-10">
         <ul className="flex flex-col gap-1 indent-5 text-sm">
           <li>1. 개인정보의 수집 및 이용 목적, 항목 및 수집방법</li>
           <li>2. 개인정보의 제공 및 처리위탁</li>
@@ -37,8 +37,8 @@ function PrivacyPolicyPage() {
           <li>11. 고지의 의무</li>
         </ul>
       </div>
-      <div className="border-stroke-10 flex flex-col gap-5 border-b pb-10 pt-5 text-sm">
-        <h2 className="text-lg font-semibold">
+      <div className="flex flex-col gap-5 border-b border-stroke-10 pb-10 pt-5 text-sm">
+        <h2 className="text-xl font-semibold">
           1. 개인정보 수집의 이용 목적, 항목 및 수집방법
         </h2>
         <ul className="flex flex-col gap-1 indent-5">
@@ -61,8 +61,8 @@ function PrivacyPolicyPage() {
         </ul>
       </div>
       <div className="flex flex-col gap-5 pt-5 text-sm">
-        <h2 className="text-lg font-semibold">2. 권익침해 구제방법</h2>
-        <div className="border-stroke-10 flex flex-col gap-5 border-b pb-10">
+        <h2 className="text-xl font-semibold">2. 권익침해 구제방법</h2>
+        <div className="flex flex-col gap-5 border-b border-stroke-10 pb-10">
           <p>
             이용자는 개인정보침해로 인한 구제를 받기 위하여
             개인정보분쟁조정위원회, 한국인터넷진흥원 개인정보침해신고센터 등에
@@ -85,7 +85,7 @@ function PrivacyPolicyPage() {
           </ul>
         </div>
         <div className="flex flex-col gap-5">
-          <h2 className="pt-5 text-lg font-semibold">3. 고지의 의무</h2>
+          <h2 className="pt-5 text-xl font-semibold">3. 고지의 의무</h2>
           <div className="flex flex-col gap-2">
             <p>
               회사는 개인정보처리방침이 변경되는 경우에는 “회사”의 사이트
