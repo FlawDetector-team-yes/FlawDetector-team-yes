@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { FC } from "react";
 
-interface ModalState {
+type ModalState = {
   isOpen?: boolean;
   ModalContent?: FC<any>;
   props?: { [key: string]: any };
@@ -9,7 +9,7 @@ interface ModalState {
   setIsOpen?: () => void;
   setIsClose?: () => void;
   setModalContent?: (value: FC<any>) => void;
-}
+};
 
 function InitialContent() {
   return <div>오류입니다. 모달 콘텐츠를 입력해주세요</div>;
