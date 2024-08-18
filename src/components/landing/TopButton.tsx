@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import upArrow from "/public/images/up-active.png";
+import upArrow from "/public/images/up-active.svg";
 
 function TopButton() {
   const onClick = () => {
