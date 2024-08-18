@@ -4,7 +4,7 @@ import CaretDoubleDownIcon from "/public/images/CaretDoubleDown.svg";
 
 function CaretDoubleDown() {
   const handleClick = () => {
-    // 여기에 클릭 시 실행할 코드를 추가
+    window.scrollTo({ top: 1390, behavior: "smooth" });
   };
 
   return (
