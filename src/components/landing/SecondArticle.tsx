@@ -1,9 +1,9 @@
 import Image from "next/image";
-import BugAndDecoIcon from "/public/images/BugAndDeco.svg";
+import bugDecoIcon from "/public/images/bug-deco.svg";
 
 function SecondArticle() {
   return (
-    <article className="flex items-center justify-center bg-primary-50">
+    <article className="flex min-w-[1880px] items-center justify-center bg-primary-50">
       <div
         id="target-section"
         className="flex h-[1280px] gap-[350px] p-[60px] text-left"
@@ -27,12 +27,7 @@ function SecondArticle() {
             </p>
           </div>
         </div>
-        <Image
-          src={BugAndDecoIcon}
-          alt="BugAndDeco"
-          width={710}
-          height={1022}
-        />
+        <Image src={bugDecoIcon} alt="bugDecoIcon" width={710} height={1022} />
       </div>
     </article>
   );

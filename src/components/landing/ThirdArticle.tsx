@@ -3,7 +3,7 @@ import CheckingImg from "/public/images/Checking.svg";
 
 function ThirdArticle() {
   return (
-    <div className="relative z-0 flex h-[1280px] items-center justify-center gap-80">
+    <div className="relative z-0 flex h-[1280px] min-w-[1880px] items-center justify-center gap-80">
       <Image src={CheckingImg} alt="Checking" width={725} height={977} />
       <div className="flex h-[280px] flex-col items-end justify-center gap-[34px]">
         <h2 className="text-right font-['Inter'] text-6xl font-bold leading-[80px] text-primary-500">

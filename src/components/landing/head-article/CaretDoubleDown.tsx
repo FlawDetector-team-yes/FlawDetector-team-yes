@@ -4,7 +4,7 @@ import CaretDoubleDownIcon from "/public/images/CaretDoubleDown.svg";
 
 function CaretDoubleDown() {
   const handleClick = () => {
-    window.scrollTo({ top: 1390, behavior: "smooth" });
+    window.scrollTo({ top: 1280, behavior: "smooth" });
   };
 
   return (
