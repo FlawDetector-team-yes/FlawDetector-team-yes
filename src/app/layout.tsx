@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "@/css/globals.css";
 import Gnb from "@/components/common/Gnb";
 import Footer from "@/components/common/Footer";
+import ModalProvider from "@/components/modal/ModalProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,8 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className="relative">
         <Gnb />
+        <ModalProvider />
         {children}
         <Footer />
       </body>
