@@ -11,7 +11,6 @@ function Footer() {
     "text-center font-['Inter'] text-base font-medium leading-normal";
   const textGrayClass = `${textBaseClass} text-[#969696]`;
   const textDarkClass = `${textBaseClass} text-[#3f3f3f]`;
-  console.log(currentPath);
 
   return (
     <>
