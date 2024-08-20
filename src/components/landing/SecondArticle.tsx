@@ -1,9 +1,17 @@
 import Image from "next/image";
-import BugAndDecoIcon from "/public/images/BugAndDeco.svg";
+import bugDecoIcon from "/public/images/bug-deco.svg";
 
+/**
+ * Landing Page의 두 번째 아티클 -
+ * `SecondArticle` 컴포넌트는 코드 보안 관리의 중요성을 강조하는 내용을 담고 있는 섹션을 렌더링합니다.
+ * 이 섹션은 큰 제목, 코드 보안 관련 질문, 그리고 플로디텍터의 장점을 설명하는 문구로 구성되어 있습니다.
+ * 또한, 시각적 요소로 `bugDecoIcon` 이미지를 포함합니다.
+ *
+ * @returns {JSX.Element} 코드 보안 관리와 관련된 정보를 표시하는 섹션을 렌더링하는 JSX 요소를 반환합니다.
+ */
 function SecondArticle() {
   return (
-    <article className="flex items-center justify-center bg-primary-50">
+    <article className="flex min-w-[1880px] items-center justify-center bg-primary-50">
       <div
         id="target-section"
         className="flex h-[1280px] gap-[350px] p-[60px] text-left"
@@ -27,12 +35,7 @@ function SecondArticle() {
             </p>
           </div>
         </div>
-        <Image
-          src={BugAndDecoIcon}
-          alt="BugAndDeco"
-          width={710}
-          height={1022}
-        />
+        <Image src={bugDecoIcon} alt="bugDecoIcon" width={710} height={1022} />
       </div>
     </article>
   );

@@ -5,7 +5,7 @@ type ModalState = {
   isOpen?: boolean;
   ModalContent?: FC<any>;
   props?: { [key: string]: any };
-  setProps: (prop: object) => void;
+  setProps?: (prop: object) => void;
   setIsOpen?: () => void;
   setIsClose?: () => void;
   setModalContent?: (value: FC<any>) => void;
