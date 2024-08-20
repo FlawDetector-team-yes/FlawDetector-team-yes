@@ -2,13 +2,13 @@ import { create } from "zustand";
 import { FC } from "react";
 
 type ModalState = {
-  isOpen: boolean;
-  ModalContent: FC<any>;
-  props: { [key: string]: any };
-  setProps: (prop: object) => void;
-  setIsOpen: () => void;
-  setIsClose: () => void;
-  setModalContent: (value: FC<any>) => void;
+  isOpen?: boolean;
+  ModalContent?: FC<any>;
+  props?: { [key: string]: any };
+  setProps?: (prop: object) => void;
+  setIsOpen?: () => void;
+  setIsClose?: () => void;
+  setModalContent?: (value: FC<any>) => void;
 };
 
 function InitialContent() {

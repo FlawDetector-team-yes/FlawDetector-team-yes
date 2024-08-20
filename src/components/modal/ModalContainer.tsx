@@ -26,7 +26,7 @@ function ModalContainer() {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-      <div ref={modalRef} className="rounded-lg bg-white p-6 shadow-lg">
+      <div ref={modalRef} className="inline-block overflow-hidden shadow-lg">
         {ModalContent ? <ModalContent /> : null}
       </div>
     </div>
