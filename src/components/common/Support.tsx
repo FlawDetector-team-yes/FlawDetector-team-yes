@@ -3,7 +3,10 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import useModal from "@/store/modalState";
+import SupportMessageModal from "../modal/SupportMessageModal";
 
+// 유효성 검사
 const schema = z.object({
   name: z.string().min(1, "이름을 입력해주세요."),
   email: z.string().email("유효한 이메일을 입력해주세요."),
@@ -12,6 +15,7 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
+// 공용 스타일 변수
 const inputBaseStyles =
   "w-[866px] flex items-start justify-start gap-2.5 rounded-lg border border-neutral-10 p-3 focus:outline-none";
 const inputFocusStyles = "focus:border-[#6100FF]";
@@ -19,6 +23,10 @@ const labelStyles =
   "font-['Inter'] text-lg font-medium leading-[27px] text-black";
 
 function Support() {
+  // 모달
+  const { setIsOpen, setModalContent } = useModal();
+
+  // Form 관련 로직
   const {
     register,
     handleSubmit,
@@ -28,6 +36,8 @@ function Support() {
   });
 
   const onSubmit = (data: FormData) => {
+    setIsOpen && setIsOpen();
+    setModalContent && setModalContent(SupportMessageModal);
     console.log(data);
     // 여기서 데이터 처리
   };
