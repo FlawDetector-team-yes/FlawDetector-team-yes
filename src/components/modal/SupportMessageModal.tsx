@@ -1,5 +1,11 @@
 import CloseModalButton from "../common/button/CloseModalButton";
 
+/**
+ * 문의하기 후 사용자에게 전송 완료 메시지를 표시하는 모달 컴포넌트입니다.
+ * 이 모달은 문의가 성공적으로 전송되었음을 알리고, 사용자가 홈으로 이동할 수 있는 버튼을 제공합니다.
+ *
+ * @returns {JSX.Element} 문의 전송 완료 메시지와 홈으로 이동하는 버튼이 포함된 모달 요소를 반환합니다.
+ */
 function SupportMessageModal() {
   return (
     <div className="flex h-[345px] w-[985px] flex-col items-center justify-center gap-14 overflow-hidden rounded-[40px] border border-[#6100ff] bg-white p-[60px]">

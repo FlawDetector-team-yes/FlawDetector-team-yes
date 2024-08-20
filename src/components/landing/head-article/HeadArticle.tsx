@@ -1,6 +1,13 @@
 import CaretDoubleDown from "./CaretDoubleDown";
 import LoginButton from "./LoginButton";
 
+/**
+ * Landing Page의 첫번 째 아티클 -
+ * `HeadArticle` 컴포넌트는 웹 페이지의 상단 섹션을 렌더링합니다.
+ * 이 섹션은 배경 이미지, 중앙에 배치된 제목, 설명 텍스트, 로그인 버튼 및 스크롤 내비게이션 아이콘을 포함합니다.
+ *
+ * @returns {JSX.Element} 상단 섹션을 렌더링하는 JSX 요소를 반환합니다.
+ */
 function HeadArticle() {
   return (
     <article

@@ -82,6 +82,12 @@ const cardData = [
   },
 ];
 
+/**
+ * CardArticle - CardList - Card - Label
+ * `CardList` 컴포넌트는 카드 데이터 배열을 사용하여 여러 `Card` 컴포넌트를 렌더링합니다.
+ *
+ * @returns {JSX.Element} 카드 목록을 포함하는 JSX 요소를 반환합니다.
+ */
 function CardList() {
   return (
     <div className="inline-flex items-start justify-start gap-12">

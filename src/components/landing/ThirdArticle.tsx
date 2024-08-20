@@ -1,6 +1,14 @@
 import Image from "next/image";
 import CheckingImg from "/public/images/Checking.svg";
 
+/**
+ * Landing Page의 세 번째 아티클 -
+ * `ThirdArticle` 컴포넌트는 두 개의 주요 요소로 구성된 섹션을 렌더링합니다.
+ * 이 섹션은 하나의 이미지와 두 개의 텍스트 블록을 포함하고 있으며,
+ * 최신 보안 동향을 실시간으로 확인할 수 있는 메시지를 전달합니다.
+ *
+ * @returns {JSX.Element} 렌더링된 `ThirdArticle` 컴포넌트를 반환합니다.
+ */
 function ThirdArticle() {
   return (
     <div className="relative z-0 flex h-[1280px] min-w-[1880px] items-center justify-center gap-80">

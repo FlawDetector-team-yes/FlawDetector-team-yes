@@ -3,7 +3,11 @@ export type ContactInfo = {
   label: string;
   value: string;
 };
-//ContactInfo 컴포넌트
+/**
+ * ServiceArticle에서만 사용되는 반복되는 코드를 줄이기 위한 컴포넌트입니다.
+ * @param {ContactInfo} props - `label`과 `value` 속성을 포함한 연락처 정보.
+ * @returns {JSX.Element} 연락처 정보를 표시하는 JSX 요소를 반환합니다.
+ */
 const ContactInfo = ({ label, value }: ContactInfo) => (
   <div className="flex flex-col gap-2">
     <div className="text-left text-xl font-semibold leading-[30px] text-[#3f3f3f]">
@@ -14,7 +18,13 @@ const ContactInfo = ({ label, value }: ContactInfo) => (
     </div>
   </div>
 );
-
+/**
+ * Landing Page의 마지막 아티클, /me/service Page에 사용 -
+ * 서비스 이용 중 문제가 발생한 경우, 사용자가 문의할 수 있는 정보를 제공하는 섹션을 렌더링합니다.
+ *
+ * 이름, 이메일, 메세지를 필수로 입력해주어 문의를 할 수 있습니다.
+ * @returns {JSX.Element} 서비스 문의 섹션을 렌더링하는 JSX 요소를 반환합니다.
+ */
 function ServiceArticle() {
   return (
     <article className="flex h-[1280px] min-w-[1880px] items-center justify-center">

@@ -22,6 +22,16 @@ const inputFocusStyles = "focus:border-[#6100FF]";
 const labelStyles =
   "font-['Inter'] text-lg font-medium leading-[27px] text-black";
 
+/**
+ * `Support` 컴포넌트는 사용자가 문의사항을 작성하여 제출할 수 있는 폼을 제공합니다.
+ * 폼은 이름, 이메일, 메시지 필드로 구성되어 있으며, 각 필드는 유효성 검사를 통해 검증됩니다.
+ * 제출된 데이터는 처리 로직에 따라 콘솔에 출력되며, 성공적으로 제출되면 모달이 표시됩니다.
+ *
+ * 유효성 검사는 `zod` 라이브러리를 사용하여 처리되며,
+ * `react-hook-form`과 `zodResolver`를 사용해 폼 데이터를 관리합니다.
+ *
+ * @returns {JSX.Element} 사용자 문의 폼을 렌더링하는 JSX 요소를 반환합니다.
+ */
 function Support() {
   // 모달
   const { setIsOpen, setModalContent } = useModal();
