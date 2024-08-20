@@ -19,7 +19,7 @@ function SupportMessageModal() {
       </div>
       <CloseModalButton
         buttonText="홈으로 이동"
-        className="h-14 w-[335px] bg-primary-500 font-['Inter'] text-xl font-semibold leading-[30px] text-white"
+        className="h-14 w-[335px] rounded-xl bg-primary-500 font-['Inter'] text-xl font-semibold leading-[30px] text-white"
         onClick={() => {
           console.log("모달닫기 버튼작동!!");
         }}
