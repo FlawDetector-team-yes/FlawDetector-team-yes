@@ -1,4 +1,19 @@
 import Support from "../common/Support";
+export type ContactInfo = {
+  label: string;
+  value: string;
+};
+//ContactInfo 컴포넌트
+const ContactInfo = ({ label, value }: ContactInfo) => (
+  <div className="flex flex-col gap-2">
+    <div className="text-left text-xl font-semibold leading-[30px] text-[#3f3f3f]">
+      {label}
+    </div>
+    <div className="text-left text-lg font-normal leading-[27px] text-[#969696]">
+      {value}
+    </div>
+  </div>
+);
 
 function ServiceArticle() {
   return (
@@ -30,20 +45,4 @@ function ServiceArticle() {
     </article>
   );
 }
-export type ContactInfo = {
-  label: string;
-  value: string;
-};
-//ContactInfo 컴포넌트
-const ContactInfo = ({ label, value }: ContactInfo) => (
-  <div className="flex flex-col gap-2">
-    <div className="text-left text-xl font-semibold leading-[30px] text-[#3f3f3f]">
-      {label}
-    </div>
-    <div className="text-left text-lg font-normal leading-[27px] text-[#969696]">
-      {value}
-    </div>
-  </div>
-);
-
 export default ServiceArticle;
