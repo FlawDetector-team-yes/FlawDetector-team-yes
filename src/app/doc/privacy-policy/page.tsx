@@ -1,7 +1,12 @@
 function PrivacyPolicyPage() {
   return (
     <div className="mx-auto mb-[70px] flex w-[65vw] flex-col gap-[20px]">
-      <h1 className="pb-5 pt-10 text-2xl font-semibold">개인정보 처리방침</h1>
+      <div className="mt-5 rounded-md bg-primary-50/30">
+        <h1 className="w-full bg-[url('/images/bg-circles.png')] bg-cover pb-5 pl-5 pt-5 text-2xl font-semibold">
+          개인정보 처리방침
+        </h1>
+      </div>
+
       <div className="flex flex-col gap-5 text-sm">
         <p>
           스팩스페이스 (이하 "회사")는 개인정보를 소중하게 생각하고 개인정보를
