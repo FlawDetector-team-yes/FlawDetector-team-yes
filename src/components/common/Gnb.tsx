@@ -1,12 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import bug from "/public/images/Bug.svg";
+import { logout } from "@/server/user.action";
+import { getSession } from "@/lib/getSession";
 
 /**
  * @TODO 로그인 처리
  * @TODO 글꼴 폰트 적용 및 공용색상 사용으로 변경하기
  */
-function Gnb() {
+async function Gnb() {
+  const session = await getSession();
+
   return (
     <>
       <div className={`px-20 py-6`}>
@@ -20,7 +24,16 @@ function Gnb() {
             </Link>
             <Link href="/vulnerability-db">취약점 DB</Link>
           </div>
-          <Link href="/me">MY 저장소</Link>
+          <div className="flex items-center gap-10">
+            <Link href="/me">MY 저장소</Link>
+            {session !== null && (
+              <form action={logout}>
+                <button type="submit" className="out-radius-999px px-4 py-2">
+                  Logout
+                </button>
+              </form>
+            )}
+          </div>
         </div>
       </div>
     </>
