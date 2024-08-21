@@ -3,6 +3,9 @@ import Credentials from "next-auth/providers/credentials";
 import github from "next-auth/providers/github";
 
 export const authConfig = {
+  session: {
+    maxAge: 24 * 60 * 60,
+  },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       // null 값을 명시적으로 false로 표시하기 위해 이중부정을 사용한다.
