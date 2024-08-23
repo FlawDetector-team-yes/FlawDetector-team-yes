@@ -5,34 +5,80 @@ import { getSession } from "@/lib/getSession";
 import { redirect } from "next/navigation";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import db from "@/firebase/firebaseClient";
+import { Session } from "next-auth";
 
 /**
- * `GithubLogin` 컴포넌트는 GitHub 소셜 로그인을 위한 버튼을 렌더링합니다.
- * 사용자가 버튼을 클릭하면 GitHub 로그인 기능이 실행될 예정입니다.
- * 현재 `onClick` 핸들러는 빈 함수로 정의되어 있으며,
- * 실제 GitHub 로그인 기능은 추후 구현 예정입니다.
+ * 주어진 사용자 번호를 기반으로 GitHub 사용자 정보를 가져옵니다.
+ * GitHub 사용자 이름을 소문자로 변환합니다.
  *
- * @returns {JSX.Element} GitHub 로그인 버튼을 렌더링하는 JSX 요소를 반환합니다.
+ * @param {string} userNumber - GitHub 프로필 이미지 URL에서 추출된 사용자 번호입니다.
+ * @returns {Promise<string | null>} GitHub 사용자 이름의 소문자 버전 또는 오류 발생 시 null입니다.
+ */
+async function fetchGitHubUserInfo(userNumber: string) {
+  const url = `https://api.github.com/user/${userNumber}`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error("사용자 정보 가져오기 실패");
+    }
+    const data = await response.json();
+    return (data.login as string).replace(/[A-Z]/g, (letter) =>
+      letter.toLowerCase(),
+    );
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+/**
+ * 사용자가 Firestore 데이터베이스에 등록되어 있는지 확인하고, 등록되지 않은 경우 새로 등록합니다.
+ * 프로필 이미지 URL에서 사용자 번호를 추출하고, 가능할 경우 추가적인 GitHub 사용자 정보를 가져옵니다.
+ *
+ * @param {Session} session - 현재 사용자 세션으로 사용자 정보를 포함합니다.
+ * @returns {Promise<void>} 사용자 등록 과정이 완료될 때까지의 Promise입니다.
+ */
+async function registerUserIfNeeded(session: Session) {
+  const docRef = collection(db, "users");
+  const email = session.user?.email;
+  const q = query(docRef, where("email", "==", email));
+  const existingUser = (await getDocs(q)).docs[0]?.data();
+
+  if (!existingUser) {
+    const profileImg = session.user?.image;
+    const userNumber = profileImg
+      ? profileImg.match(/u\/(\d+)/)?.[1] || null
+      : null;
+
+    let owner = null;
+    if (userNumber) {
+      // GitHub 사용자 정보 가져오기
+      owner = await fetchGitHubUserInfo(userNumber);
+    }
+
+    await addDoc(docRef, {
+      username: session.user?.name,
+      email,
+      profileImg,
+      userNumber,
+      owner,
+    });
+  }
+}
+
+/**
+ * GitHub 소셜 로그인 버튼을 렌더링하는 컴포넌트입니다.
+ * 사용자가 버튼을 클릭하면 GitHub 로그인 기능이 실행됩니다.
+ *
+ * @returns {JSX.Element} GitHub 로그인 버튼을 렌더링하는 JSX 요소입니다.
  */
 async function GithubLogin() {
   const session = await getSession();
   console.log(JSON.stringify(session));
 
-  // 로그인 되면 랜딩페이지로 이동
   if (session !== null) {
-    const docRef = collection(db, "users");
-
-    const q = query(docRef, where("email", "==", session.user?.email));
-    const isRegistered = (await getDocs(q)).docs[0]?.data();
-
-    if (!isRegistered) {
-      await addDoc(docRef, {
-        username: session.user?.name,
-        email: session.user?.email,
-        profileImg: session.user?.image,
-      });
-    }
-
+    // Firestore에 사용자 등록 여부 확인
+    await registerUserIfNeeded(session);
     redirect("/");
   }
 
@@ -48,4 +94,5 @@ async function GithubLogin() {
     </form>
   );
 }
+
 export default GithubLogin;
