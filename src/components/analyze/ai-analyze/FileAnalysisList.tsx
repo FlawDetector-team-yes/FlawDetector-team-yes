@@ -21,9 +21,8 @@ export default function FileAnalysisList({
         <ul className="flex flex-col gap-8">
           {analysisResults.map((result: TAnalysisResult) => (
             <FileAnalysisItem
-              key={result.id}
-              fileName={result.fileName}
-              code={result.code}
+              key={result.sha}
+              fileName={result.name}
               results={result.results}
             />
           ))}
