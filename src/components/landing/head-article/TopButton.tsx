@@ -10,7 +10,9 @@ import upArrow from "/public/images/up-active.svg";
  */
 function TopButton() {
   const onClick = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (typeof window) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
   return (
     <button
