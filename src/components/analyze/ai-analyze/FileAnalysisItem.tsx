@@ -9,17 +9,14 @@ import folderOpenImg from "../../../../public/images/folder-open.png";
  *
  * @param {Object} props - 컴포넌트 속성
  * @param {string} props.fileName - 파일 이름
- * @param {string} props.code - 파일 코드
  * @param {Object[]} props.results - 분석 결과 배열
  * @returns {JSX.Element} - 파일 분석 항목 구성 요소
  */
 export default function FileAnalysisItem({
   fileName,
-  code,
   results,
 }: {
   fileName: string;
-  code: string;
   results: { code: string; coment: string }[];
 }): JSX.Element {
   return (
@@ -29,7 +26,7 @@ export default function FileAnalysisItem({
         <span>{`sfacweb-1/${fileName}`}</span>
       </div>
       <div className="flex w-full gap-7">
-        <CodeArea type="select" fileCode={code} />
+        <CodeArea type="select" />
         <Infobox results={results} />
       </div>
     </li>
