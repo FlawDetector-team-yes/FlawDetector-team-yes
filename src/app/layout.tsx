@@ -1,6 +1,6 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "@/css/globals.css";
 import Gnb from "@/components/common/Gnb";
 import Footer from "@/components/common/Footer";
 import ModalProvider from "@/components/modal/ModalProvider";
