@@ -21,11 +21,11 @@ export default function FileAnalysisSideBar({
         <ul className="w-[247px] rounded-sm">
           {analysisResults.map((result: TAnalysisResult) => (
             <li
-              key={result.id}
+              key={result.sha}
               className="flex h-[44px] gap-1 border-[1px] border-t-0 border-[#C3C3C3] p-2 first:rounded-t-md first:border-t last:rounded-b-md"
             >
               <Image src={fileImg} alt="File" width={24} height={24} />
-              <span>{result.fileName}</span>
+              <span>{result.name}</span>
             </li>
           ))}
         </ul>

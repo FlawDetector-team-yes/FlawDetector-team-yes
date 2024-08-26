@@ -3,31 +3,19 @@ import xMarkError from "../../../public/images/x-mark-error.png";
 import triangleYellow from "../../../public/images/triangle-yellow.png";
 import circleGreen from "../../../public/images/circle-green.png";
 import menuRepoFolder from "../../../public/images/menu-repo-folder.png";
-import { TFile, TSelectedFiles } from "@/app/me/(analyze)/type";
 import StateItem from "./StateItem";
 import FileList from "./FileList";
-
-export type TFileListProps = {
-  onClick: (file: TSelectedFiles) => void;
-  fileData: TFile[];
-  selectedFiles: TSelectedFiles[];
-};
 
 /**
  * `FileSideBar` 컴포넌트는 사이드바를 렌더링하며, 통계와 프로필, 파일 목록을 포함합니다.
  * 통계는 상태 항목을 표시하고, 프로필 영역과 파일 목록이 하위 요소로 포함됩니다.
  *
- * @param {Object} props - 컴포넌트 속성
+ * @param {Object} props - 컴포넌트의 속성
  * @param {Function} props.onClick - 파일 클릭 시 호출되는 콜백 함수
- * @param {TFile[]} props.fileData - 파일 데이터 배열
  * @param {TSelectedFiles[]} props.selectedFiles - 선택된 파일 목록
- * @returns {JSX.Element} - 사이드바 구성 요소
+ * @returns {JSX.Element} - 사이드바 컴포넌트
  */
-export default function FileSideBar({
-  onClick,
-  fileData,
-  selectedFiles,
-}: TFileListProps) {
+export default function FileSideBar() {
   return (
     <>
       <aside className="flex h-[1163px] w-[247px] flex-col justify-between">
@@ -38,8 +26,8 @@ export default function FileSideBar({
           <StateItem src={circleGreen} alt="Success" count={23} />
         </div>
 
-        {/* 프로필 */}
         <div className="h-[994px] w-[247px] scroll-smooth rounded-xl border-[1px] border-[#C3C3C3]">
+          {/* 프로필 */}
           <div className="flex h-[70px] justify-between rounded-t-xl bg-primary-50 p-5">
             <div className="flex items-center gap-[10px] text-xl">
               <img
@@ -61,11 +49,7 @@ export default function FileSideBar({
             </div>
           </div>
           {/* 파일 목록 */}
-          <FileList
-            fileData={fileData}
-            onClick={onClick}
-            selectedFiles={selectedFiles}
-          />
+          <FileList />
         </div>
         <button
           className="fill-radius-8px-lg w-[246px] text-xl"

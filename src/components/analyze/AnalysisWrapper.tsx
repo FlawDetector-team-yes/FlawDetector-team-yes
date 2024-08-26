@@ -1,85 +1,81 @@
 "use client";
-import { useState } from "react";
-import { fileData } from "@/app/me/(analyze)/data";
-import { TSelectedFiles } from "@/app/me/(analyze)/type";
+
 import ProgressList from "./ProgressList";
 import CodeArea from "./CodeArea";
 import FileSideBar from "./FileSideBar";
+import useSelectedFilesStore from "@/store/useSelectedFilesStore";
+import useFilesStore, { fetchRepoContents } from "@/store/useFilesStore";
+import { decodeUnicode } from "@/lib/decodeUnicode";
 
 /**
  * `AnalysisWrapper` 컴포넌트
  *
- * 이 컴포넌트는 파일 분석을 관리하고 UI를 렌더링합니다.
- * 파일 선택, 전체 선택, 선택된 파일에 대한 코드 표시 및 분석 대기 중 상태를 처리합니다.
+ * 이 컴포넌트는 파일 분석 작업을 관리하고 UI를 렌더링합니다.
+ * 파일 선택, 전체 선택, 선택된 파일에 대한 코드 표시 및 분석 대기 상태를 처리합니다.
  *
- * @returns {JSX.Element} `AnalysisWrapper` 컴포넌트
+ * @returns {JSX.Element} `AnalysisWrapper` 컴포넌트가 렌더링됩니다.
  */
 export default function AnalysisWrapper() {
-  const [selectedFiles, setSelectedFiles] = useState<TSelectedFiles[]>([]);
+  const selectAllFile = useSelectedFilesStore((state) => state.selectedAllFile);
+  const folderPath = useSelectedFilesStore((state) => state.folderPath);
+  const files = useFilesStore((state) => state.files);
 
   /**
-   * 파일 선택 핸들러
-   * @param {TSelectedFiles} file - 선택하거나 해제할 파일
+   * 전체 파일을 선택하고 파일 내용을 가져와 상태를 업데이트합니다.
+   *
+   * @async
+   * @function handleSelectedAllFile
+   * @returns {Promise<void>} 파일 선택 및 상태 업데이트가 완료됩니다.
    */
-  const handleToggleFiles = (file: TSelectedFiles) => {
-    setSelectedFiles((prev) => {
-      const fileIndex = prev.findIndex((f) => f.id === file.id);
+  const handleSelectedAllFile = async () => {
+    // files 배열에서 type이 "file"인 파일만 필터링
+    const fileItems = files.filter((file) => file.type === "file");
 
-      if (fileIndex === -1) {
-        // 파일을 추가
-        return [
-          ...prev,
-          {
-            id: file.id,
-            fileName: file.fileName,
-            code: file.code,
-            isCodeAnalyzed: "pending",
-          },
-        ];
-      } else {
-        // 파일을 제거
-        return prev.filter((f) => f.id !== file.id);
+    // file이 존재한다면,
+    if (fileItems) {
+      const fileContentsPromises = fileItems.map((file) =>
+        fetchRepoContents(
+          "flawdetector-team-yes",
+          "flawdetector-team-yes",
+          `${folderPath}/${file.name}`,
+        ),
+      );
+      try {
+        // file 정보를 불러오는 api를 Promise.all로 병렬적으로 요청
+        const fileContentsArray = await Promise.all(fileContentsPromises);
+
+        // 파일 내용을 base64로 디코딩하고 selectedFiles 상태 업데이트
+        const selectedFiles = fileContentsArray.map((file) => {
+          const decodedContent = decodeUnicode(file.content);
+          console.log(decodedContent);
+          return {
+            sha: file.sha,
+            name: file.name,
+            content: decodedContent,
+          };
+        });
+        selectAllFile(selectedFiles);
+      } catch (error) {
+        console.error("Error fetching or decoding files:", error);
       }
-    });
+    }
   };
-
-  /**
-   * 전체 파일 선택 핸들러
-   */
-  const handleSelectAllFiles = () => {
-    const allFiles = fileData.map((file) => ({
-      ...file,
-      isCodeAnalyzed: "pending",
-    }));
-    setSelectedFiles(allFiles);
-  };
-
-  // 마지막 선택된 파일을 변수로 저장
-  const lastSelectedFile = selectedFiles[selectedFiles.length - 1];
-
   return (
     <>
       <section className="flex h-[107px] w-full min-w-[1760px] gap-7">
         <button
           className="flex w-[247px] items-center justify-center gap-[10px] rounded-lg bg-primary-500 px-4 text-2xl font-semibold text-white"
-          onClick={handleSelectAllFiles}
+          onClick={() => handleSelectedAllFile()}
         >
-          폴더 전체 검사
+          파일 전체 선택
         </button>
-        <ProgressList
-          onClick={handleToggleFiles}
-          selectedFiles={selectedFiles}
-        />
+        <ProgressList />
       </section>
-      <main className="flex h-[1163px] w-full min-w-[1760px] justify-between gap-7">
-        <FileSideBar
-          selectedFiles={selectedFiles}
-          onClick={handleToggleFiles}
-          fileData={fileData}
-        />
-        <section className="flex w-full gap-[28px]">
-          <CodeArea type="select" fileCode={lastSelectedFile?.code || ""} />
-          <CodeArea type="analyze" fileCode={lastSelectedFile?.code || ""} />
+      <main className="flex h-[1163px] min-w-[1760px] gap-7">
+        <FileSideBar />
+        <section className="flex w-[1484px] gap-[28px]">
+          <CodeArea type="select" />
+          <CodeArea type="analyze" />
         </section>
       </main>
       {/* 
