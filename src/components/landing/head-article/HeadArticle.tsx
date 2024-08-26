@@ -1,5 +1,6 @@
 import CaretDoubleDown from "./CaretDoubleDown";
 import LoginButton from "./LoginButton";
+import MainBackground from "/public/images/MainBackground.svg";
 
 /**
  * Landing Page의 첫번 째 아티클 -
@@ -13,7 +14,7 @@ function HeadArticle() {
     <article
       className="relative flex h-[1172px] min-w-[1920px] items-center justify-center bg-[100%_auto] bg-no-repeat"
       style={{
-        backgroundImage: "url('/images/MainBackground.svg')",
+        backgroundImage: `url(${MainBackground.src})`,
       }}
     >
       <div className="flex h-[509px] flex-col items-center justify-center gap-[65px]">

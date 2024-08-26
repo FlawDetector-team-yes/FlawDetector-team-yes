@@ -3,6 +3,7 @@ import Image from "next/image";
 import sfacspace from "/public/images/sfacspace.svg";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import MainBackground from "/public/images/MainBackground.svg";
 
 function Footer() {
   const currentPath = usePathname();
@@ -17,7 +18,9 @@ function Footer() {
       {currentPath === "/login" || (
         <footer
           className={`bottom-0 left-0 right-0 flex justify-between bg-cover bg-no-repeat px-20 py-10`}
-          style={{ backgroundImage: "url('/images/MainBackground.svg')" }}
+          style={{
+            backgroundImage: `url(${MainBackground.src})`,
+          }}
         >
           <div className="flex">
             <Image

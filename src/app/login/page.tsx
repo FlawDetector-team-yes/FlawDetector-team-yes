@@ -1,10 +1,13 @@
 import GithubLogin from "@/components/login/GithubLogin";
+import MainBackground from "/public/images/MainBackground.svg";
 
 function page() {
   return (
     <article
       className="relative flex h-[1172px] min-w-[1920px] items-center justify-center bg-[110%_auto] bg-no-repeat"
-      style={{ backgroundImage: "url('/images/MainBackground.svg')" }}
+      style={{
+        backgroundImage: `url(${MainBackground.src})`,
+      }}
     >
       <div className="flex h-[509px] flex-col items-center justify-center gap-[65px]">
         <div className="flex items-center justify-center gap-60">
