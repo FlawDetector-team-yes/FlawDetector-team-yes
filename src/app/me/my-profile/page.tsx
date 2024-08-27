@@ -3,7 +3,7 @@ import leftArrow from "/public/images/left-violet-arrow.png";
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import Link from "next/link";
-import ProfileInfoList from "@/components/me/ProfileInfoList";
+import { SessionProvider } from "next-auth/react";
 const inter = Inter({ subsets: ["latin"] });
 
 function MyProfile() {
@@ -25,7 +25,9 @@ function MyProfile() {
               </button>
             </Link>
           </div>
-          <ProfileInfo />
+          <SessionProvider>
+            <ProfileInfo />
+          </SessionProvider>
         </div>
       </div>
       ;

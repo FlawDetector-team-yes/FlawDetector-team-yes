@@ -1,9 +1,12 @@
 import GitListItem from "@/components/me/GitListItem";
 import ProfileInfo from "@/components/me/ProfileInfo";
 import { Inter } from "next/font/google";
+import { SessionProvider } from "next-auth/react";
+import { getSession } from "@/lib/getSession";
 const inter = Inter({ subsets: ["latin"] });
 
-function MyPage() {
+async function MyPage() {
+  const session = await getSession();
   return (
     <>
       <div className={inter.className}>
@@ -15,7 +18,9 @@ function MyPage() {
               MY Library
             </div>
           </div>
-          <ProfileInfo />
+          <SessionProvider session={session}>
+            <ProfileInfo />
+          </SessionProvider>
           <GitListItem />
         </div>
       </div>
