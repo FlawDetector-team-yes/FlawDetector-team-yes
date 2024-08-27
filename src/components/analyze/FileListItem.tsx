@@ -1,10 +1,11 @@
-import { TGithubContent, TSelectedFiles } from "@/app/me/(analyze)/type";
+import { TGithubContent } from "@/app/me/(analyze)/type";
 import fileImg from "../../../public/images/file.png";
 import folderImg from "../../../public/images/folder-open.png";
 import checkImg from "../../../public/images/check.png";
 import Image from "next/image";
 import useFilesStore, { fetchRepoContents } from "@/store/useFilesStore";
 import useSelectedFilesStore from "@/store/useSelectedFilesStore";
+import { decodeUnicode } from "@/lib/decodeUnicode";
 
 type TFileListItemProps = {
   file: TGithubContent;
@@ -47,7 +48,7 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
             `${prevFolder}/${file.name}`,
           );
           if (fileData && fileData.content) {
-            const decodedContent = atob(fileData.content);
+            const decodedContent = decodeUnicode(fileData.content);
             selectFile("file", fileData.name, fileData.sha, decodedContent);
           }
         } catch (error) {
