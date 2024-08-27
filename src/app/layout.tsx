@@ -1,6 +1,6 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "@/css/globals.css";
 import Gnb from "@/components/common/Gnb";
 import Footer from "@/components/common/Footer";
 import ModalProvider from "@/components/modal/ModalProvider";
@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <body className={`${inter.className} relative`}>
         <Gnb />
         <ModalProvider />

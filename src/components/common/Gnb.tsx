@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import bug from "/public/images/Bug.svg";
+import bug from "/public/images/bug.svg";
 import { logout } from "@/server/user.action";
 import { getSession } from "@/lib/getSession";
 
