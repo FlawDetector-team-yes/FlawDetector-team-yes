@@ -1,11 +1,19 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import Gnb from "@/components/common/Gnb";
 import Footer from "@/components/common/Footer";
 import ModalProvider from "@/components/modal/ModalProvider";
 
 const inter = Inter({ subsets: ["latin"] });
+
+const pretendard = localFont({
+  src: "../fonts/PretendardVariable.woff2",
+  display: "swap",
+  weight: "45 920",
+  variable: "--font-pretendard",
+});
 
 export const metadata: Metadata = {
   title: "FlawDetector",
@@ -20,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${inter.className} relative`}>
+      <body className={`${inter.className} ${pretendard.variable} relative`}>
         <Gnb />
         <ModalProvider />
         {children}

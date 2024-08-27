@@ -13,6 +13,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         inter: ["Inter", "sans-serif"],
+        pretendard: ["var(--font-pretendard)"],
       },
       animation: {
         "slide-right": "slide-right 120s linear infinite",
