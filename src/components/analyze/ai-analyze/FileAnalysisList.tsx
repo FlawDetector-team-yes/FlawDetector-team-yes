@@ -1,5 +1,5 @@
 import { TAnalysisResult } from "@/app/me/(analyze)/type";
-import FileAnalysisItem from "./FileAnalysisItem";
+import FileAnalysisItem from "./FileAnalysisListItem";
 
 /**
  * `FileAnalysisList` 컴포넌트는 주어진 분석 결과 배열을 기반으로
