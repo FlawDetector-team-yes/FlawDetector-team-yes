@@ -1,29 +1,18 @@
-import { TSelectedFilesProps } from "@/app/me/(analyze)/type";
 import InputChips from "./InputChips";
 import ProgressBar from "./ProgressBar";
+import useSelectedFilesStore from "@/store/useSelectedFilesStore";
 
 /**
- * `ProgressList` 컴포넌트는 파일 목록과 진행 상황을 시각적으로 표시합니다.
+ * `ProgressList` 컴포넌트는 선택된 파일 목록과 파일 분석 진행 상황을 시각적으로 표시합니다.
  *
- * - `selectedFiles`: 현재 선택된 파일들의 배열입니다.
- * - `onClick`: 파일을 클릭할 때 호출되는 핸들러 함수입니다.
+ * - 선택된 파일들을 `InputChips` 컴포넌트를 사용하여 목록으로 표시합니다.
+ * - `ProgressBar` 컴포넌트를 사용하여 파일 분석 진행 상태를 표시합니다.
  *
- * 컴포넌트는 선택된 파일들을 표시하고, 진행 바를 통해 파일 분석 진행 상태를 나타냅니다.
- *
- * @param {TSelectedFilesProps} props - 컴포넌트에 전달되는 속성들.
- * @param {TSelectedFiles[]} props.selectedFiles - 선택된 파일의 배열.
- * @param {(file: TSelectedFiles) => void} props.onClick - 파일 클릭 시 호출되는 핸들러 함수.
- * @returns {JSX.Element} - 렌더링된 컴포넌트.
+ * @returns {JSX.Element} - 렌더링된 `ProgressList` 컴포넌트
  */
-export default function ProgressList({
-  selectedFiles,
-  onClick,
-}: TSelectedFilesProps): JSX.Element {
-  // 진행률 계산
-  const progress =
-    (selectedFiles.filter((file) => file.isCodeAnalyzed !== "Success").length /
-      selectedFiles.length) *
-    100;
+export default function ProgressList(): JSX.Element {
+  const selectedFiles = useSelectedFilesStore((state) => state.selectedFiles);
+  const removeFile = useSelectedFilesStore((state) => state.removeFile);
 
   // 테스트용 진행도
   const testProgress = 45;
@@ -36,8 +25,8 @@ export default function ProgressList({
           style={{ overflowX: "hidden" }}
         >
           {selectedFiles.map((file) => (
-            <InputChips onClick={() => onClick(file)} key={file.id}>
-              {file.fileName}
+            <InputChips onClick={() => removeFile(file.sha)} key={file.sha}>
+              {file.name}
             </InputChips>
           ))}
         </div>

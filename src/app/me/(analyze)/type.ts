@@ -1,18 +1,31 @@
-export type TFile = {
-  id: string;
-  fileName: string;
-  code: string;
+export type TGithubContentLinks = {
+  self: string;
+  git: string;
+  html: string;
 };
 
-export type TSelectedFiles = TFile & { isCodeAnalyzed?: string };
-// isCodeAnalyzed : completed(완료), pending(대기), error(오류)
-
-export type TSelectedFilesProps = {
-  selectedFiles: TSelectedFiles[];
-  onClick: (file: TSelectedFiles) => void;
+export type TGithubContent = {
+  name: string;
+  path: string;
+  sha: string;
+  size: number;
+  url: string;
+  html_url: string;
+  git_url: string;
+  download_url: string | null;
+  content?: string; // type이 file일 경우 content 프로퍼티 존재
+  encoding?: string; // type이 file일 경우 encoding 프로퍼티 존재
+  type: "file" | "dir";
+  _links: TGithubContentLinks;
 };
 
-export type TAnalysisResult = TFile & {
+export type TSelectedFiles = {
+  name: string;
+  sha: string;
+  content: string;
+};
+
+export type TAnalysisResult = TGithubContent & {
   results: {
     code: string;
     coment: string;

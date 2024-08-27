@@ -5,12 +5,15 @@ import plugin from "tailwindcss/plugin";
 
 const config: Config = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
+      fontFamily: {
+        inter: ["Inter", "sans-serif"],
+      },
       animation: {
         "slide-right": "slide-right 120s linear infinite",
         slideIn: "slideIn 1s ease-out forwards",
@@ -48,7 +51,7 @@ const config: Config = {
           50: "#F2EBFF",
         },
         stroke: {
-          blue: "99BDFF",
+          blue: "#99BDFF",
           10: "#E6E6E6", // 메인
           5: "#F3F3F3",
         },
@@ -56,7 +59,7 @@ const config: Config = {
           purpleLight: "#FAF8FF",
           purpleDark: "#E3E1E7",
           redLight: "#FFEFEF",
-          grayLight: "F1F1F1",
+          grayLight: "#F1F1F1",
           grayDark: "#C2C2C2",
         },
         system: {
