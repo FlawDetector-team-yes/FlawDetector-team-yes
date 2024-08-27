@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import userInfoStore from "@/store/useAuth";
 // /me/my-profile 마이페이지 프로필정보 클릭 시 나의 정보와 라이브러이 설정들을 보여주는 컴포넌트.
 export default function ProfileInfoList() {
+  const userData = userInfoStore((state) => state.userInfo);
   return (
     <>
       <div className="flex w-full justify-between border-b-2 pb-[40px]">
@@ -12,7 +14,7 @@ export default function ProfileInfoList() {
           </div>
           <div className="flex flex-col gap-1">
             <span className="text-[18px]">계정</span>
-            <input type="text" readOnly placeholder="marry@gmail.com" />
+            <input type="text" readOnly placeholder={userData?.email} />
           </div>
         </div>
       </div>
