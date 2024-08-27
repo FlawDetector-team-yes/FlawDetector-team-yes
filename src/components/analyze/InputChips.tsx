@@ -20,7 +20,9 @@ export default function InputChips({ children, ...rest }: TProgressBarProps) {
           {...rest}
         >
           <Image src={fileImg} alt="File" width={24} height={24} />
-          <span className="text-base text-[#3F3F3F]">{children}</span>
+          <span className="overflow-hidden text-ellipsis whitespace-nowrap px-3 text-base text-[#3F3F3F]">
+            {children}
+          </span>
           <Image src={closeImg} alt="Close" width={11.5} height={11.5} />
         </button>
       </div>
