@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import ToggleSwitch from "@/components/me/ToggleSwitch";
+import { SessionProvider } from "next-auth/react";
 const inter = Inter({ subsets: ["latin"] });
 export default function SettingPage() {
   return (
@@ -24,7 +25,9 @@ export default function SettingPage() {
               </button>
             </Link>
           </div>
-          <ProfileInfo />
+          <SessionProvider>
+            <ProfileInfo />
+          </SessionProvider>
           <div className="flex w-full justify-between border-b-2 pb-[40px]">
             <div className="flex h-[103px] flex-col justify-between py-[50px]">
               <div className="flex gap-5">
