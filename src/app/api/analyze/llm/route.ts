@@ -32,7 +32,7 @@ export async function POST(req: Request) {
         "Cache-Control": "no-store",
       },
       body: JSON.stringify({
-        user_message: `${content}\n\nquestion: Please translate the result of analyzing the security vulnerability of the above code into Korean and respond only in Korean.`,
+        user_message: `${content}\n\nquestion: Please translate the result of analyzing the security vulnerability of the above code into Korean and respond only in Korean. Also, please inform us of the modified code by applying the security vulnerability analysis results.`,
         temperature: 0.6,
         top_p: 0.6,
       }),
