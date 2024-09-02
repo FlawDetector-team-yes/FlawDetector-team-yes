@@ -8,11 +8,11 @@ self.onmessage = async (event) => {
       self.postMessage({ fileId, percent, status: "progress" });
     };
 
-    // 총 요청 시간 (30초)
-    // const totalDuration = 30000;
+    // 총 요청 시간 (40초)
     const updateInterval = 1000; // 1초 간격으로 진행 상황 업데이트
     const progressSteps = [
-      { percent: 40, duration: 10000 }, // 10초 동안 40%
+      { percent: 30, duration: 10000 }, // 10초 동안 30%
+      { percent: 50, duration: 10000 }, // 다음 10초 동안 50%
       { percent: 80, duration: 10000 }, // 다음 10초 동안 80%
       { percent: 100, duration: 10000 }, // 나머지 10초 동안 100%
     ];
