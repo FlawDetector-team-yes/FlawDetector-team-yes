@@ -7,6 +7,7 @@ import useSelectedFilesStore from "@/store/useSelectedFilesStore";
 import useFilesStore, { fetchRepoContents } from "@/store/useFilesStore";
 import { decodeUnicode } from "@/lib/decodeUnicode";
 import { useParams } from "next/navigation";
+import CodeViewer from "./CodeViewer";
 
 /**
  * `AnalysisWrapper` 컴포넌트
@@ -64,25 +65,20 @@ export default function AnalysisWrapper() {
   };
   return (
     <>
-      <section className="flex h-[107px] w-full min-w-[1760px] gap-7">
-        <button
-          className="flex w-[247px] items-center justify-center gap-[10px] rounded-lg bg-primary-500 px-4 text-2xl font-semibold text-white"
-          onClick={() => handleSelectedAllFile()}
-        >
-          파일 전체 선택
-        </button>
-      </section>
-      <main className="flex h-[1163px] min-w-[1760px] gap-7">
-        <FileSideBar />
-        <section className="flex w-[1484px] gap-[28px]">
-          <CodeArea type="select" />
-          <CodeArea type="analyze" />
+      <section className="flex h-full w-full min-w-[1760px] gap-7">
+        <section className="flex w-[247px] flex-col gap-7">
+          <button
+            className="flex h-[107px] w-[247px] items-center justify-center gap-[10px] rounded-lg bg-primary-500 px-4 text-2xl font-semibold text-white"
+            onClick={() => handleSelectedAllFile()}
+          >
+            파일 전체 선택
+          </button>
+          <FileSideBar />
         </section>
-      </main>
-      {/* 
-      검사 확인, 검사 상태 모달 들어갈 예정
-     <Modal />
-     */}
+        <main className="h-[1220px] w-full overflow-y-scroll">
+          <CodeViewer />
+        </main>
+      </section>
     </>
   );
 }
