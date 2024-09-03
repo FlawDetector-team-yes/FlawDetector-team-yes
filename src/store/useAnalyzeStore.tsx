@@ -1,5 +1,21 @@
 import { create } from "zustand";
 
+// step
+export type TStepStore = {
+  currentStep: string;
+  setCurrentStep: (step: string) => void;
+};
+
+export const useStepStore = create<TStepStore>((set) => ({
+  currentStep: "select",
+  setCurrentStep: (step: string) => {
+    set((state: any) => ({
+      ...state,
+      currentStep: step,
+    }));
+  },
+}));
+
 // progress
 export type TAnalyzeFiles = {
   fileId: string; // fileId를 넣어줘
