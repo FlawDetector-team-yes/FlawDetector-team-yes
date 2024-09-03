@@ -4,6 +4,11 @@ import checkImg from "../../../../public/images/circle-purple-success.svg";
 import { useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import ModalFileList from "./ModalFileList";
+import {
+  useAnalyzeFilesStore,
+  useResultDataStore,
+} from "@/store/useAnalyzeStore";
+import useSelectedFilesStore from "@/store/useSelectedFilesStore";
 
 type TStepInfo = {
   headerText: string;
@@ -43,6 +48,58 @@ const stepInfo: Record<string, TStepInfo> = {
 export const AnalysisModal: React.FC<any> = () => {
   const closeModal = useModal((state) => state.setIsClose); // 모달 닫기 함수
   const [currentStep, setCurrentStep] = useState<string>("select"); // 현재 단계 상태
+  const selectedFiles = useSelectedFilesStore((state) => state.selectedFiles);
+  // store
+  const setAnalyzeFiles = useAnalyzeFilesStore(
+    (state) => state.setAnalyzeFiles,
+  );
+  // const resultData = useResultDataStore((state) => state.resultData);
+  const setResultData = useResultDataStore((state) => state.setResultData);
+
+  const getAnalyzeFiles = async () => {
+    // 검사하기 누를 경우
+    const workerPromises = selectedFiles.map((file) => {
+      return new Promise<void>((resolve, reject) => {
+        const worker = new Worker(
+          new URL(`../../../worker/analyzeWorker.ts`, import.meta.url),
+        );
+
+        worker.postMessage({
+          fileId: file.sha,
+          content: file.content,
+          apiUrl: `/api/analyze/llm`,
+        });
+
+        worker.onmessage = (event) => {
+          const { fileId, percent, result, status, type } = event.data;
+
+          if (type === "progress") {
+            setCurrentStep("analyze");
+            setAnalyzeFiles({ fileId, progressValue: percent, state: status });
+            console.log(`Progress: ${percent}%`);
+          } else if (type === "completed") {
+            setResultData({ sha: fileId, result });
+            worker.terminate();
+            resolve(); // 워커 작업 완료 시 resolve 호출
+          } else if (type === "error") {
+            console.error(
+              `Error processing file ${fileId}: ${event.data.message}`,
+            );
+            worker.terminate();
+            reject(event.data.message); // 에러 발생 시 reject 호출
+          }
+        };
+      });
+    });
+
+    try {
+      await Promise.all(workerPromises); // 모든 워커 작업이 완료될 때까지 대기
+      setCurrentStep("finish"); // 모든 작업이 끝나면 finish로 변경
+    } catch (error) {
+      console.error("One or more workers failed:", error);
+    }
+    // setWorkers(workers);
+  };
 
   /**
    * 현재 단계에 따라 모달을 닫거나 분석을 중단하는 함수
@@ -64,13 +121,12 @@ export const AnalysisModal: React.FC<any> = () => {
    */
   const handleNextStep = () => {
     if (currentStep === "select") {
-      setCurrentStep("analyze");
-    } else if (currentStep === "analyze") {
-      setCurrentStep("finish");
-    } else {
+      // worker 실행
+      getAnalyzeFiles();
+    } else if (currentStep !== "select" && currentStep !== "analyze") {
       // 분석 완료 후 모달 닫기 및 저장 처리
-      closeModal?.();
       // TODO: 검사 이력을 파이어베이스에 저장하고 코드 검사 결과 페이지로 이동 처리
+      closeModal?.();
     }
   };
 
