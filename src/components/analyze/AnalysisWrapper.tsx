@@ -6,6 +6,8 @@ import FileSideBar from "./FileSideBar";
 import useSelectedFilesStore from "@/store/useSelectedFilesStore";
 import useFilesStore, { fetchRepoContents } from "@/store/useFilesStore";
 import { decodeUnicode } from "@/lib/decodeUnicode";
+import OpenModalBtn from "./OpenModalBtn";
+import { useStepStore } from "@/store/useAnalyzeStore";
 
 /**
  * `AnalysisWrapper` 컴포넌트
@@ -19,6 +21,7 @@ export default function AnalysisWrapper() {
   const selectAllFile = useSelectedFilesStore((state) => state.selectedAllFile);
   const folderPath = useSelectedFilesStore((state) => state.folderPath);
   const files = useFilesStore((state) => state.files);
+  const currentStep = useStepStore((state) => state.currentStep); // 현재 단계 상태
 
   /**
    * 전체 파일을 선택하고 파일 내용을 가져와 상태를 업데이트합니다.
@@ -71,16 +74,17 @@ export default function AnalysisWrapper() {
         </button>
         <ProgressList />
       </section>
-      <main className="flex h-[1163px] min-w-[1760px] gap-7">
+      <main className="relative flex h-[1163px] min-w-[1760px] gap-7">
         <FileSideBar />
         <section className="flex w-[1484px] gap-[28px]">
           <CodeArea type="select" />
           <CodeArea type="analyze" />
         </section>
+        {currentStep === "analyze" && <OpenModalBtn />}
       </main>
       {/* 
       검사 확인, 검사 상태 모달 들어갈 예정
-     <Modal />
+      <Modal />
      */}
     </>
   );

@@ -1,12 +1,14 @@
+import { useState } from "react";
 import useModal from "@/store/modalState";
 import bugImg from "../../../../public/images/bug.svg";
 import checkImg from "../../../../public/images/circle-purple-success.svg";
-import { useState } from "react";
+import cancelImg from "../../../../public/images/circle-x-mark.png";
 import Image, { StaticImageData } from "next/image";
 import ModalFileList from "./ModalFileList";
 import {
   useAnalyzeFilesStore,
   useResultDataStore,
+  useStepStore,
 } from "@/store/useAnalyzeStore";
 import useSelectedFilesStore from "@/store/useSelectedFilesStore";
 
@@ -29,8 +31,14 @@ const stepInfo: Record<string, TStepInfo> = {
     headerText: "소스 코드 취약점을 분석 중입니다.",
     mainText:
       "모든 코드 분석이 완료된 후에만 검사 이력을 저장할 수 있습니다. 잠시만 기다려 주세요.",
-    nextBtnText: "저장하기",
+    nextBtnText: "중단하기",
     img: bugImg,
+  },
+  cancel: {
+    headerText: "소스 코드 검사가 중단 되었습니다.",
+    mainText: "코드 분석이 완료된 검사 이력만 저장됩니다.",
+    nextBtnText: "저장하기",
+    img: cancelImg,
   },
   finish: {
     headerText: "소스코드 취약점 분석이 완료되었습니다",
@@ -47,15 +55,20 @@ const stepInfo: Record<string, TStepInfo> = {
  */
 export const AnalysisModal: React.FC<any> = () => {
   const closeModal = useModal((state) => state.setIsClose); // 모달 닫기 함수
-  const [currentStep, setCurrentStep] = useState<string>("select"); // 현재 단계 상태
-  const selectedFiles = useSelectedFilesStore((state) => state.selectedFiles);
-  // store
+  const currentStep = useStepStore((state) => state.currentStep); // 현재 단계 상태
+  const setCurrentStep = useStepStore((state) => state.setCurrentStep); // 현재 단계 상태 업데이트
+  const selectedFiles = useSelectedFilesStore((state) => state.selectedFiles); // 선택된 파일들
   const setAnalyzeFiles = useAnalyzeFilesStore(
     (state) => state.setAnalyzeFiles,
-  );
-  // const resultData = useResultDataStore((state) => state.resultData);
-  const setResultData = useResultDataStore((state) => state.setResultData);
+  ); // 검사 중인 파일 업데이트
+  const resultData = useResultDataStore((state) => state.resultData); // 검사 결과
+  const setResultData = useResultDataStore((state) => state.setResultData); // 검사 결과 업데이트
+  const [workers, setWorkers] = useState<Worker[]>([]); // 워커 상태관리를 위한 배열
 
+  /**
+   * 검사하기 누를 경우 실행되는 로직
+   * web worker가 실행됨.
+   */
   const getAnalyzeFiles = async () => {
     // 검사하기 누를 경우
     const workerPromises = selectedFiles.map((file) => {
@@ -63,6 +76,9 @@ export const AnalysisModal: React.FC<any> = () => {
         const worker = new Worker(
           new URL(`../../../worker/analyzeWorker.ts`, import.meta.url),
         );
+
+        // 검사 중단 로직을 위해 worker 배열에 현재 생성된 worker들을 넣어줌.
+        setWorkers((prevWorkers) => [...prevWorkers, worker]);
 
         worker.postMessage({
           fileId: file.sha,
@@ -76,7 +92,7 @@ export const AnalysisModal: React.FC<any> = () => {
           if (type === "progress") {
             setCurrentStep("analyze");
             setAnalyzeFiles({ fileId, progressValue: percent, state: status });
-            console.log(`Progress: ${percent}%`);
+            // console.log(`Progress: ${percent}%`);
           } else if (type === "completed") {
             setResultData({ sha: fileId, result });
             worker.terminate();
@@ -98,7 +114,26 @@ export const AnalysisModal: React.FC<any> = () => {
     } catch (error) {
       console.error("One or more workers failed:", error);
     }
-    // setWorkers(workers);
+  };
+
+  /**
+   * 검사 중단 함수
+   */
+  const handleCancel = () => {
+    setCurrentStep("cancel"); // 상태를 cancle로 변경하여 중단 시킴
+
+    workers.forEach((worker) => worker.terminate()); // 모든 워커 종료
+
+    setWorkers([]); // 워커 상태 초기화
+
+    // analyzeFiles 초기화
+    selectedFiles.forEach((file) => {
+      setAnalyzeFiles({
+        fileId: file.sha,
+        progressValue: 0,
+        state: "canceled", // 상태를 "canceled"로 설정
+      });
+    });
   };
 
   /**
@@ -106,11 +141,8 @@ export const AnalysisModal: React.FC<any> = () => {
    * 왼쪽 버튼 클릭 핸들러
    */
   const handleCloseModal = () => {
-    if (currentStep === "analyze") {
-      const userConfirmed = window.confirm(
-        "검사를 정말 중단하시겠습니까? 중단하면 진행 중인 검사 데이터가 모두 사라집니다.",
-      );
-      if (!userConfirmed) return;
+    if (currentStep === "cancel") {
+      setCurrentStep("select"); // step 초기화 시켜줌
     }
     closeModal?.();
   };
@@ -123,12 +155,17 @@ export const AnalysisModal: React.FC<any> = () => {
     if (currentStep === "select") {
       // worker 실행
       getAnalyzeFiles();
+    } else if (currentStep === "analyze") {
+      // 검사 중단
+      handleCancel();
     } else if (currentStep !== "select" && currentStep !== "analyze") {
       // 분석 완료 후 모달 닫기 및 저장 처리
       // TODO: 검사 이력을 파이어베이스에 저장하고 코드 검사 결과 페이지로 이동 처리
       closeModal?.();
     }
   };
+
+  console.log(resultData);
 
   return (
     <div
@@ -169,11 +206,13 @@ export const AnalysisModal: React.FC<any> = () => {
         <button
           className={`${
             currentStep === "analyze"
-              ? "bg-[#F1F1F1] text-[#C3C3C3]"
-              : "border-[2px] border-[#6100FF] bg-[#6100FF] text-white hover:bg-[#5300DA]"
+              ? "bg-system-warning text-white"
+              : currentStep === "cancel"
+                ? "bg-[#F1F1F1] text-[#C3C3C3]"
+                : "border-[2px] border-[#6100FF] bg-[#6100FF] text-white hover:bg-[#5300DA]"
           } w-[200px] rounded-lg font-semibold`}
           onClick={handleNextStep}
-          // disabled={currentStep === "analyze"} // TODO : 분석 중일 때 버튼 비활성화
+          disabled={currentStep === "cancel"} // TODO : 분석 중일 때 버튼 비활성화
         >
           {stepInfo[currentStep].nextBtnText}
         </button>

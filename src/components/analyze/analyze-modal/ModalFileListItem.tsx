@@ -37,8 +37,8 @@ export default function ModalFileListItem({
           </span>
         </div>
 
-        <div className="flex w-full items-center justify-end gap-2">
-          <div className="h-2.5 w-[50%] rounded-full bg-gray-200 dark:bg-gray-100">
+        <div className="flex w-[50%] items-center justify-end gap-2">
+          <div className="h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-100">
             <div
               className="h-2.5 rounded-full bg-system-success"
               style={{ width: `${fileProgress?.progressValue || 0}%` }}
