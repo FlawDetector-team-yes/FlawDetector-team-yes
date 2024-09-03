@@ -1,4 +1,4 @@
-import { TSelectedFiles } from "@/app/me/(analyze)/type";
+import { TSelectedFiles } from "@/app/me/repos/type";
 import { create } from "zustand";
 
 type TSelectedFilesState = {

@@ -6,6 +6,7 @@ import FileSideBar from "./FileSideBar";
 import useSelectedFilesStore from "@/store/useSelectedFilesStore";
 import useFilesStore, { fetchRepoContents } from "@/store/useFilesStore";
 import { decodeUnicode } from "@/lib/decodeUnicode";
+import { useParams } from "next/navigation";
 
 /**
  * `AnalysisWrapper` 컴포넌트
@@ -16,6 +17,7 @@ import { decodeUnicode } from "@/lib/decodeUnicode";
  * @returns {JSX.Element} `AnalysisWrapper` 컴포넌트가 렌더링됩니다.
  */
 export default function AnalysisWrapper() {
+  const repo = useParams<{ id: string }>();
   const selectAllFile = useSelectedFilesStore((state) => state.selectedAllFile);
   const folderPath = useSelectedFilesStore((state) => state.folderPath);
   const files = useFilesStore((state) => state.files);
@@ -36,7 +38,7 @@ export default function AnalysisWrapper() {
       const fileContentsPromises = fileItems.map((file) =>
         fetchRepoContents(
           "flawdetector-team-yes",
-          "flawdetector-team-yes",
+          repo.id,
           `${folderPath}/${file.name}`,
         ),
       );
@@ -69,7 +71,6 @@ export default function AnalysisWrapper() {
         >
           파일 전체 선택
         </button>
-        <ProgressList />
       </section>
       <main className="flex h-[1163px] min-w-[1760px] gap-7">
         <FileSideBar />

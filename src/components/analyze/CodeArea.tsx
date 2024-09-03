@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import magnifier from "../../../public/images/magnifier.png";
 import folderDashed from "../../../public/images/folder-dashed.png";
