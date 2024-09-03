@@ -1,8 +1,8 @@
 import Image from "next/image";
 import leftVioletArrow from "../../../../../public/images/left-violet-arrow.png";
-import { analysisResults } from "../data";
 import FileAnalysisSideBar from "@/components/analyze/ai-analyze/FileAnalysisSideBar";
 import FileAnalysisList from "@/components/analyze/ai-analyze/FileAnalysisList";
+//import { analysisResults } from "../data";
 
 /**
  * `AiAnalyzePage` 컴포넌트는 파일 분석 페이지를 렌더링합니다.

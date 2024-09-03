@@ -26,4 +26,5 @@ async function AnalyzePage() {
     </div>
   );
 }
+
 export default AnalyzePage;
