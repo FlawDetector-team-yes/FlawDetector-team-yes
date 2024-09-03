@@ -4,8 +4,8 @@ self.onmessage = async (event) => {
 
   try {
     // 진행 상황 업데이트를 위한 함수
-    const updateProgress = (percent: number) => {
-      self.postMessage({ fileId, percent, status: "progress" });
+    const updateProgress = (percent: number, status: string) => {
+      self.postMessage({ fileId, percent, status, type: "progress" });
     };
 
     // 총 요청 시간 (40초)
@@ -35,7 +35,7 @@ self.onmessage = async (event) => {
             stepPercentIncrement * (elapsedTime / updateInterval),
           step.percent,
         );
-        updateProgress(Math.round(percent));
+        updateProgress(Math.round(percent), "progress");
 
         if (elapsedTime >= stepDuration) {
           previousPercent = step.percent;
@@ -65,14 +65,22 @@ self.onmessage = async (event) => {
     clearInterval(updateIntervalId);
 
     // 완료시 메인 스레드로 보냄
-    // console.log(result);
-    self.postMessage({ fileId, percent: 100, result, status: "completed" });
+    console.log(result);
+    updateProgress(100, "completed");
+    self.postMessage({
+      fileId,
+      percent: 100,
+      result,
+      status: "completed",
+      type: "completed",
+    });
   } catch (error: any) {
     self.postMessage({
       fileId,
       percent: 0,
       status: "error",
       message: error.message,
+      type: "error",
     });
   }
 };
