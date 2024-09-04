@@ -78,8 +78,9 @@ export default function AnalysisWrapper() {
           </button>
           <FileSideBar />
         </section>
-        <main className="h-[1220px] w-full overflow-y-scroll">
+        <main className="relative h-[1220px] w-full overflow-y-scroll">
           <CodeViewer />
+          {currentStep === "analyze" && <OpenModalBtn />}
         </main>
       </section>
     </>
