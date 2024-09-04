@@ -1,6 +1,6 @@
-import { TAnalysisResult } from "@/app/me/(analyze)/type";
 import Image from "next/image";
 import fileImg from "../../../../public/images/file.png";
+import { TAnalysisResult } from "@/app/me/repos/type";
 
 /**
  * `FileAnalysisSideBar` 컴포넌트는 사이드바에 분석 파일 목록을 표시합니다.
@@ -13,13 +13,14 @@ import fileImg from "../../../../public/images/file.png";
 export default function FileAnalysisSideBar({
   analysisResults,
 }: {
-  analysisResults: TAnalysisResult[];
+  analysisResults?: TAnalysisResult[];
 }) {
   return (
     <>
       <aside>
         <ul className="w-[247px] rounded-sm">
-          {analysisResults.map((result: TAnalysisResult) => (
+          {/* 분석 결과  */}
+          {/*{analysisResults.map((result: TAnalysisResult) => (
             <li
               key={result.sha}
               className="flex h-[44px] gap-1 border-[1px] border-t-0 border-[#C3C3C3] p-2 first:rounded-t-md first:border-t last:rounded-b-md"
@@ -27,7 +28,7 @@ export default function FileAnalysisSideBar({
               <Image src={fileImg} alt="File" width={24} height={24} />
               <span>{result.name}</span>
             </li>
-          ))}
+          ))}*/}
         </ul>
       </aside>
     </>

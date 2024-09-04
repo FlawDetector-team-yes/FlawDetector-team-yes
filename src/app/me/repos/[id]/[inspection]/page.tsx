@@ -25,8 +25,8 @@ function AiAnalyzePage() {
         <p className="flex items-center text-[38px] font-medium">sfacweb - 1</p>
       </section>
       <section className="flex gap-8">
-        <FileAnalysisSideBar analysisResults={analysisResults} />
-        <FileAnalysisList analysisResults={analysisResults} />
+        <FileAnalysisSideBar />
+        <FileAnalysisList />
       </section>
     </div>
   );
