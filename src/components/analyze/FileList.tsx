@@ -3,10 +3,11 @@
 import { useEffect } from "react";
 import leftArrowImg from "../../../public/images/left-arrow-pagination.png";
 import FileListItem from "./FileListItem";
-import { TGithubContent } from "@/app/me/(analyze)/type";
 import useSelectedFilesStore from "@/store/useSelectedFilesStore";
 import useFilesStore from "@/store/useFilesStore";
 import Image from "next/image";
+import { TGithubContent } from "@/app/me/repos/type";
+import { useParams } from "next/navigation";
 
 /**
  * `FileList` 컴포넌트는 파일 목록을 렌더링하는 역할을 합니다.
@@ -17,6 +18,7 @@ import Image from "next/image";
  */
 
 export default function FileList() {
+  const repo = useParams<{ id: string }>();
   const selectedFiles = useSelectedFilesStore((state) => state.selectedFiles);
   const files = useFilesStore((state) => state.files);
   const fetchFiles = useFilesStore((state) => state.fecthFiles);
@@ -47,7 +49,7 @@ export default function FileList() {
   const handleClickPrevFolder = () => {
     console.log();
     if (prevDirPath) {
-      fetchFiles("flawdetector-team-yes", "flawdetector-team-yes", prevDirPath);
+      fetchFiles("flawdetector-team-yes", repo.id, prevDirPath);
       moveFolderPath(prevDirPath);
     }
   };
@@ -56,7 +58,7 @@ export default function FileList() {
    * 컴포넌트가 마운트될 때 초기 폴더의 파일들을 가져오는 효과를 설정합니다.
    */
   useEffect(() => {
-    fetchFiles("flawdetector-team-yes", "flawdetector-team-yes", "src");
+    fetchFiles("flawdetector-team-yes", repo.id, "src");
   }, []);
 
   return (

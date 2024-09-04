@@ -1,4 +1,4 @@
-import { TSelectedFiles } from "@/app/me/(analyze)/type";
+import { TSelectedFiles } from "@/app/me/repos/type";
 import fileImg from "../../../../public/images/file.png";
 import Image from "next/image";
 import { useAnalyzeFilesStore } from "@/store/useAnalyzeStore";

@@ -1,4 +1,4 @@
-import { TGithubContent } from "@/app/me/(analyze)/type";
+import { TGithubContent } from "@/app/me/repos/type";
 import { sortDirOverFiles } from "@/lib/sortDirOverFiles";
 import { create } from "zustand";
 
