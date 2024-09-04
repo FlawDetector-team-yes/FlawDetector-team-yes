@@ -1,4 +1,4 @@
-import { TAnalysisResult } from "@/app/me/(analyze)/type";
+import { TAnalysisResult } from "@/app/me/repos/type";
 import FileAnalysisItem from "./FileAnalysisListItem";
 
 /**
@@ -13,19 +13,20 @@ import FileAnalysisItem from "./FileAnalysisListItem";
 export default function FileAnalysisList({
   analysisResults,
 }: {
-  analysisResults: TAnalysisResult[];
+  analysisResults?: TAnalysisResult[];
 }) {
   return (
     <>
       <main>
         <ul className="flex flex-col gap-8">
-          {analysisResults.map((result: TAnalysisResult) => (
+          {/** 분석 파일 리스트 */}
+          {/*{analysisResults.map((result: TAnalysisResult) => (
             <FileAnalysisItem
               key={result.sha}
               fileName={result.name}
               results={result.results}
             />
-          ))}
+          ))}*/}
         </ul>
       </main>
     </>

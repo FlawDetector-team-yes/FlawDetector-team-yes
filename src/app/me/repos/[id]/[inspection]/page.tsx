@@ -1,8 +1,8 @@
 import Image from "next/image";
 import leftVioletArrow from "../../../../../public/images/left-violet-arrow.png";
-import { analysisResults } from "../data";
 import FileAnalysisSideBar from "@/components/analyze/ai-analyze/FileAnalysisSideBar";
 import FileAnalysisList from "@/components/analyze/ai-analyze/FileAnalysisList";
+//import { analysisResults } from "../data";
 
 /**
  * `AiAnalyzePage` 컴포넌트는 파일 분석 페이지를 렌더링합니다.
@@ -25,8 +25,8 @@ function AiAnalyzePage() {
         <p className="flex items-center text-[38px] font-medium">sfacweb - 1</p>
       </section>
       <section className="flex gap-8">
-        <FileAnalysisSideBar analysisResults={analysisResults} />
-        <FileAnalysisList analysisResults={analysisResults} />
+        <FileAnalysisSideBar />
+        <FileAnalysisList />
       </section>
     </div>
   );

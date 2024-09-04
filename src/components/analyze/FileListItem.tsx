@@ -1,4 +1,3 @@
-import { TGithubContent } from "@/app/me/(analyze)/type";
 import fileImg from "../../../public/images/file.png";
 import folderImg from "../../../public/images/folder-open.png";
 import checkImg from "../../../public/images/check.png";
@@ -6,6 +5,8 @@ import Image from "next/image";
 import useFilesStore, { fetchRepoContents } from "@/store/useFilesStore";
 import useSelectedFilesStore from "@/store/useSelectedFilesStore";
 import { decodeUnicode } from "@/lib/decodeUnicode";
+import { TGithubContent } from "@/app/me/repos/type";
+import { useParams } from "next/navigation";
 
 type TFileListItemProps = {
   file: TGithubContent;
@@ -21,6 +22,7 @@ type TFileListItemProps = {
  * @returns {JSX.Element} - 파일 항목을 렌더링하는 JSX 요소
  */
 function FileListItem({ file, isSelected }: TFileListItemProps) {
+  const repo = useParams<{ id: string }>();
   const fetchFiles = useFilesStore((state) => state.fecthFiles);
   const selectedFiles = useSelectedFilesStore((state) => state.selectedFiles);
   const prevFolder = useSelectedFilesStore((state) => state.folderPath);
@@ -44,7 +46,7 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
         try {
           const fileData = await fetchRepoContents(
             "flawdetector-team-yes",
-            "flawdetector-team-yes",
+            repo.id,
             `${prevFolder}/${file.name}`,
           );
           if (fileData && fileData.content) {
@@ -63,7 +65,7 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
       selectFile("dir", file.name);
       fetchFiles(
         "flawdetector-team-yes",
-        "flawdetector-team-yes",
+        repo.id,
         `${prevFolder}/${file.name}`,
       );
     }
