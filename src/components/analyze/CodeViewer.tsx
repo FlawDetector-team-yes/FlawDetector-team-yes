@@ -95,12 +95,6 @@ export default function CodeViewer() {
           />
           <style jsx global>{`
             /* CodeMirror 컨테이너 스타일 */
-            @font-face {
-              font-family: "Pretendard";
-              src: url("/fonts/pretendard.woff2") format("woff2");
-              font-weight: 400;
-              font-style: normal;
-            }
             .cm-line {
               font-size: 17px; /* 폰트 크기를 조절합니다 */
               margin-left: 10px;
