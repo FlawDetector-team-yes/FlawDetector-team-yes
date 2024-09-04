@@ -1,6 +1,7 @@
 import { TSelectedFiles } from "@/app/me/repos/type";
 import fileImg from "../../../../public/images/file.png";
 import Image from "next/image";
+import { useAnalyzeFilesStore } from "@/store/useAnalyzeStore";
 
 /**
  * 모달 파일 리스트 아이템을 표시하는 컴포넌트입니다.
@@ -18,6 +19,9 @@ export default function ModalFileListItem({
   file: TSelectedFiles;
   idx: number;
 }) {
+  const analyzeFiles = useAnalyzeFilesStore((state) => state.analyzeFiles);
+  const fileProgress = analyzeFiles.find((p) => p.fileId === file.sha);
+
   return (
     <>
       <li
@@ -32,8 +36,17 @@ export default function ModalFileListItem({
             {file.name}
           </span>
         </div>
-        <progress />
-        <span>대기중</span>
+
+        <div className="flex w-[50%] items-center justify-end gap-2">
+          <div className="h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-100">
+            <div
+              className="h-2.5 rounded-full bg-system-success"
+              style={{ width: `${fileProgress?.progressValue || 0}%` }}
+            ></div>
+          </div>
+          {/* <span>대기중</span> */}
+          <span>{fileProgress?.progressValue || 0}%</span>
+        </div>
       </li>
     </>
   );
