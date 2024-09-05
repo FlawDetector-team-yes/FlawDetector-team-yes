@@ -13,6 +13,7 @@ const pretendard = localFont({
   display: "swap",
   weight: "45 920",
   variable: "--font-pretendard",
+  preload: false,
 });
 
 export const metadata: Metadata = {

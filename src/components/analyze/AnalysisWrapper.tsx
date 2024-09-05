@@ -8,6 +8,8 @@ import useFilesStore, { fetchRepoContents } from "@/store/useFilesStore";
 import { decodeUnicode } from "@/lib/decodeUnicode";
 import { useParams } from "next/navigation";
 import CodeViewer from "./CodeViewer";
+import OpenModalBtn from "./OpenModalBtn";
+import { useStepStore } from "@/store/useAnalyzeStore";
 
 /**
  * `AnalysisWrapper` 컴포넌트
@@ -22,6 +24,7 @@ export default function AnalysisWrapper() {
   const selectAllFile = useSelectedFilesStore((state) => state.selectedAllFile);
   const folderPath = useSelectedFilesStore((state) => state.folderPath);
   const files = useFilesStore((state) => state.files);
+  const currentStep = useStepStore((state) => state.currentStep); // 현재 단계 상태
 
   /**
    * 전체 파일을 선택하고 파일 내용을 가져와 상태를 업데이트합니다.
@@ -75,8 +78,9 @@ export default function AnalysisWrapper() {
           </button>
           <FileSideBar />
         </section>
-        <main className="h-[1220px] w-full overflow-y-scroll">
+        <main className="relative h-[1220px] w-full overflow-y-scroll">
           <CodeViewer />
+          {currentStep === "analyze" && <OpenModalBtn />}
         </main>
       </section>
     </>
