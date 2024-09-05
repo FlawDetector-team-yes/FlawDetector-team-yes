@@ -50,6 +50,7 @@ export type TResultData = {
   sha: string;
   name?: string;
   path?: string;
+  content: string;
   result: string; // 결과 저장
 };
 

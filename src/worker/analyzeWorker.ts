@@ -1,11 +1,18 @@
 self.onmessage = async (event) => {
-  const { fileId, content, apiUrl } = event.data;
+  const { fileId, name, content, apiUrl } = event.data;
   // console.log(content);
 
   try {
     // 진행 상황 업데이트를 위한 함수
     const updateProgress = (percent: number, status: string) => {
-      self.postMessage({ fileId, percent, status, type: "progress" });
+      self.postMessage({
+        fileId,
+        name,
+        content,
+        percent,
+        status,
+        type: "progress",
+      });
     };
 
     // 총 요청 시간 (40초)
@@ -69,6 +76,8 @@ self.onmessage = async (event) => {
     updateProgress(100, "completed");
     self.postMessage({
       fileId,
+      name,
+      content,
       percent: 100,
       result,
       status: "completed",
@@ -77,6 +86,8 @@ self.onmessage = async (event) => {
   } catch (error: any) {
     self.postMessage({
       fileId,
+      name,
+      content,
       percent: 0,
       status: "error",
       message: error.message,

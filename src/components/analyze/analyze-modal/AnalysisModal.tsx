@@ -82,19 +82,21 @@ export const AnalysisModal: React.FC<any> = () => {
 
         worker.postMessage({
           fileId: file.sha,
+          name: file.name,
           content: file.content,
           apiUrl: `/api/analyze/llm`,
         });
 
         worker.onmessage = (event) => {
-          const { fileId, percent, result, status, type } = event.data;
+          const { fileId, name, content, percent, result, status, type } =
+            event.data;
 
           if (type === "progress") {
             setCurrentStep("analyze");
             setAnalyzeFiles({ fileId, progressValue: percent, state: status });
             // console.log(`Progress: ${percent}%`);
           } else if (type === "completed") {
-            setResultData({ sha: fileId, result });
+            setResultData({ sha: fileId, name, content, result });
             worker.terminate();
             resolve(); // 워커 작업 완료 시 resolve 호출
           } else if (type === "error") {
