@@ -1,19 +1,22 @@
 "use client";
 import { useEffect, useState } from "react";
-import menuDot from "/public/images/menu-dot.png";
-import Image, { StaticImageData } from "next/image";
+
+import Image from "next/image";
 import plus from "/public/images/plus.png";
 import LibrarySort from "./LibrarySort";
 import useUserStore from "@/store/useUserStore";
+import GitRepoListItem from "./GitRepoListItem";
+import GitRepoListLoading from "./GitRepoListLoading";
 
-type TUserInfoType = {
+export type TUserInfoType = {
   label: string;
   name: string;
   createdAt: string;
 };
 
-export default function GitListItem() {
+export default function GitRepoList() {
   const user = useUserStore((state) => state.userInfo);
+  const isLoading = useUserStore((state) => state.isLoading);
   const [repos, setRepos] = useState<TUserInfoType[]>([]);
   const [visibleCount, setVisibleCount] = useState<number>(12); // 초기 12개만 출력
 
@@ -48,36 +51,25 @@ export default function GitListItem() {
     <>
       <LibrarySort />
       <div className="grid grid-cols-4 gap-10 pt-5">
-        {repos.slice(0, visibleCount).map((repo, index) => (
-          <div
-            key={index}
-            className="flex h-[200px] w-[310px] flex-col justify-between rounded-xl border border-solid border-[#E0CEFF] px-2 py-4"
-          >
-            <div className="flex h-[30px] flex-col justify-between gap-2">
-              <div className="h-[23px] w-[43px] rounded-full border border-solid border-[#3F3F3F] px-1 py-[2px] text-center text-[12px]">
-                label
-              </div>
-              <span className="w-[296px] break-words text-[24px]">
-                {repo.name}
-              </span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-light">{repo.createdAt}</span>
-            </div>
-          </div>
-        ))}
+        {!repos.length ? (
+          <GitRepoListLoading />
+        ) : (
+          repos
+            .slice(0, visibleCount)
+            .map((repo, index) => <GitRepoListItem key={index} repo={repo} />)
+        )}
       </div>
 
       {/* 더보기 버튼 */}
       {isMoreItems && (
-        <div className="mt-7 flex w-full justify-center">
+        <div className="mt-12 flex w-full justify-center">
           <button
-            className="flex h-[54px] w-[103px] items-center justify-center rounded-lg border border-solid border-[#6100FF] text-[#6100FF]"
+            className="flex h-[54px] w-[103px] items-center justify-center gap-1 rounded-lg border border-solid border-primary-500 text-[#6100FF]"
             onClick={handleLoadMore}
           >
-            <span>more </span>
+            <span>더보기</span>
             <div>
-              <Image src={plus} alt="더보기" width={18} height={18} />
+              <Image src={plus} alt="더보기" width={19} height={19} />
             </div>
           </button>
         </div>
