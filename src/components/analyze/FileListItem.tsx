@@ -1,12 +1,16 @@
 import fileImg from "../../../public/images/file.png";
 import folderImg from "../../../public/images/folder-open.png";
 import checkImg from "../../../public/images/check.png";
+import successImg from "../../../public/images/circle-success.png";
+import loadingImg from "../../../public/images/loading-arrow.png";
+import errorImg from "../../../public/images/triangle-error.png";
 import Image from "next/image";
 import useFilesStore, { fetchRepoContents } from "@/store/useFilesStore";
 import useSelectedFilesStore from "@/store/useSelectedFilesStore";
 import { decodeUnicode } from "@/lib/decodeUnicode";
 import { TGithubContent } from "@/app/me/repos/type";
 import { useParams } from "next/navigation";
+import { useAnalyzeFilesStore, useStepStore } from "@/store/useAnalyzeStore";
 
 type TFileListItemProps = {
   file: TGithubContent;
@@ -28,6 +32,9 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
   const prevFolder = useSelectedFilesStore((state) => state.folderPath);
   const selectFile = useSelectedFilesStore((state) => state.selectFile);
   const removeFile = useSelectedFilesStore((state) => state.removeFile);
+  const currentStep = useStepStore((state) => state.currentStep); // 현재 단계 상태
+  // 검사 중인 파일들
+  const analyzeFiles = useAnalyzeFilesStore((state) => state.analyzeFiles);
 
   /**
    * 파일 또는 폴더를 클릭했을 때 호출되는 핸들러입니다.
@@ -88,7 +95,30 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
         width={24}
         height={24}
       />
-      <span className="text-base text-[#3F3F3F]">{file.name}</span>
+      <div className="flex w-full justify-between">
+        <span className="text-base text-[#3F3F3F]">{file.name}</span>
+        {analyzeFiles.map((f) =>
+          f.fileId === file.sha && f.state === "progress" ? (
+            <div key={f.fileId} className="h-5 w-5">
+              <Image
+                src={loadingImg}
+                alt="loadingImg"
+                className="animate-[spin_3s_linear_infinite]"
+              />
+            </div>
+          ) : f.fileId === file.sha && f.state === "completed" ? (
+            <div key={f.fileId} className="h-5 w-5">
+              <Image src={successImg} alt="successImg" />
+            </div>
+          ) : f.fileId === file.sha && f.state === "error" ? (
+            <div key={f.fileId} className="h-5 w-5">
+              <Image src={errorImg} alt="errorImg" />
+            </div>
+          ) : (
+            ""
+          ),
+        )}
+      </div>
     </li>
   );
 }
