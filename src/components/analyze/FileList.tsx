@@ -8,6 +8,7 @@ import useFilesStore from "@/store/useFilesStore";
 import Image from "next/image";
 import { TGithubContent } from "@/app/me/repos/type";
 import { useParams } from "next/navigation";
+import useUserStore from "@/store/useUserStore";
 
 /**
  * `FileList` 컴포넌트는 파일 목록을 렌더링하는 역할을 합니다.
@@ -20,6 +21,7 @@ import { useParams } from "next/navigation";
 export default function FileList() {
   const repo = useParams<{ id: string }>();
   const selectedFiles = useSelectedFilesStore((state) => state.selectedFiles);
+  const owner = useUserStore((state) => state.userInfo?.owner);
   const files = useFilesStore((state) => state.files);
   const fetchFiles = useFilesStore((state) => state.fecthFiles);
   const folderPath = useSelectedFilesStore((state) => state.folderPath);
@@ -49,7 +51,7 @@ export default function FileList() {
   const handleClickPrevFolder = () => {
     console.log();
     if (prevDirPath) {
-      fetchFiles("flawdetector-team-yes", repo.id, prevDirPath);
+      fetchFiles(owner || "", repo.id, prevDirPath);
       moveFolderPath(prevDirPath);
     }
   };
@@ -58,7 +60,7 @@ export default function FileList() {
    * 컴포넌트가 마운트될 때 초기 폴더의 파일들을 가져오는 효과를 설정합니다.
    */
   useEffect(() => {
-    fetchFiles("flawdetector-team-yes", repo.id, "src");
+    fetchFiles(owner || "", repo.id, "");
   }, []);
 
   return (
