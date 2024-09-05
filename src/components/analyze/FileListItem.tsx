@@ -9,6 +9,7 @@ import circleXMarkImg from "../../../public/images/circle-x-mark.png";
 import purpleSuccessImg from "../../../public/images/circle-purple-success.svg";
 import { useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import useFilesStore, { fetchRepoContents } from "@/store/useFilesStore";
@@ -16,10 +17,29 @@ import useSelectedFilesStore from "@/store/useSelectedFilesStore";
 import { useAnalyzeFilesStore, useStepStore } from "@/store/useAnalyzeStore";
 import { decodeUnicode } from "@/lib/decodeUnicode";
 import { TGithubContent } from "@/app/me/repos/type";
+import { format } from "date-fns";
 
 type TFileListItemProps = {
   file: TGithubContent;
   isSelected: boolean;
+};
+
+type TToastSteps = {
+  analyzeToast: {
+    img: JSX.Element;
+    text: string;
+    subText: string;
+  };
+  finishToast: {
+    img: JSX.Element;
+    text: string;
+    subText: string;
+  };
+  cancelToast: {
+    img: JSX.Element;
+    text: string;
+    subText: string;
+  };
 };
 
 /**
@@ -38,65 +58,93 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
   const selectFile = useSelectedFilesStore((state) => state.selectFile);
   const removeFile = useSelectedFilesStore((state) => state.removeFile);
   const currentStep = useStepStore((state) => state.currentStep); // 현재 단계 상태
-  // 검사 중인 파일들
-  const analyzeFiles = useAnalyzeFilesStore((state) => state.analyzeFiles);
+  const analyzeFiles = useAnalyzeFilesStore((state) => state.analyzeFiles); // 검사 중인 파일들
+
+  // 특정 형식으로 날짜 data 문자열 format
+  const today = format(new Date(), "yyyy-MM-dd HH:mm");
+  // base64 encoding
+  const encodingDate = btoa(today);
+
+  const toastStep: TToastSteps = {
+    analyzeToast: {
+      img: (
+        <Image
+          src={loadingImg}
+          alt="loadingImg"
+          className="animate-[spin_3s_linear_infinite]"
+          width={30}
+          height={30}
+        />
+      ),
+      text: "검사중...",
+      subText: "코드가 많을수록 처리시간이 길어집니다.",
+    },
+    finishToast: {
+      img: (
+        <Image
+          src={purpleSuccessImg}
+          alt="purpleSuccessImg"
+          width={30}
+          height={30}
+        />
+      ),
+      text: "프로젝트 검사 완료",
+      subText: "검사 결과를 확인해보세요.",
+    },
+    cancelToast: {
+      img: (
+        <Image
+          src={circleXMarkImg}
+          alt="circleXMarkImg"
+          width={30}
+          height={30}
+        />
+      ),
+      text: "검사 중단",
+      subText: "검사가 중단되었습니다.",
+    },
+  };
 
   useEffect(() => {
     analyzeFiles &&
       currentStep !== "select" &&
       toast.custom(() => (
-        <div className="flex w-[400px] items-start justify-between rounded-md bg-white p-8 shadow-lg">
-          <div className="flex gap-5">
+        <div className="flex w-[400px] items-start justify-between rounded-lg bg-white p-8 shadow-lg">
+          <div className="flex w-full gap-5">
             <div className="h-[30px] w-[30px]">
-              {currentStep === "analyze" ? (
-                <Image
-                  src={loadingImg}
-                  alt="loadingImg"
-                  className="animate-[spin_3s_linear_infinite]"
-                  width={30}
-                  height={30}
-                />
-              ) : currentStep === "finish" ? (
-                <Image
-                  src={purpleSuccessImg}
-                  alt="purpleSuccessImg"
-                  width={30}
-                  height={30}
-                />
-              ) : currentStep === "cancel" ? (
-                <Image
-                  src={circleXMarkImg}
-                  alt="circleXMarkImg"
-                  width={30}
-                  height={30}
-                />
-              ) : (
-                ""
-              )}
+              {currentStep === "analyze"
+                ? toastStep.analyzeToast.img
+                : currentStep === "finish"
+                  ? toastStep.finishToast.img
+                  : currentStep === "cancel"
+                    ? toastStep.cancelToast.img
+                    : ""}
             </div>
 
-            <div className="flex max-w-fit flex-col gap-3">
+            <div className="flex w-full flex-col gap-3">
               <h1 className="font-medium">
                 {currentStep === "analyze"
-                  ? "검사중..."
+                  ? toastStep.analyzeToast.text
                   : currentStep === "finish"
-                    ? "프로젝트 검사 완료"
+                    ? toastStep.finishToast.text
                     : currentStep === "cancel"
-                      ? "검사 중단"
+                      ? toastStep.cancelToast.text
                       : ""}
               </h1>
               <p className="text-neutral-50">
                 {currentStep === "analyze"
-                  ? "코드가 많을수록 처리시간이 길어집니다."
+                  ? toastStep.analyzeToast.subText
                   : currentStep === "finish"
-                    ? "검사 결과를 확인해보세요."
+                    ? toastStep.finishToast.subText
                     : currentStep === "cancel"
-                      ? "검사가 중단되었습니다."
+                      ? toastStep.cancelToast.subText
                       : ""}
               </p>
               {currentStep === "finish" && (
-                <button className="rounded-md bg-primary-500 px-5 py-2 text-white">
-                  검사 결과 보러가기
+                <button className="rounded-lg bg-primary-500 px-5 py-2 text-white">
+                  <Link href={`/me/repos/${repo.id}/${encodingDate}`}>
+                    검사 결과 보러가기
+                  </Link>
                 </button>
               )}
             </div>
