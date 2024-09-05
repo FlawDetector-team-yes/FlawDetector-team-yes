@@ -9,12 +9,16 @@ export type TuserInfo = {
 
 type TUserDataState = {
   userInfo: TuserInfo | null;
+  isLoading: boolean;
   setUserData: (data: TuserInfo) => void;
+  setIsLoading: () => void;
 };
 
-export const userInfoStore = create<TUserDataState>((set) => ({
+export const useUserStore = create<TUserDataState>((set) => ({
   userInfo: null,
+  isLoading: true,
   setUserData: (data: TuserInfo) => set({ userInfo: data }),
+  setIsLoading: () => set({ isLoading: false }),
 }));
 
-export default userInfoStore;
+export default useUserStore;
