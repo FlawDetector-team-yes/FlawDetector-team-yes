@@ -4,13 +4,18 @@ import checkImg from "../../../public/images/check.png";
 import successImg from "../../../public/images/circle-success.png";
 import loadingImg from "../../../public/images/loading-arrow.png";
 import errorImg from "../../../public/images/triangle-error.png";
+import xMarkImg from "../../../public/images/x-mark-off.png";
+import circleXMarkImg from "../../../public/images/circle-x-mark.png";
+import purpleSuccessImg from "../../../public/images/circle-purple-success.svg";
+import { useEffect } from "react";
 import Image from "next/image";
+import { useParams } from "next/navigation";
+import { toast } from "sonner";
 import useFilesStore, { fetchRepoContents } from "@/store/useFilesStore";
 import useSelectedFilesStore from "@/store/useSelectedFilesStore";
+import { useAnalyzeFilesStore, useStepStore } from "@/store/useAnalyzeStore";
 import { decodeUnicode } from "@/lib/decodeUnicode";
 import { TGithubContent } from "@/app/me/repos/type";
-import { useParams } from "next/navigation";
-import { useAnalyzeFilesStore, useStepStore } from "@/store/useAnalyzeStore";
 
 type TFileListItemProps = {
   file: TGithubContent;
@@ -35,6 +40,74 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
   const currentStep = useStepStore((state) => state.currentStep); // 현재 단계 상태
   // 검사 중인 파일들
   const analyzeFiles = useAnalyzeFilesStore((state) => state.analyzeFiles);
+
+  useEffect(() => {
+    analyzeFiles &&
+      currentStep !== "select" &&
+      toast.custom(() => (
+        <div className="flex w-[400px] items-start justify-between rounded-md bg-white p-8 shadow-lg">
+          <div className="flex gap-5">
+            <div className="h-[30px] w-[30px]">
+              {currentStep === "analyze" ? (
+                <Image
+                  src={loadingImg}
+                  alt="loadingImg"
+                  className="animate-[spin_3s_linear_infinite]"
+                  width={30}
+                  height={30}
+                />
+              ) : currentStep === "finish" ? (
+                <Image
+                  src={purpleSuccessImg}
+                  alt="purpleSuccessImg"
+                  width={30}
+                  height={30}
+                />
+              ) : currentStep === "cancel" ? (
+                <Image
+                  src={circleXMarkImg}
+                  alt="circleXMarkImg"
+                  width={30}
+                  height={30}
+                />
+              ) : (
+                ""
+              )}
+            </div>
+
+            <div className="flex max-w-fit flex-col gap-3">
+              <h1 className="font-medium">
+                {currentStep === "analyze"
+                  ? "검사중..."
+                  : currentStep === "finish"
+                    ? "프로젝트 검사 완료"
+                    : currentStep === "cancel"
+                      ? "검사 중단"
+                      : ""}
+              </h1>
+              <p className="text-neutral-50">
+                {currentStep === "analyze"
+                  ? "코드가 많을수록 처리시간이 길어집니다."
+                  : currentStep === "finish"
+                    ? "검사 결과를 확인해보세요."
+                    : currentStep === "cancel"
+                      ? "검사가 중단되었습니다."
+                      : ""}
+              </p>
+              {currentStep === "finish" && (
+                <button className="rounded-md bg-primary-500 px-5 py-2 text-white">
+                  검사 결과 보러가기
+                </button>
+              )}
+            </div>
+          </div>
+
+          <button onClick={() => toast.dismiss()}>
+            <Image src={xMarkImg} alt="x-mark" width={20} height={20} />
+          </button>
+        </div>
+      ));
+  }, [currentStep]);
 
   /**
    * 파일 또는 폴더를 클릭했을 때 호출되는 핸들러입니다.
