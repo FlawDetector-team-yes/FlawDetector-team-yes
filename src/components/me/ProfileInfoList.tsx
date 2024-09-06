@@ -8,7 +8,7 @@ export default function ProfileInfoList() {
   const userData = useUserStore((state) => state.userInfo);
   return (
     <>
-      <div className="flex w-full justify-between border-b-2 pb-[40px]">
+      <div className="flex w-full justify-between border-b-[1px] pb-[40px]">
         <div className="flex h-[203px] flex-col justify-between py-[40px]">
           <div>
             <h1 className="text-2xl font-bold">내정보</h1>
@@ -19,27 +19,20 @@ export default function ProfileInfoList() {
           </div>
         </div>
       </div>
-      <div className="flex w-full justify-between border-b-2 pb-[40px]">
+      <div className="flex w-full justify-between border-b-[1px] pb-[40px]">
         <div className="flex h-[203px] flex-col justify-between py-[40px]">
-          <div>
-            <h1 className="text-2xl font-bold">라이브러리</h1>
-          </div>
-          <div className="flex flex-col gap-1">
-            <Link href="/me/detected">
-              <span className="text-[18px] font-medium">검출된 파일</span>
-            </Link>
+          <div className="flex flex-col gap-7 text-[18px]">
             <Link href="/me/clip">
               <span className="text-[18px] font-medium">스크랩</span>
             </Link>
+            <Link href="/me/setting">
+              <span>설정</span>
+            </Link>
+            <span>고객센터</span>
           </div>
         </div>
       </div>
-      <div className="flex h-[203px] flex-col gap-4 py-[40px]">
-        <Link href="/me/setting">
-          <span>설정</span>
-        </Link>
-        <span>고객센터</span>
-      </div>
+      <div className="flex h-[203px] flex-col gap-4 py-[40px]"></div>
     </>
   );
 }
