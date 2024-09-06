@@ -9,13 +9,14 @@ import addDataToFirebase from "./addDataToFirebase.js";
  * @async
  * @function crawling
  */
+crawling();
 export default async function crawling() {
   const PAGE_COUNT = 1; // 스크랩할 페이지네이션 페이지 수
   const BASE_URL = "https://www.cnnvd.org.cn/home/warn";
   const TIMEOUT = 600000; // 페이지 로딩 타임아웃 설정
 
   try {
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
     const token = await fetchToken();
     await page.goto(BASE_URL, { waitUntil: "networkidle0", timeout: TIMEOUT });
