@@ -1,9 +1,9 @@
 name: Run JavaScript File Weekly
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # 수동 실행을 위한 설정
   schedule:
-    - cron: '0 0 * * 0'
+    - cron: '0 0 * * 0' # 매주 일요일 자정에 실행 (UTC 기준)
 
 jobs:
   run-js-file:
@@ -13,19 +13,19 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: List files
+      run: ls -R
+
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '20.17.0'
+        node-version: '20.17.0' # 원하는 Node.js 버전을 설정하세요
 
     - name: Install dependencies
       run: npm install
 
-    - name: Compile TypeScript
-      run: npx tsc
-
     - name: Run JavaScript file
-      run: node dist/scripts/crawling.js
+      run: node src/scripts/crawling.mjs
       env:
         NEXT_PUBLIC_USERNAME: ${{ secrets.NEXT_PUBLIC_USERNAME }}
         NEXT_PUBLIC_PASSWORD: ${{ secrets.NEXT_PUBLIC_PASSWORD }}
