@@ -5,44 +5,73 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import userInfoStore from "@/store/useAuth";
+import useUserStore from "@/store/useUserStore";
 
-// /me 마이페이지 상단의 나의정보와 프로필정보 로그아웃을 나타내는 컴포넌트
 export default function ProfileInfo() {
-  const userData = userInfoStore((state) => state.userInfo);
-  const setUserData = userInfoStore((state) => state.setUserData);
+  const userData = useUserStore((state) => state.userInfo);
+  const isLoading = useUserStore((state) => state.isLoading);
+  const setUserData = useUserStore((state) => state.setUserData);
+  const setIsLoading = useUserStore((state) => state.setIsLoading);
   const { data: session } = useSession();
-  // const docRef = collection(db, "users");
-  const pathName = usePathname();
+  const [isImgLoading, setIsImgLoading] = useState<boolean>(true);
   const [userProfileImg, setUserProfileImg] = useState("");
+  const pathName = usePathname();
+
+  const handleLoadImg = () => {
+    setIsImgLoading(false);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       if (session) {
-        console.log(session);
+        const profileImg = session.user?.image;
+        const userNumber = profileImg
+          ? profileImg.match(/u\/(\d+)/)?.[1] || null
+          : null;
+
+        const { owner } = await (
+          await fetch(`/api/github/user/${userNumber}`)
+        ).json();
         setUserData({
           email: session.user?.email,
           username: session.user?.name,
           profileImg: session.user?.image,
+          owner: owner,
         });
         setUserProfileImg(userData?.profileImg as string);
+        setIsLoading();
       }
     };
     fetchData();
   }, [session, userProfileImg]);
+
   return (
     <>
       <div className="flex w-full justify-between border-b-2 pb-[60px]">
         <div className="flex gap-6 rounded-full">
+          {/* 프로필 이미지 */}
+          {isImgLoading && (
+            <div className="h-[70px] w-[70px] animate-pulse rounded-full bg-gray-400"></div>
+          )}
+
           <Image
-            className="rounded-full"
+            className={`rounded-full transition-opacity duration-500 ${
+              isImgLoading ? "opacity-0" : "opacity-100"
+            }`}
+            onLoad={handleLoadImg}
             src={userProfileImg}
-            alt="프로필이미지"
+            alt="Profile"
             width={70}
-            height={40}
+            height={70}
           />
+
           <div className="flex flex-col text-2xl">
-            <span>Hello,</span>
-            <span>{userData?.email}</span>
+            {!isLoading && (
+              <>
+                <span>Hello,</span>
+                <span>{userData?.email}</span>
+              </>
+            )}
           </div>
         </div>
 
