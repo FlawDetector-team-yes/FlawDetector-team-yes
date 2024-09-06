@@ -7,6 +7,7 @@ import useSelectedFilesStore from "@/store/useSelectedFilesStore";
 import { decodeUnicode } from "@/lib/decodeUnicode";
 import { TGithubContent } from "@/app/me/repos/type";
 import { useParams } from "next/navigation";
+import useUserStore from "@/store/useUserStore";
 
 type TFileListItemProps = {
   file: TGithubContent;
@@ -23,6 +24,7 @@ type TFileListItemProps = {
  */
 function FileListItem({ file, isSelected }: TFileListItemProps) {
   const repo = useParams<{ id: string }>();
+  const owner = useUserStore((state) => state.userInfo?.owner);
   const fetchFiles = useFilesStore((state) => state.fecthFiles);
   const selectedFiles = useSelectedFilesStore((state) => state.selectedFiles);
   const prevFolder = useSelectedFilesStore((state) => state.folderPath);
@@ -44,14 +46,16 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
       // 처음 선택한 파일일 경우
       if (fileIndex === -1) {
         try {
-          const fileData = await fetchRepoContents(
-            "flawdetector-team-yes",
-            repo.id,
-            `${prevFolder}/${file.name}`,
-          );
-          if (fileData && fileData.content) {
-            const decodedContent = decodeUnicode(fileData.content);
-            selectFile("file", fileData.name, fileData.sha, decodedContent);
+          if (owner) {
+            const fileData = await fetchRepoContents(
+              owner,
+              repo.id,
+              `${prevFolder}/${file.name}`,
+            );
+            if (fileData && fileData.content) {
+              const decodedContent = decodeUnicode(fileData.content);
+              selectFile("file", fileData.name, fileData.sha, decodedContent);
+            }
           }
         } catch (error) {
           console.error("Error fetching or decoding file:", error);
@@ -63,11 +67,7 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
       // 폴더일 경우
     } else {
       selectFile("dir", file.name);
-      fetchFiles(
-        "flawdetector-team-yes",
-        repo.id,
-        `${prevFolder}/${file.name}`,
-      );
+      fetchFiles(owner || "", repo.id, `${prevFolder}/${file.name}`);
     }
   };
 

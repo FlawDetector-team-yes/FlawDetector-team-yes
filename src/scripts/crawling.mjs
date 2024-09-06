@@ -1,21 +1,22 @@
 import puppeteer from "puppeteer";
-import handler from "./trans";
-import parseTextToArray from "./parseTextToArray";
-import fetchToken from "./fetch-token";
-import addDataToFirebase from "./addDataToFirebase";
+import handler from "./trans.js";
+import parseTextToArray from "./parseTextToArray.js";
+import fetchToken from "./fetch-token.js";
+import addDataToFirebase from "./addDataToFirebase.js";
 
 /**
  * 웹 스크래핑을 수행하여 데이터를 추출하는 함수입니다.
  * @async
  * @function crawling
  */
+crawling();
 export default async function crawling() {
   const PAGE_COUNT = 1; // 스크랩할 페이지네이션 페이지 수
   const BASE_URL = "https://www.cnnvd.org.cn/home/warn";
   const TIMEOUT = 600000; // 페이지 로딩 타임아웃 설정
 
   try {
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
     const token = await fetchToken();
     await page.goto(BASE_URL, { waitUntil: "networkidle0", timeout: TIMEOUT });
@@ -26,8 +27,8 @@ export default async function crawling() {
     for (let i = 0; i < PAGE_COUNT; i++) {
       const objs = await getPageData(page);
 
-      for (let j = 0; j < Math.min(10, objs.length); j++) {
-        // for (let j = 0; j < 2; j++) {
+      // for (let j = 0; j < Math.min(10, objs.length); j++) {
+      for (let j = 0; j < 2; j++) {
         await navigateToPage(page, i + 1);
 
         if (await isElementPresent(page, j)) {
@@ -217,5 +218,5 @@ async function translateAndLogData(pageData, token) {
   console.log(`테이블: ${arrayTable}`);
 
   // 파이어베이스에 데이터 넣기
-  // await addDataToFirebase(title, subtitle, content, arrayTable);
+  await addDataToFirebase(title, subtitle, content, arrayTable);
 }

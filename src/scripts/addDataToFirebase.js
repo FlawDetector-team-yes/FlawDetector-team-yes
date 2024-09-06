@@ -1,4 +1,4 @@
-import db from "@/firebase/firebaseClient";
+import db from "../firebase/firebaseClient.js";
 import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 
 /**

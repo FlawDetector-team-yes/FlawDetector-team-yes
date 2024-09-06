@@ -26,7 +26,9 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "**/*.js"
+    "**/*.js",
+    "**/*.mjs",
+    "src/scripts/crawling.mjs"
   ],
   "exclude": ["node_modules"]
 }
