@@ -5,17 +5,17 @@ import bugImg from "../../../public/images/bug-white.svg";
 import rightArrowImg from "../../../public/images/right-arrow-white.svg";
 import starPurple from "../../../public/images/star-purple.svg";
 import starWhite from "../../../public/images/star-white.svg";
-import { TUserInfoType } from "./GitRepoList";
+import { TMyPageUserReposType } from "./GitRepoList";
 import { useRouter } from "next/navigation";
 import useUserStore from "@/store/useUserStore";
 
-const BG_COLOR: Record<TRepoType, string> = {
+const BG_COLOR: Record<TRepoState, string> = {
   pending: "bg-[#F1F1F1]",
   analyze: "bg-[#FFF3F3]",
   finish: "bg-[#F2EBFF]",
 };
 
-const TEXT_COLOR: Record<TRepoType, string> = {
+const TEXT_COLOR: Record<TRepoState, string> = {
   pending: "text-[#969696]",
   analyze: "text-[#FF6D6D]",
   finish: "text-[#6100FF]",
@@ -27,14 +27,14 @@ const TEXT = {
   finish: "검사완료",
 };
 
-type TRepoType = "pending" | "analyze" | "finish";
+type TRepoState = "pending" | "analyze" | "finish";
 
 export default function GitRepoListItem({
   repo,
-  repoType,
+  repoState,
 }: {
-  repo: TUserInfoType;
-  repoType: TRepoType;
+  repo: TMyPageUserReposType;
+  repoState: TRepoState;
 }) {
   const bookmarkedRepos = useUserStore((state) => state.bookmarkedRepos);
   const toggleBookmarkedRepos = useUserStore(
@@ -43,7 +43,7 @@ export default function GitRepoListItem({
   const router = useRouter();
   const handlePageChange = () => {
     // 검사 페이지 이동
-    if (repoType !== "finish") {
+    if (repoState !== "finish") {
       router.push(`/me/repos/${repo.name}`);
     }
     //else {
@@ -60,12 +60,12 @@ export default function GitRepoListItem({
         <div className="flex justify-between">
           {/* 라벨 */}
           <div
-            className={`${BG_COLOR[repoType]} ${repoType !== "finish" ? "w-[62px]" : "w-[75px]"} flex h-[35px] w-[75px] items-center justify-center gap-3 rounded-full px-2 py-3`}
+            className={`${BG_COLOR[repoState]} ${repoState !== "finish" ? "w-[60px]" : "w-[75px]"} flex h-[35px] items-center justify-center gap-3 rounded-full px-2 py-3`}
           >
             <span
-              className={`${TEXT_COLOR[repoType]} font-pretendard text-sm font-semibold`}
+              className={`${TEXT_COLOR[repoState]} font-pretendard text-sm font-semibold`}
             >
-              {TEXT[repoType]}
+              {TEXT[repoState]}
             </span>
           </div>
           {/* 북마크*/}
