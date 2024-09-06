@@ -217,7 +217,9 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
         height={24}
       />
       <div className="flex w-full justify-between">
-        <span className="text-base text-[#3F3F3F]">{file.name}</span>
+        <span className="w-[120px] truncate text-base text-[#3F3F3F]">
+          {file.name}
+        </span>
         {analyzeFiles.map((f) =>
           f.fileId === file.sha && f.state === "progress" ? (
             <div key={f.fileId} className="h-5 w-5">
