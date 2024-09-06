@@ -1,8 +1,8 @@
 import puppeteer from "puppeteer";
-import handler from "./trans";
-import parseTextToArray from "./parseTextToArray";
-import fetchToken from "./fetch-token";
-import addDataToFirebase from "./addDataToFirebase";
+import handler from "./trans.js";
+import parseTextToArray from "./parseTextToArray.js";
+import fetchToken from "./fetch-token.js";
+import addDataToFirebase from "./addDataToFirebase.js";
 
 /**
  * 웹 스크래핑을 수행하여 데이터를 추출하는 함수입니다.
