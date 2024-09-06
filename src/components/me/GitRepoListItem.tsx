@@ -3,8 +3,11 @@
 import Image from "next/image";
 import bugImg from "../../../public/images/bug-white.svg";
 import rightArrowImg from "../../../public/images/right-arrow-white.svg";
+import starPurple from "../../../public/images/star-purple.svg";
+import starWhite from "../../../public/images/star-white.svg";
 import { TUserInfoType } from "./GitRepoList";
 import { useRouter } from "next/navigation";
+import useUserStore from "@/store/useUserStore";
 
 const BG_COLOR: Record<TRepoType, string> = {
   pending: "bg-[#F1F1F1]",
@@ -33,6 +36,10 @@ export default function GitRepoListItem({
   repo: TUserInfoType;
   repoType: TRepoType;
 }) {
+  const bookmarkedRepos = useUserStore((state) => state.bookmarkedRepos);
+  const toggleBookmarkedRepos = useUserStore(
+    (state) => state.toggleBookmarkedRepos,
+  );
   const router = useRouter();
   const handlePageChange = () => {
     // 검사 페이지 이동
@@ -46,20 +53,49 @@ export default function GitRepoListItem({
     //}
   };
   return (
-    <div className="flex h-[225px] w-[310px] flex-col justify-between rounded-3xl border border-solid border-[#E0CEFF] p-[20px]">
-      <div className="flex h-[30px] flex-col justify-between gap-2">
-        <div
-          className={`${BG_COLOR[repoType]} ${repoType !== "finish" ? "w-[65px]" : "w-[75px]"} flex h-[35px] w-[75px] items-center justify-center gap-3 rounded-full px-2 py-3`}
-        >
-          <span
-            className={`${TEXT_COLOR[repoType]} font-pretendard text-sm font-semibold`}
+    <div
+      className={`group flex h-[225px] w-[310px] flex-col justify-between rounded-3xl border border-solid border-[#E0CEFF] p-[20px] hover:bg-[#FAF8FF]`}
+    >
+      <div className="flex h-[30px] flex-col justify-between">
+        <div className="flex justify-between">
+          {/* 라벨 */}
+          <div
+            className={`${BG_COLOR[repoType]} ${repoType !== "finish" ? "w-[62px]" : "w-[75px]"} flex h-[35px] w-[75px] items-center justify-center gap-3 rounded-full px-2 py-3`}
           >
-            {TEXT[repoType]}
-          </span>
+            <span
+              className={`${TEXT_COLOR[repoType]} font-pretendard text-sm font-semibold`}
+            >
+              {TEXT[repoType]}
+            </span>
+          </div>
+          {/* 북마크*/}
+          <button
+            className="flex h-[48px] w-[48px] items-center justify-center gap-3 rounded-xl group-hover:border-[1px] group-hover:border-[#E0CEFF]"
+            onClick={() => toggleBookmarkedRepos(repo.name)}
+          >
+            {bookmarkedRepos.includes(repo.name) ? (
+              <Image
+                src={starPurple}
+                alt="Star Purple"
+                width={32}
+                height={32}
+              />
+            ) : (
+              <Image
+                className="opacity-0 group-hover:opacity-100"
+                src={starWhite}
+                alt="Star Purple"
+                width={32}
+                height={32}
+              />
+            )}
+          </button>
         </div>
+        {/* 레포명 */}
         <span className="w-[280px] break-words text-[24px]">{repo.name}</span>
       </div>
       <div className="flex items-end justify-between">
+        {/* 검사하기 버튼 */}
         <button
           onClick={handlePageChange}
           className={`flex h-[45px] w-[146px] items-center justify-evenly rounded-xl bg-primary-500`}

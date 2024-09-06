@@ -51,6 +51,7 @@ export default function GitRepoList() {
     <>
       <LibrarySort />
       <div className="grid grid-cols-4 gap-10 pt-5">
+        {/* 레포 리스트 */}
         {!repos.length ? (
           <GitRepoListLoading />
         ) : (
