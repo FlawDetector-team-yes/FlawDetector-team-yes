@@ -1,5 +1,5 @@
 self.onmessage = async (event) => {
-  const { fileId, name, content, apiUrl } = event.data;
+  const { fileId, name, content, apiUrl, currState } = event.data;
   // console.log(content);
 
   try {
@@ -14,6 +14,21 @@ self.onmessage = async (event) => {
         type: "progress",
       });
     };
+
+    // "cancel" 상태일 경우 워커를 바로 종료
+    if (currState === "cancel") {
+      updateProgress(0, "canceled");
+      self.postMessage({
+        fileId,
+        name,
+        content,
+        percent: 0,
+        status: "canceled",
+        type: "canceled",
+      });
+      self.close(); // 워커 종료
+      return; // 함수 종료
+    }
 
     // 총 요청 시간 (40초)
     const updateInterval = 1000; // 1초 간격으로 진행 상황 업데이트
@@ -53,6 +68,7 @@ self.onmessage = async (event) => {
     }, updateInterval);
 
     // POST 요청을 비동기로 수행
+
     const response = await fetch(apiUrl, {
       method: "POST",
       headers: {
