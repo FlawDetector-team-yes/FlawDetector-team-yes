@@ -22,7 +22,7 @@ jobs:
       run: npm install
 
     - name: Run JavaScript file
-      run: node src/scripts/crawling.js
+      run: node src/scripts/crawling.mjs
       env:
         NEXT_PUBLIC_USERNAME: ${{ secrets.NEXT_PUBLIC_USERNAME }}
         NEXT_PUBLIC_PASSWORD: ${{ secrets.NEXT_PUBLIC_PASSWORD }}
