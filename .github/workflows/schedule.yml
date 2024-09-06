@@ -23,6 +23,13 @@ jobs:
     - name: Run JavaScript file
       run: node src/scripts/crawling.js
       env:
-        # .env 파일에서 환경변수를 가져오기 , firebase 도 추가하기
+        # .env 파일에서 환경변수를 가져오기
         NEXT_PUBLIC_USERNAME: ${{secrets.NEXT_PUBLIC_USERNAME}}
         NEXT_PUBLIC_PASSWORD: ${{secrets.NEXT_PUBLIC_PASSWORD}}
+        NEXT_PUBLIC_API_KEY: ${{secrets.NEXT_PUBLIC_API_KEY}}
+        NEXT_PUBLIC_AUTH_DOMAIN: ${{secrets.NEXT_PUBLIC_AUTH_DOMAIN}}
+        NEXT_PUBLIC_PROJECT_ID: ${{secrets.NEXT_PUBLIC_PROJECT_ID}}
+        NEXT_PUBLIC_STORAGE_BUCKET: ${{secrets.NEXT_PUBLIC_STORAGE_BUCKET}}
+        NEXT_PUBLIC_MESSAGING_SENDER_ID: ${{secrets.NEXT_PUBLIC_MESSAGING_SENDER_ID}}
+        NEXT_PUBLIC_APP_ID: ${{secrets.NEXT_PUBLIC_APP_ID}}
+        NEXT_PUBLIC_MEASUREMENT_ID: ${{secrets.NEXT_PUBLIC_MEASUREMENT_ID}}
