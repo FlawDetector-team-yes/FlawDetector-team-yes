@@ -1,4 +1,4 @@
-import db from "@/firebase/firebaseClient";
+import db from "@/firebase/firebaseClient.ts";
 import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 
 /**
