@@ -217,7 +217,9 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
         height={24}
       />
       <div className="flex w-full justify-between">
-        <span className="w-[120px] truncate text-base text-[#3F3F3F]">
+        <span
+          className={`${isSelected && "w-[130px] truncate"} text-base text-[#3F3F3F]`}
+        >
           {file.name}
         </span>
         {analyzeFiles.map((f) =>
