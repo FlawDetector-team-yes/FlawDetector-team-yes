@@ -1,7 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import bugImg from "../../../public/images/bug-white.svg";
 import rightArrowImg from "../../../public/images/right-arrow-white.svg";
 import { TUserInfoType } from "./GitRepoList";
+import { useRouter } from "next/navigation";
 
 const BG_COLOR: Record<TRepoType, string> = {
   pending: "bg-[#F1F1F1]",
@@ -23,14 +26,30 @@ const TEXT = {
 
 type TRepoType = "pending" | "analyze" | "finish";
 
-export default function GitRepoListItem({ repo }: { repo: TUserInfoType }) {
-  const repoType: TRepoType = "finish";
-
+export default function GitRepoListItem({
+  repo,
+  repoType,
+}: {
+  repo: TUserInfoType;
+  repoType: TRepoType;
+}) {
+  const router = useRouter();
+  const handlePageChange = () => {
+    // 검사 페이지 이동
+    if (repoType !== "finish") {
+      router.push(`/me/repos/${repo.name}`);
+    }
+    //else {
+    // 검사 결과 페이지 이동
+    // repoState 에서
+    // router.push(`/me/repos/${repo.name}/${repn.id}`);
+    //}
+  };
   return (
     <div className="flex h-[225px] w-[310px] flex-col justify-between rounded-3xl border border-solid border-[#E0CEFF] p-[20px]">
       <div className="flex h-[30px] flex-col justify-between gap-2">
         <div
-          className={`${BG_COLOR[repoType]} ${repoType !== "finish" ? "w-[70px]" : "w-[75px]"} flex h-[35px] w-[75px] items-center justify-center gap-3 rounded-full px-2 py-3`}
+          className={`${BG_COLOR[repoType]} ${repoType !== "finish" ? "w-[65px]" : "w-[75px]"} flex h-[35px] w-[75px] items-center justify-center gap-3 rounded-full px-2 py-3`}
         >
           <span
             className={`${TEXT_COLOR[repoType]} font-pretendard text-sm font-semibold`}
@@ -42,6 +61,7 @@ export default function GitRepoListItem({ repo }: { repo: TUserInfoType }) {
       </div>
       <div className="flex items-end justify-between">
         <button
+          onClick={handlePageChange}
           className={`flex h-[45px] w-[146px] items-center justify-evenly rounded-xl bg-primary-500`}
         >
           <div className="flex gap-[6px]">

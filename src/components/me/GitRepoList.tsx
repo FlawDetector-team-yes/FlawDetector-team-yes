@@ -56,7 +56,9 @@ export default function GitRepoList() {
         ) : (
           repos
             .slice(0, visibleCount)
-            .map((repo, index) => <GitRepoListItem key={index} repo={repo} />)
+            .map((repo, index) => (
+              <GitRepoListItem key={index} repo={repo} repoType={"pending"} />
+            ))
         )}
       </div>
 
