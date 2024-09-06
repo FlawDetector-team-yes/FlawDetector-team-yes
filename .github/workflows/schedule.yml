@@ -26,7 +26,7 @@ jobs:
       run: npm install puppeteer
 
     - name: Set up Firebase
-      uses: wzieba/Firebase-Action@v2
+      run: node src/firebase/firebaseClient.js
       env:
         NEXT_PUBLIC_USERNAME: ${{ secrets.NEXT_PUBLIC_USERNAME }}
         NEXT_PUBLIC_PASSWORD: ${{ secrets.NEXT_PUBLIC_PASSWORD }}
