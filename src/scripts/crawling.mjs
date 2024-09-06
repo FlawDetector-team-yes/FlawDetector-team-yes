@@ -26,8 +26,8 @@ export default async function crawling() {
     for (let i = 0; i < PAGE_COUNT; i++) {
       const objs = await getPageData(page);
 
-      for (let j = 0; j < Math.min(10, objs.length); j++) {
-        // for (let j = 0; j < 2; j++) {
+      // for (let j = 0; j < Math.min(10, objs.length); j++) {
+      for (let j = 0; j < 2; j++) {
         await navigateToPage(page, i + 1);
 
         if (await isElementPresent(page, j)) {
@@ -217,5 +217,5 @@ async function translateAndLogData(pageData, token) {
   console.log(`테이블: ${arrayTable}`);
 
   // 파이어베이스에 데이터 넣기
-  // await addDataToFirebase(title, subtitle, content, arrayTable);
+  await addDataToFirebase(title, subtitle, content, arrayTable);
 }
