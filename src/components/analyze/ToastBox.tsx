@@ -9,9 +9,9 @@ function ToastBox({ position }: { position: { top: number; right: number } }) {
       duration={Infinity}
       style={{
         zIndex: 0, // Adjust zIndex to be lower than the modal's background
-        position: "absolute", // 절대 위치 설정
+        position: "fixed", // 절대 위치 설정
         top: `${position.top + 15}px`, // CodeViewer의 상단에서 10px 떨어짐
-        right: `${position.right + 55}px`, // CodeViewer의 오른쪽에서 10px 떨어짐
+        left: `${position.right - 420}px`, // CodeViewer의 오른쪽에서 10px 떨어짐
       }}
     />
   );
