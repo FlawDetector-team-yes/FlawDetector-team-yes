@@ -38,9 +38,9 @@ function UserProfileBtn({ pathName }: { pathName: string }) {
         <form action={deleteUserInfo}>
           <button
             type="submit"
-            className="fill-hover out-radius-8px h-[40px] w-[126px] border-system-warning bg-system-warning/20 font-normal text-system-warning"
+            className="fill-hover out-radius-8px h-[40px] w-[126px] border-system-warning bg-system-warning/15 font-normal text-system-warning"
           >
-            <Link href={"/"}>회원탈퇴</Link>
+            회원탈퇴
           </button>
         </form>
       )}
