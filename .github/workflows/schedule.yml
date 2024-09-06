@@ -1,0 +1,28 @@
+name: Run JavaScript File Weekly
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # 매주 일요일 자정에 실행 (UTC 기준)
+
+jobs:
+  run-js-file:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20.17.0' # 원하는 Node.js 버전을 설정하세요
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run JavaScript file
+      run: node src/scripts/crawling.js
+      env:
+        # .env 파일에서 환경변수를 가져오기 , firebase 도 추가하기
+        NEXT_PUBLIC_USERNAME: ${{secrets.NEXT_PUBLIC_USERNAME}}
+        NEXT_PUBLIC_PASSWORD: ${{secrets.NEXT_PUBLIC_PASSWORD}}
