@@ -7,17 +7,15 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import useUserStore from "@/store/useUserStore";
 
-// /me 마이페이지 상단의 나의정보와 프로필정보 로그아웃을 나타내는 컴포넌트
 export default function ProfileInfo() {
   const userData = useUserStore((state) => state.userInfo);
+  const isLoading = useUserStore((state) => state.isLoading);
   const setUserData = useUserStore((state) => state.setUserData);
   const setIsLoading = useUserStore((state) => state.setIsLoading);
   const { data: session } = useSession();
   const [isImgLoading, setIsImgLoading] = useState<boolean>(true);
-  // const docRef = collection(db, "users");
-
-  const pathName = usePathname();
   const [userProfileImg, setUserProfileImg] = useState("");
+  const pathName = usePathname();
 
   const handleLoadImg = () => {
     setIsImgLoading(false);
@@ -51,22 +49,29 @@ export default function ProfileInfo() {
     <>
       <div className="flex w-full justify-between border-b-2 pb-[60px]">
         <div className="flex gap-6 rounded-full">
+          {/* 프로필 이미지 */}
           {isImgLoading && (
             <div className="h-[70px] w-[70px] animate-pulse rounded-full bg-gray-400"></div>
           )}
+
           <Image
-            className={`rounded-full`}
-            style={{ display: isImgLoading ? "none" : "block" }}
+            className={`rounded-full transition-opacity duration-500 ${
+              isImgLoading ? "opacity-0" : "opacity-100"
+            }`}
             onLoad={handleLoadImg}
             src={userProfileImg}
-            alt="프로필이미지"
+            alt="Profile"
             width={70}
-            height={40}
+            height={70}
           />
 
           <div className="flex flex-col text-2xl">
-            <span>Hello,</span>
-            <span>{userData?.email}</span>
+            {!isLoading && (
+              <>
+                <span>Hello,</span>
+                <span>{userData?.email}</span>
+              </>
+            )}
           </div>
         </div>
 

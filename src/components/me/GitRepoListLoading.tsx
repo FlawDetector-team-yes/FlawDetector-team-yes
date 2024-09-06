@@ -1,7 +1,7 @@
 export default function GitRepoListLoading() {
   return (
     <>
-      {Array(1)
+      {Array(12)
         .fill(null)
         .map((_, index) => (
           <div
