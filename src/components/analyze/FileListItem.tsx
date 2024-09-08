@@ -18,9 +18,7 @@ import { useAnalyzeFilesStore, useStepStore } from "@/store/useAnalyzeStore";
 import { decodeUnicode } from "@/lib/decodeUnicode";
 import { TGithubContent } from "@/app/me/repos/type";
 import { format } from "date-fns";
-import { useParams } from "next/navigation";
 import useUserStore from "@/store/useUserStore";
-
 
 type TFileListItemProps = {
   file: TGithubContent;
