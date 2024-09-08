@@ -27,7 +27,7 @@ export default function FileList() {
   const folderPath = useSelectedFilesStore((state) => state.folderPath);
   const moveFolderPath = useSelectedFilesStore((state) => state.moveFolderPath);
 
-  const isActiveMoveDir = folderPath !== "src";
+  const isActiveMoveDir = folderPath !== "";
   const prevDirPath = folderPath.substring(0, folderPath.lastIndexOf("/"));
   const moveDirName = folderPath.split("/")[folderPath.split("/").length - 1];
 
@@ -49,11 +49,8 @@ export default function FileList() {
    * 이전 폴더의 경로로 파일을 가져오고 상태를 업데이트합니다.
    */
   const handleClickPrevFolder = () => {
-    console.log();
-    if (prevDirPath) {
-      fetchFiles(owner || "", repo.id, prevDirPath);
-      moveFolderPath(prevDirPath);
-    }
+    fetchFiles(owner || "", repo.id, prevDirPath);
+    moveFolderPath(prevDirPath);
   };
 
   /**
@@ -61,6 +58,7 @@ export default function FileList() {
    */
   useEffect(() => {
     fetchFiles(owner || "", repo.id, "");
+    moveFolderPath(""); //
   }, []);
 
   return (
