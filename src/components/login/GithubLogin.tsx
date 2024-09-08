@@ -74,7 +74,6 @@ async function registerUserIfNeeded(session: Session) {
  */
 async function GithubLogin() {
   const session = await getSession();
-  console.log(JSON.stringify(session));
 
   if (session !== null) {
     // Firestore에 사용자 등록 여부 확인

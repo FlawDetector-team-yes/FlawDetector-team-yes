@@ -50,7 +50,6 @@ export default function GitRepoList() {
           await fetch(`api/github/repos/${user.owner}`)
         ).json();
         setRepos(res);
-        console.log(JSON.stringify(res));
       }
     } catch (e) {
       console.log(e);
