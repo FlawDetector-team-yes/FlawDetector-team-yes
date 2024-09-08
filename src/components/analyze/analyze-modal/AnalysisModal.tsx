@@ -9,6 +9,7 @@ import {
   useAnalyzeFilesStore,
   useResultDataStore,
   useStepStore,
+  useWorkerStore,
 } from "@/store/useAnalyzeStore";
 import useSelectedFilesStore from "@/store/useSelectedFilesStore";
 
@@ -63,7 +64,9 @@ export const AnalysisModal: React.FC<any> = () => {
   ); // 검사 중인 파일 업데이트
   const resultData = useResultDataStore((state) => state.resultData); // 검사 결과
   const setResultData = useResultDataStore((state) => state.setResultData); // 검사 결과 업데이트
-  const [workers, setWorkers] = useState<Worker[]>([]); // 워커 상태관리를 위한 배열
+  // const [workers, setWorkers] = useState<Worker[]>([]); // 워커 상태관리를 위한 배열
+  const addWorker = useWorkerStore((state) => state.addWorker);
+  const clearWorkers = useWorkerStore((state) => state.clearWorkers);
 
   /**
    * 검사하기 누를 경우 실행되는 로직
@@ -77,24 +80,26 @@ export const AnalysisModal: React.FC<any> = () => {
           new URL(`../../../worker/analyzeWorker.ts`, import.meta.url),
         );
 
-        // 검사 중단 로직을 위해 worker 배열에 현재 생성된 worker들을 넣어줌.
-        setWorkers((prevWorkers) => [...prevWorkers, worker]);
+        addWorker(worker); // 워커 스토어에 워커 추가
 
         worker.postMessage({
           fileId: file.sha,
+          name: file.name,
           content: file.content,
           apiUrl: `/api/analyze/llm`,
+          currState: currentStep,
         });
 
         worker.onmessage = (event) => {
-          const { fileId, percent, result, status, type } = event.data;
+          const { fileId, name, content, percent, result, status, type } =
+            event.data;
 
           if (type === "progress") {
             setCurrentStep("analyze");
             setAnalyzeFiles({ fileId, progressValue: percent, state: status });
             // console.log(`Progress: ${percent}%`);
           } else if (type === "completed") {
-            setResultData({ sha: fileId, result });
+            setResultData({ sha: fileId, name, content, result });
             worker.terminate();
             resolve(); // 워커 작업 완료 시 resolve 호출
           } else if (type === "error") {
@@ -120,11 +125,7 @@ export const AnalysisModal: React.FC<any> = () => {
    * 검사 중단 함수
    */
   const handleCancel = () => {
-    setCurrentStep("cancel"); // 상태를 cancle로 변경하여 중단 시킴
-
-    workers.forEach((worker) => worker.terminate()); // 모든 워커 종료
-
-    setWorkers([]); // 워커 상태 초기화
+    clearWorkers(); // 모든 워커 종료
 
     // analyzeFiles 초기화
     selectedFiles.forEach((file) => {
@@ -134,6 +135,8 @@ export const AnalysisModal: React.FC<any> = () => {
         state: "canceled", // 상태를 "canceled"로 설정
       });
     });
+
+    setCurrentStep("cancel"); // 상태를 cancle로 변경하여 중단 시킴
   };
 
   /**
@@ -143,8 +146,9 @@ export const AnalysisModal: React.FC<any> = () => {
   const handleCloseModal = () => {
     if (currentStep === "cancel") {
       setCurrentStep("select"); // step 초기화 시켜줌
+    } else {
+      closeModal?.();
     }
-    closeModal?.();
   };
 
   /**
@@ -158,9 +162,10 @@ export const AnalysisModal: React.FC<any> = () => {
     } else if (currentStep === "analyze") {
       // 검사 중단
       handleCancel();
-    } else if (currentStep !== "select" && currentStep !== "analyze") {
+    } else if (currentStep === "finish") {
       // 분석 완료 후 모달 닫기 및 저장 처리
       // TODO: 검사 이력을 파이어베이스에 저장하고 코드 검사 결과 페이지로 이동 처리
+    } else {
       closeModal?.();
     }
   };

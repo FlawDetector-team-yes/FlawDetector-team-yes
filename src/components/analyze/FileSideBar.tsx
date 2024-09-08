@@ -36,12 +36,12 @@ export default function FileSideBar() {
 
   return (
     <>
-      <aside className="flex h-[1163px] w-[247px] flex-col justify-between">
+      <aside className="flex max-h-fit w-[247px] flex-col justify-between gap-5">
         {/* 통계 */}
-        <div className="flex h-[65px] w-[246px] justify-evenly gap-6 rounded-lg border-[1px] border-[#C3C3C3] p-5">
-          <StateItem src={xMarkError} alt="Error" count={12} />
-          <StateItem src={triangleYellow} alt="Warning" count={8} />
-          <StateItem src={circleGreen} alt="Success" count={23} />
+        <div className="flex h-fit w-[246px] flex-col justify-evenly gap-6 rounded-lg border-[1px] border-[#C3C3C3] p-5">
+          <StateItem src={xMarkError} alt="검출된 취약점" count={12} />
+          <StateItem src={triangleYellow} alt="수정 제안" count={8} />
+          <StateItem src={circleGreen} alt="문제 없음" count={23} />
         </div>
 
         <div className="h-[994px] w-[247px] scroll-smooth rounded-xl border-[1px] border-[#C3C3C3]">

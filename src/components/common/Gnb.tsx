@@ -28,7 +28,10 @@ async function Gnb() {
             <Link href="/me">MY 저장소</Link>
             {session !== null && (
               <form action={logout}>
-                <button type="submit" className="out-radius-999px px-4 py-2">
+                <button
+                  type="submit"
+                  className="out-radius-8px bg-primary-100/20 px-7 py-1.5"
+                >
                   Logout
                 </button>
               </form>

@@ -1,12 +1,34 @@
 self.onmessage = async (event) => {
-  const { fileId, content, apiUrl } = event.data;
+  const { fileId, name, content, apiUrl, currState } = event.data;
   // console.log(content);
 
   try {
     // 진행 상황 업데이트를 위한 함수
     const updateProgress = (percent: number, status: string) => {
-      self.postMessage({ fileId, percent, status, type: "progress" });
+      self.postMessage({
+        fileId,
+        name,
+        content,
+        percent,
+        status,
+        type: "progress",
+      });
     };
+
+    // "cancel" 상태일 경우 워커를 바로 종료
+    if (currState === "cancel") {
+      updateProgress(0, "canceled");
+      self.postMessage({
+        fileId,
+        name,
+        content,
+        percent: 0,
+        status: "canceled",
+        type: "canceled",
+      });
+      self.close(); // 워커 종료
+      return; // 함수 종료
+    }
 
     // 총 요청 시간 (40초)
     const updateInterval = 1000; // 1초 간격으로 진행 상황 업데이트
@@ -46,6 +68,7 @@ self.onmessage = async (event) => {
     }, updateInterval);
 
     // POST 요청을 비동기로 수행
+
     const response = await fetch(apiUrl, {
       method: "POST",
       headers: {
@@ -69,6 +92,8 @@ self.onmessage = async (event) => {
     updateProgress(100, "completed");
     self.postMessage({
       fileId,
+      name,
+      content,
       percent: 100,
       result,
       status: "completed",
@@ -77,6 +102,8 @@ self.onmessage = async (event) => {
   } catch (error: any) {
     self.postMessage({
       fileId,
+      name,
+      content,
       percent: 0,
       status: "error",
       message: error.message,

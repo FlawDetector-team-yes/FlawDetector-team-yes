@@ -19,9 +19,12 @@ export default function StateItem({
 }) {
   return (
     <>
-      <div className="flex w-[44px] items-center justify-center gap-2 text-xl">
-        <Image src={src} alt={alt} width={24} height={24} />
-        {count}
+      <div className="flex h-fit w-full items-center justify-start gap-3 text-xl">
+        <Image src={src} alt={alt} width={20} height={20} />
+        <p className="flex w-full justify-between">
+          <span>{alt}</span>
+          <span>{count}</span>
+        </p>
       </div>
     </>
   );

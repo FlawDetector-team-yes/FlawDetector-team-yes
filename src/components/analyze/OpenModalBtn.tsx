@@ -27,7 +27,7 @@ function OpenModalBtn() {
 
   return (
     <>
-      <div className="absolute bottom-10 right-0">
+      <div className="fixed bottom-[100px] right-[130px]">
         <button
           className="flex rounded-full bg-primary-500 p-5"
           onClick={handleAnalysisBtn}

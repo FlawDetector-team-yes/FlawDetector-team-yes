@@ -31,7 +31,7 @@ type TSelectedFilesState = {
 
 const useSelectedFilesStore = create<TSelectedFilesState>((set, get) => ({
   selectedFiles: [],
-  folderPath: "src",
+  folderPath: "",
   moveFolderPath: (path: string) => set({ folderPath: path }),
   selectedAllFile: (selectedAllFiles: TSelectedFiles[]) =>
     set({ selectedFiles: selectedAllFiles }),
