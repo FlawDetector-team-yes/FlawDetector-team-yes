@@ -19,13 +19,15 @@ import useUserStore from "@/store/useUserStore";
  */
 
 export default function FileList() {
-  const repo = useParams<{ id: string }>();
-  const selectedFiles = useSelectedFilesStore((state) => state.selectedFiles);
-  const owner = useUserStore((state) => state.userInfo?.owner);
   const files = useFilesStore((state) => state.files);
   const fetchFiles = useFilesStore((state) => state.fecthFiles);
+
+  const selectedFiles = useSelectedFilesStore((state) => state.selectedFiles);
   const folderPath = useSelectedFilesStore((state) => state.folderPath);
   const moveFolderPath = useSelectedFilesStore((state) => state.moveFolderPath);
+
+  const owner = sessionStorage.getItem("owner");
+  const repo = useParams<{ id: string }>();
 
   const isActiveMoveDir = folderPath !== "";
   const prevDirPath = folderPath.substring(0, folderPath.lastIndexOf("/"));
@@ -49,16 +51,20 @@ export default function FileList() {
    * 이전 폴더의 경로로 파일을 가져오고 상태를 업데이트합니다.
    */
   const handleClickPrevFolder = () => {
-    fetchFiles(owner || "", repo.id, prevDirPath);
-    moveFolderPath(prevDirPath);
+    if (owner) {
+      fetchFiles(owner, repo.id, prevDirPath);
+      moveFolderPath(prevDirPath);
+    }
   };
 
   /**
    * 컴포넌트가 마운트될 때 초기 폴더의 파일들을 가져오는 효과를 설정합니다.
    */
   useEffect(() => {
-    fetchFiles(owner || "", repo.id, "");
-    moveFolderPath(""); //
+    if (owner) {
+      fetchFiles(owner, repo.id, "");
+      moveFolderPath("");
+    }
   }, []);
 
   return (

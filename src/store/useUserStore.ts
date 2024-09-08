@@ -4,7 +4,6 @@ export type TUserInfo = {
   email: string | null | undefined;
   username: string | null | undefined;
   profileImg: string | null | undefined;
-  owner: string | null | undefined;
 };
 
 type TUserDataState = {

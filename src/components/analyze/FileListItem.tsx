@@ -4,12 +4,13 @@ import fileImg from "../../../public/images/file.png";
 import folderImg from "../../../public/images/folder-open.png";
 import checkImg from "../../../public/images/check.png";
 import Image from "next/image";
-import useFilesStore, { fetchRepoContents } from "@/store/useFilesStore";
+import useFilesStore from "@/store/useFilesStore";
 import useSelectedFilesStore from "@/store/useSelectedFilesStore";
 import { decodeUnicode } from "@/lib/decodeUnicode";
 import { TGithubContent } from "@/app/me/repos/type";
 import { useParams } from "next/navigation";
 import useUserStore from "@/store/useUserStore";
+import { fetchRepoContents } from "@/lib/api/github/fetchRepoContents";
 
 type TFileListItemProps = {
   file: TGithubContent;
@@ -25,14 +26,14 @@ type TFileListItemProps = {
  * @returns {JSX.Element} - 파일 항목을 렌더링하는 JSX 요소
  */
 function FileListItem({ file, isSelected }: TFileListItemProps) {
-  const repo = useParams<{ id: string }>();
-  const owner = useUserStore((state) => state.userInfo?.owner);
   const fetchFiles = useFilesStore((state) => state.fecthFiles);
-  const selectedFiles = useSelectedFilesStore((state) => state.selectedFiles);
   const prevFolder = useSelectedFilesStore((state) => state.folderPath);
   const selectFile = useSelectedFilesStore((state) => state.selectFile);
   const removeFile = useSelectedFilesStore((state) => state.removeFile);
+  const selectedFiles = useSelectedFilesStore((state) => state.selectedFiles);
+  const repo = useParams<{ id: string }>();
 
+  const owner = sessionStorage.getItem("owner");
   /**
    * 파일 또는 폴더를 클릭했을 때 호출되는 핸들러입니다.
    * 파일일 경우: 선택된 파일을 추가하거나 제거합니다.
@@ -68,8 +69,10 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
       }
       // 폴더일 경우
     } else {
-      selectFile("dir", file.name);
-      fetchFiles(owner || "", repo.id, `${prevFolder}/${file.name}`);
+      if (owner) {
+        selectFile("dir", file.name);
+        fetchFiles(owner, repo.id, `${prevFolder}/${file.name}`);
+      }
     }
   };
 

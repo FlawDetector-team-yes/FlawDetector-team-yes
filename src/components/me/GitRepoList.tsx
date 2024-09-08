@@ -1,12 +1,13 @@
 "use client";
-import { useEffect, useState } from "react";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import plus from "/public/images/plus.png";
 import useUserStore from "@/store/useUserStore";
 import GitRepoListItem from "./GitRepoListItem";
 import GitRepoListLoading from "./GitRepoListLoading";
 import RepoSortDropdown from "./RepoSortDropdown";
+import { fetchUserRepos } from "@/lib/api/github/fetchUserRepos";
 
 export type TMyPageUserReposType = {
   label: string;
@@ -18,6 +19,7 @@ export type TSortType = "recent" | "oldest" | "name"; // pending, analyze, finis
 
 export default function GitRepoList() {
   const user = useUserStore((state) => state.userInfo);
+  const owner = sessionStorage.getItem("owner");
   const [repos, setRepos] = useState<TMyPageUserReposType[]>([]);
   const [visibleCount, setVisibleCount] = useState<number>(12);
 
@@ -45,28 +47,17 @@ export default function GitRepoList() {
   };
 
   /**
-   * 사용자 GitHub 레포지토리 목록을 불러오는 함수
-   * 사용자 정보가 있을 경우에만 API 호출
-   */
-  const fetchUserRepos = async () => {
-    try {
-      if (user) {
-        const res = await await (
-          await fetch(`api/github/repos/${user.owner}`)
-        ).json();
-        setRepos(res);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  /**
    * 컴포넌트가 마운트될 때 및 사용자 정보가 변경될 때
    * 레포지토리 목록을 불러옴
    */
   useEffect(() => {
-    fetchUserRepos();
+    const fetchRepos = async () => {
+      if (owner) {
+        const userRepos = await fetchUserRepos(owner);
+        setRepos(userRepos);
+      }
+    };
+    fetchRepos();
   }, [user]);
 
   return (

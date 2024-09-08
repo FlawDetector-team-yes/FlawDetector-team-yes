@@ -17,21 +17,23 @@ export default function ProfileInfo() {
   const pathName = usePathname();
 
   useEffect(() => {
+    // user 전역변수 저장
+    // owner 세션스토리지에 저장
     const fetchData = async () => {
       if (session) {
         const profileImg = session.user?.image;
         const userNumber = profileImg
           ? profileImg.match(/u\/(\d+)/)?.[1] || null
           : null;
-
         const { owner } = await (
           await fetch(`/api/github/user/${userNumber}`)
         ).json();
+        sessionStorage.setItem("owner", owner);
+
         setUserData({
           email: session.user?.email,
           username: session.user?.name,
           profileImg: session.user?.image,
-          owner: owner,
         });
         setIsLoading();
       }
