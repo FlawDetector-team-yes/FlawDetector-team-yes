@@ -19,16 +19,18 @@ export type TSortType = "recent" | "oldest" | "name"; // pending, analyze, finis
 export default function GitRepoList() {
   const user = useUserStore((state) => state.userInfo);
   const [repos, setRepos] = useState<TMyPageUserReposType[]>([]);
-  const [visibleCount, setVisibleCount] = useState<number>(12); // 초기 12개만 출력
+  const [visibleCount, setVisibleCount] = useState<number>(12);
 
-  // repos 길이가 12개 이하일 경우, 더보기 버튼을 숨김
   const isMoreItems = repos.length > visibleCount;
 
-  // 더보기 버튼 클릭 시, 12개씩 추가로 보여주기
   const handleLoadMore = () => {
     setVisibleCount((prev) => prev + 12);
   };
 
+  /**
+   * 레포지토리 정렬 함수
+   * @param {TSortType} sortType - 정렬 기준 ("recent", "oldest", "name")
+   */
   const handleSortRepos = (sortType: TSortType) => {
     const sortFunctions: Record<TSortType, (a: any, b: any) => number> = {
       recent: (a: any, b: any) =>
@@ -42,7 +44,10 @@ export default function GitRepoList() {
     setRepos(sortedRepos);
   };
 
-  // 사용자 github repo 목록 불러오기
+  /**
+   * 사용자 GitHub 레포지토리 목록을 불러오는 함수
+   * 사용자 정보가 있을 경우에만 API 호출
+   */
   const fetchUserRepos = async () => {
     try {
       if (user) {
@@ -56,6 +61,10 @@ export default function GitRepoList() {
     }
   };
 
+  /**
+   * 컴포넌트가 마운트될 때 및 사용자 정보가 변경될 때
+   * 레포지토리 목록을 불러옴
+   */
   useEffect(() => {
     fetchUserRepos();
   }, [user]);

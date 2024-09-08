@@ -9,26 +9,48 @@ import { TMyPageUserReposType } from "./GitRepoList";
 import { useRouter } from "next/navigation";
 import useUserStore from "@/store/useUserStore";
 
+/**
+ * 레포 상태별 배경색 설정 객체
+ * @type {Record<TRepoState, string>}
+ */
 const BG_COLOR: Record<TRepoState, string> = {
   pending: "bg-[#F1F1F1]",
   analyze: "bg-[#FFF3F3]",
   finish: "bg-[#F2EBFF]",
 };
 
+/**
+ * 레포 상태별 텍스트 색상 설정 객체
+ * @type {Record<TRepoState, string>}
+ */
 const TEXT_COLOR: Record<TRepoState, string> = {
   pending: "text-[#969696]",
   analyze: "text-[#FF6D6D]",
   finish: "text-[#6100FF]",
 };
 
+/**
+ * 레포 상태별 라벨 텍스트 설정 객체
+ * @type {Record<TRepoState, string>}
+ */
 const TEXT = {
   pending: "검사전",
   analyze: "검사중",
   finish: "검사완료",
 };
 
+/**
+ * 레포 상태 타입 정의
+ * @typedef {"pending" | "analyze" | "finish"} TRepoState
+ */
 type TRepoState = "pending" | "analyze" | "finish";
 
+/**
+ * Git 레포지토리 목록 아이템 컴포넌트
+ * @param {Object} props - 컴포넌트 속성
+ * @param {TMyPageUserReposType} props.repo - 레포지토리 정보
+ * @param {TRepoState} props.repoState - 레포지토리 상태
+ */
 export default function GitRepoListItem({
   repo,
   repoState,
@@ -41,6 +63,11 @@ export default function GitRepoListItem({
     (state) => state.toggleBookmarkedRepos,
   );
   const router = useRouter();
+
+  /**
+   * 페이지 이동 처리 함수
+   * 레포 상태에 따라 검사 페이지 또는 검사 결과 페이지로 이동
+   */
   const handlePageChange = () => {
     // 검사 페이지 이동
     if (repoState !== "finish") {

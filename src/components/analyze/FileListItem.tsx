@@ -1,3 +1,5 @@
+"use client";
+
 import fileImg from "../../../public/images/file.png";
 import folderImg from "../../../public/images/folder-open.png";
 import checkImg from "../../../public/images/check.png";
