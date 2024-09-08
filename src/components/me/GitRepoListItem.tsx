@@ -74,7 +74,7 @@ export default function GitRepoListItem({
       router.push(`/me/repos/${repo.name}`);
     }
     //else {
-    // 검사 결과 페이지 이동
+    // 검사 결과 페이지 이동 추가 예정
     // repoState 에서
     // router.push(`/me/repos/${repo.name}/${repn.id}`);
     //}
