@@ -90,3 +90,58 @@ export const useResultDataStore = create<TResultDataStore>((set) => ({
     });
   },
 }));
+
+// repoId로 묶은 결과 데이터
+export type TAnalyzeFileResult = {
+  repoId: string;
+  result: TResultData[];
+};
+
+type TAnalyzeFileResultStore = {
+  analyzeFileResult: TAnalyzeFileResult;
+  setAnalyzeFileResult: (res: TAnalyzeFileResult) => void;
+};
+
+// Result Store 생성
+export const useAnalyzeFileResultStore = create<TAnalyzeFileResultStore>(
+  (set) => ({
+    analyzeFileResult: {
+      repoId: "",
+      result: [],
+    },
+    setAnalyzeFileResult: (res: TAnalyzeFileResult) => {
+      set((state) => ({
+        ...state,
+        analyzeFileResult: res,
+      }));
+    },
+  }),
+);
+
+// repos state
+export type TReposState = {
+  repoId: string;
+  repoName: string;
+  state: string;
+};
+
+export type TReposStateStore = {
+  reposState: TReposState[];
+  setReposState: (repo: TReposState) => void;
+};
+
+export const useReposStateStore = create<TReposStateStore>((set) => ({
+  reposState: [],
+  setReposState: (repo: TReposState) => {
+    set((state) => {
+      // 기존 repoState 배열에서 동일한 fileId를 가진 항목을 제거
+      const updatedState = state?.reposState.filter(
+        (r) => r.repoId !== repo.repoId,
+      );
+      // 새로운 state 항목을 추가
+      return {
+        reposState: [...updatedState, repo],
+      };
+    });
+  },
+}));
