@@ -12,6 +12,8 @@ import OpenModalBtn from "./OpenModalBtn";
 import { useStepStore } from "@/store/useAnalyzeStore";
 import { useEffect, useRef, useState } from "react";
 import ToastBox from "./ToastBox";
+import useUserStore from "@/store/useUserStore";
+
 
 /**
  * `AnalysisWrapper` 컴포넌트
@@ -23,6 +25,7 @@ import ToastBox from "./ToastBox";
  */
 export default function AnalysisWrapper() {
   const repo = useParams<{ id: string }>();
+  const owner = useUserStore((state) => state.userInfo?.owner);
   const selectAllFile = useSelectedFilesStore((state) => state.selectedAllFile);
   const folderPath = useSelectedFilesStore((state) => state.folderPath);
   const files = useFilesStore((state) => state.files);
@@ -80,11 +83,7 @@ export default function AnalysisWrapper() {
     // file이 존재한다면,
     if (fileItems) {
       const fileContentsPromises = fileItems.map((file) =>
-        fetchRepoContents(
-          "flawdetector-team-yes",
-          repo.id,
-          `${folderPath}/${file.name}`,
-        ),
+        fetchRepoContents(owner || "", repo.id, `${folderPath}/${file.name}`),
       );
       try {
         // file 정보를 불러오는 api를 Promise.all로 병렬적으로 요청
