@@ -1,5 +1,22 @@
 import { create } from "zustand";
 
+// worker
+export type TWorkerStore = {
+  workers: Worker[];
+  addWorker: (worker: Worker) => void;
+  clearWorkers: () => void;
+};
+
+export const useWorkerStore = create<TWorkerStore>((set, get) => ({
+  workers: [],
+  addWorker: (worker) =>
+    set((state) => ({ workers: [...state.workers, worker] })),
+  clearWorkers: () => {
+    get().workers.forEach((worker) => worker.terminate());
+    set({ workers: [] });
+  },
+}));
+
 // step
 export type TStepStore = {
   currentStep: string;
@@ -50,6 +67,7 @@ export type TResultData = {
   sha: string;
   name?: string;
   path?: string;
+  content: string;
   result: string; // 결과 저장
 };
 
