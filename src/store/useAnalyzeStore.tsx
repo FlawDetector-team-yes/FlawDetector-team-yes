@@ -138,12 +138,27 @@ export const useReposStateStore = create<TReposStateStore>((set) => ({
     set((state) => {
       // 기존 repoState 배열에서 동일한 fileId를 가진 항목을 제거
       const updatedState = state?.reposState.filter(
-        (r) => r.repoId !== repo.repoId,
+        (r) => r.repoName !== repo.repoName,
       );
       // 새로운 state 항목을 추가
       return {
         reposState: [...updatedState, repo],
       };
     });
+  },
+}));
+
+type TSaveTimeStore = {
+  saveTime: string;
+  setSaveTime: (t: string) => void;
+};
+
+export const useSaveTimeStore = create<TSaveTimeStore>((set) => ({
+  saveTime: "",
+  setSaveTime: (t: string) => {
+    set((state) => ({
+      ...state,
+      saveTime: t,
+    }));
   },
 }));
