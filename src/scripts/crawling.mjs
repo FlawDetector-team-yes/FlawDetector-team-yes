@@ -4,37 +4,43 @@ import parseTextToArray from "./parseTextToArray.js";
 import fetchToken from "./fetch-token.js";
 import addDataToFirebase from "./addDataToFirebase.js";
 
+crawling();
+
 /**
  * 웹 스크래핑을 수행하여 데이터를 추출하는 함수입니다.
  * @async
  * @function crawling
  */
-crawling();
 export default async function crawling() {
-  const PAGE_COUNT = 1; // 스크랩할 페이지네이션 페이지 수
+  const PAGE_COUNT = 2; // 스크랩할 페이지네이션 페이지 수
   const BASE_URL = "https://www.cnnvd.org.cn/home/warn";
   const TIMEOUT = 600000; // 페이지 로딩 타임아웃 설정
 
   try {
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({
+      headless: false, // 화면을 볼 수 있도록 headless 모드를 꺼둡니다.
+      defaultViewport: null, // 브라우저 창을 완전한 크기로 열도록 설정
+    });
     const page = await browser.newPage();
     const token = await fetchToken();
     await page.goto(BASE_URL, { waitUntil: "networkidle0", timeout: TIMEOUT });
 
-    // 전체 페이지네이션 개수 카운트 시 사용
-    // const liElements = await getPageNumbers(page);
-
+    // 전체 다 실행시 사용
+    // const li = await getPageNumbers(page);
+    // 페이지네이션 반복분 실행
+    // for (let i = 0; i < li.length; i++) {
     for (let i = 0; i < PAGE_COUNT; i++) {
       const objs = await getPageData(page);
-
-      // for (let j = 0; j < Math.min(10, objs.length); j++) {
-      for (let j = 0; j < 2; j++) {
+      for (let j = 0; j < Math.min(10, objs.length); j++) {
+        // for (let j = 0; j < 2; j++) {
+        // 페이지네이션 버튼 클릭(페이지 이동)
         await navigateToPage(page, i + 1);
 
         if (await isElementPresent(page, j)) {
           await clickElement(page, j);
           const pageData = await extractPageData(page);
           await translateAndLogData(pageData, token);
+          // 페이지 리로드
           await page.goto(BASE_URL, { waitUntil: "networkidle0" });
         } else {
           console.log(`Element ${j + 1}을(를) 찾을 수 없습니다.`);
@@ -46,6 +52,13 @@ export default async function crawling() {
   } catch (error) {
     console.error("데이터를 가져오는 중 오류 발생:", error);
   }
+}
+
+// 대기 시간을 수동으로 구현하는 함수
+function delay(time) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, time);
+  });
 }
 
 /**
@@ -80,17 +93,23 @@ async function getPageData(page) {
 }
 
 /**
- * 특정 페이지로 네비게이션합니다.
+ * 페이지네이션을 사용하여 특정 페이지로 이동하는 함수입니다.
  * @async
  * @function navigateToPage
  * @param {puppeteer.Page} page - Puppeteer 페이지 객체
- * @param {number} pageIndex - 네비게이션할 페이지 인덱스
+ * @param {number} pageIndex - 이동할 페이지의 인덱스
  */
 async function navigateToPage(page, pageIndex) {
-  await Promise.all([
-    page.click(`.el-pager li:nth-child(${pageIndex})`),
-    page.waitForSelector(".content-title", { timeout: 60000 }),
-  ]);
+  try {
+    if (pageIndex === 1) return;
+    await page.click(`.el-pager li:nth-child(${pageIndex})`);
+
+    await delay(1000);
+    // 특정 요소가 나타날 때까지 대기
+    await page.waitForSelector(".content-title", { timeout: 30000 });
+  } catch (error) {
+    console.error("페이지 네비게이션 중 오류 발생:", error);
+  }
 }
 
 /**
@@ -116,7 +135,11 @@ async function isElementPresent(page, index) {
 async function clickElement(page, index) {
   await page.evaluate((i) => {
     const element = document.querySelectorAll(".el-col-16 > *")[i];
-    element.click();
+    if (element) {
+      element.click();
+    } else {
+      console.error(`Element at index ${i} not found`);
+    }
   }, index);
 
   console.log(`Element ${index + 1}이(가) 성공적으로 클릭되었습니다.`);
