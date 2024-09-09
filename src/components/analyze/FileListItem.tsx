@@ -1,3 +1,5 @@
+"use client";
+
 import fileImg from "../../../public/images/file.png";
 import folderImg from "../../../public/images/folder-open.png";
 import checkImg from "../../../public/images/check.png";
@@ -7,6 +9,7 @@ import errorImg from "../../../public/images/triangle-error.png";
 import xMarkImg from "../../../public/images/x-mark-off.png";
 import circleXMarkImg from "../../../public/images/circle-x-mark.png";
 import purpleSuccessImg from "../../../public/images/circle-purple-success.svg";
+import downloadImg from "../../../public/images/download.png";
 import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,13 +17,15 @@ import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import useFilesStore, { fetchRepoContents } from "@/store/useFilesStore";
 import useSelectedFilesStore from "@/store/useSelectedFilesStore";
-import { useAnalyzeFilesStore, useStepStore } from "@/store/useAnalyzeStore";
+import {
+  useAnalyzeFilesStore,
+  useSaveTimeStore,
+  useStepStore,
+} from "@/store/useAnalyzeStore";
 import { decodeUnicode } from "@/lib/decodeUnicode";
 import { TGithubContent } from "@/app/me/repos/type";
-import { format } from "date-fns";
-import { useParams } from "next/navigation";
 import useUserStore from "@/store/useUserStore";
-
+import { fetchRepoContents } from "@/lib/api/github/fetchRepoContents";
 
 type TFileListItemProps = {
   file: TGithubContent;
@@ -43,6 +48,11 @@ type TToastSteps = {
     text: string;
     subText: string;
   };
+  saveToast: {
+    img: JSX.Element;
+    text: string;
+    subText: string;
+  };
 };
 
 /**
@@ -54,20 +64,15 @@ type TToastSteps = {
  * @returns {JSX.Element} - 파일 항목을 렌더링하는 JSX 요소
  */
 function FileListItem({ file, isSelected }: TFileListItemProps) {
-  const repo = useParams<{ id: string }>();
-  const owner = useUserStore((state) => state.userInfo?.owner);
   const fetchFiles = useFilesStore((state) => state.fecthFiles);
-  const selectedFiles = useSelectedFilesStore((state) => state.selectedFiles);
   const prevFolder = useSelectedFilesStore((state) => state.folderPath);
   const selectFile = useSelectedFilesStore((state) => state.selectFile);
   const removeFile = useSelectedFilesStore((state) => state.removeFile);
+  const selectedFiles = useSelectedFilesStore((state) => state.selectedFiles);
+  const repo = useParams<{ id: string }>();
   const currentStep = useStepStore((state) => state.currentStep); // 현재 단계 상태
   const analyzeFiles = useAnalyzeFilesStore((state) => state.analyzeFiles); // 검사 중인 파일들
-
-  // 특정 형식으로 날짜 data 문자열 format
-  const today = format(new Date(), "yyyy-MM-dd HH:mm");
-  // base64 encoding
-  const encodingDate = btoa(today);
+  const saveTime = useSaveTimeStore((state) => state.saveTime); // 검사 완료 시간
 
   const toastStep: TToastSteps = {
     analyzeToast: {
@@ -107,6 +112,11 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
       text: "검사 중단",
       subText: "검사가 중단되었습니다.",
     },
+    saveToast: {
+      img: <Image src={downloadImg} alt="downloadImg" width={30} height={30} />,
+      text: "검사 결과 저장 완료",
+      subText: "저장된 검사 결과를 확인해보세요.",
+    },
   };
 
   useEffect(() => {
@@ -118,22 +128,26 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
             <div className="h-[30px] w-[30px]">
               {currentStep === "analyze"
                 ? toastStep.analyzeToast.img
-                : currentStep === "finish"
+                : currentStep === "finish" || currentStep === "save"
                   ? toastStep.finishToast.img
                   : currentStep === "cancel"
                     ? toastStep.cancelToast.img
-                    : ""}
+                    : currentStep === "save"
+                      ? toastStep.saveToast.img
+                      : ""}
             </div>
 
             <div className="flex w-full flex-col gap-3">
               <h1 className="font-medium">
                 {currentStep === "analyze"
                   ? toastStep.analyzeToast.text
-                  : currentStep === "finish"
+                  : currentStep === "finish" || currentStep === "save"
                     ? toastStep.finishToast.text
                     : currentStep === "cancel"
                       ? toastStep.cancelToast.text
-                      : ""}
+                      : currentStep === "save"
+                        ? toastStep.saveToast.text
+                        : ""}
               </h1>
               <p className="text-neutral-50">
                 {currentStep === "analyze"
@@ -142,18 +156,26 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
                     ? toastStep.finishToast.subText
                     : currentStep === "cancel"
                       ? toastStep.cancelToast.subText
-                      : ""}
+                      : currentStep === "save"
+                        ? toastStep.saveToast.subText
+                        : ""}
               </p>
               {currentStep === "finish" && (
                 <button className="rounded-lg bg-primary-500 px-5 py-2 text-white">
-                  <Link href={`/me/repos/${repo.id}/${encodingDate}`}>
+                  <Link href={`/me/repos/${repo.id}/${saveTime}`}>
                     검사 결과 보러가기
+                  </Link>
+                </button>
+              )}
+              {currentStep === "save" && (
+                <button className="rounded-lg bg-primary-500 px-5 py-2 text-white">
+                  <Link href={`/me/repos/${repo.id}/${saveTime}`}>
+                    저장된 검사 결과 보러가기
                   </Link>
                 </button>
               )}
             </div>
           </div>
-
           <button onClick={() => toast.dismiss()}>
             <Image src={xMarkImg} alt="x-mark" width={20} height={20} />
           </button>
@@ -161,6 +183,7 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
       ));
   }, [currentStep]);
 
+  const owner = sessionStorage.getItem("owner");
   /**
    * 파일 또는 폴더를 클릭했을 때 호출되는 핸들러입니다.
    * 파일일 경우: 선택된 파일을 추가하거나 제거합니다.
@@ -196,8 +219,10 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
       }
       // 폴더일 경우
     } else {
-      selectFile("dir", file.name);
-      fetchFiles(owner || "", repo.id, `${prevFolder}/${file.name}`);
+      if (owner) {
+        selectFile("dir", file.name);
+        fetchFiles(owner, repo.id, `${prevFolder}/${file.name}`);
+      }
     }
   };
 
