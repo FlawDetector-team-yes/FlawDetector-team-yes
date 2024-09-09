@@ -5,7 +5,10 @@ import triangleDown from "/public/images/triangle-Down.png";
 import Image from "next/image";
 import { TSortType } from "./GitRepoList";
 
-// 한국어 옵션을 TSortType 값으로 맵핑하는 객체
+/**
+ * 한국어 옵션을 TSortType 값으로 맵핑하는 객체
+ * @type {Record<string, TSortType>}
+ */
 const OPTION_MAP: Record<string, TSortType> = {
   //검사전: "pending",
   //검사중: "analyze",
@@ -15,6 +18,10 @@ const OPTION_MAP: Record<string, TSortType> = {
   이름순: "name",
 };
 
+/**
+ * 타입별 드롭다운 옵션
+ * @type {Record<"type" | "sort", string[]>}
+ */
 const TYPE_OPTION: Record<"type" | "sort", string[]> = {
   type: ["검사전", "검사중", "검사완료"],
   sort: ["최신순", "오래된 순", "이름순"],
@@ -25,18 +32,26 @@ type TRepoSortDropdownProps = {
   sort: (sortType: TSortType) => void;
 };
 
+/**
+ * RepoSortDropdown 컴포넌트
+ * Git 레포지토리 리스트에서 타입 또는 정렬 기준을 선택할 수 있는 드롭다운 메뉴
+ * @param {TRepoSortDropdownProps} props - 컴포넌트 속성
+ * @param {"type" | "sort"} props.typeName - 드롭다운 메뉴의 타입 (type 또는 sort)
+ * @param {(sortType: TSortType) => void} props.sort - 정렬 기준을 부모 컴포넌트로 전달하는 함수
+ * @returns {JSX.Element} RepoSortDropdown 컴포넌트
+ */
 export default function RepoSortDropdown({
   typeName,
   sort,
 }: TRepoSortDropdownProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  // 드롭다운 열기/닫기 토글
   const toggleDropdown = () => setIsOpen((prev) => !prev);
-
   const capitalizeTypeName = typeName[0].toUpperCase() + typeName.slice(1);
-
-  // 드롭다운 항목 클릭 핸들러
+  /**
+   * 드롭다운 항목 클릭 시 호출되는 함수
+   * 한국어 옵션을 영문 옵션으로 변환하여 부모 컴포넌트로 전달 후 드롭다운을 닫음
+   * @param {string} option - 선택된 드롭다운 옵션
+   */
   const handleOptionClick = (option: string) => {
     const mappedValue = OPTION_MAP[option]; // 한국어 옵션을 영문 값으로 변환
     sort(mappedValue); // 선택된 정렬 옵션을 부모에게 전달
