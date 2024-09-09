@@ -15,10 +15,13 @@ import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import useFilesStore, { fetchRepoContents } from "@/store/useFilesStore";
 import useSelectedFilesStore from "@/store/useSelectedFilesStore";
-import { useAnalyzeFilesStore, useStepStore } from "@/store/useAnalyzeStore";
+import {
+  useAnalyzeFilesStore,
+  useSaveTimeStore,
+  useStepStore,
+} from "@/store/useAnalyzeStore";
 import { decodeUnicode } from "@/lib/decodeUnicode";
 import { TGithubContent } from "@/app/me/repos/type";
-import { format } from "date-fns";
 import useUserStore from "@/store/useUserStore";
 
 type TFileListItemProps = {
@@ -67,11 +70,7 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
   const removeFile = useSelectedFilesStore((state) => state.removeFile);
   const currentStep = useStepStore((state) => state.currentStep); // 현재 단계 상태
   const analyzeFiles = useAnalyzeFilesStore((state) => state.analyzeFiles); // 검사 중인 파일들
-
-  // 특정 형식으로 날짜 data 문자열 format
-  const today = format(new Date(), "yyyy-MM-dd HH:mm");
-  // base64 encoding
-  const encodingDate = btoa(today);
+  const saveTime = useSaveTimeStore((state) => state.saveTime); // 검사 완료 시간
 
   const toastStep: TToastSteps = {
     analyzeToast: {
@@ -161,14 +160,14 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
               </p>
               {currentStep === "finish" && (
                 <button className="rounded-lg bg-primary-500 px-5 py-2 text-white">
-                  <Link href={`/me/repos/${repo.id}/${encodingDate}`}>
+                  <Link href={`/me/repos/${repo.id}/${saveTime}`}>
                     검사 결과 보러가기
                   </Link>
                 </button>
               )}
               {currentStep === "save" && (
                 <button className="rounded-lg bg-primary-500 px-5 py-2 text-white">
-                  <Link href={`/me/repos/${repo.id}/${encodingDate}`}>
+                  <Link href={`/me/repos/${repo.id}/${saveTime}`}>
                     저장된 검사 결과 보러가기
                   </Link>
                 </button>

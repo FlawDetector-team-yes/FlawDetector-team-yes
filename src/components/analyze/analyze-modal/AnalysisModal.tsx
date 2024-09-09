@@ -7,11 +7,11 @@ import Image, { StaticImageData } from "next/image";
 import ModalFileList from "./ModalFileList";
 import {
   TAnalyzeFileResult,
-  TReposState,
   useAnalyzeFileResultStore,
   useAnalyzeFilesStore,
   useReposStateStore,
   useResultDataStore,
+  useSaveTimeStore,
   useStepStore,
   useWorkerStore,
 } from "@/store/useAnalyzeStore";
@@ -103,6 +103,8 @@ export const AnalysisModal: React.FC<any> = ({
   const selectedAllFile = useSelectedFilesStore(
     (state) => state.selectedAllFile,
   );
+  const saveTime = useSaveTimeStore((state) => state.saveTime);
+  const setSaveTime = useSaveTimeStore((state) => state.setSaveTime);
   const reposState = useReposStateStore((state) => state.reposState);
   const setReposState = useReposStateStore((state) => state.setReposState);
 
@@ -154,6 +156,24 @@ export const AnalysisModal: React.FC<any> = ({
     try {
       await Promise.all(workerPromises); // 모든 워커 작업이 완료될 때까지 대기
       setCurrentStep("finish"); // 모든 작업이 끝나면 finish로 변경
+      // 특정 형식으로 날짜 data 문자열 format
+      const today = format(new Date(), "yyyy-MM-dd HH:mm");
+      // base64 encoding
+      const encodingSaveTime = btoa(today);
+
+      setSaveTime(encodingSaveTime);
+
+      setReposState({
+        repoId: encodingSaveTime,
+        repoName: repo.id,
+        state: "finish",
+      });
+
+      setAnalyzeFileResult({
+        repoId: encodingSaveTime,
+        repoName: repo.id,
+        data: [...resultData],
+      });
     } catch (error) {
       console.error("One or more workers failed:", error);
     }
@@ -205,23 +225,11 @@ export const AnalysisModal: React.FC<any> = ({
       // TODO: 코드 검사 결과 페이지로 이동 처리
 
       // 특정 형식으로 날짜 data 문자열 format
-      const today = format(new Date(), "yyyy-MM-dd HH:mm");
+      // const today = format(new Date(), "yyyy-MM-dd HH:mm");
       // base64 encoding
-      const encodingSaveTime = btoa(today);
+      // const encodingSaveTime = btoa(today);
 
-      setReposState({
-        repoId: encodingSaveTime,
-        repoName: repo.id,
-        state: "finish",
-      });
-
-      setAnalyzeFileResult({
-        repoId: encodingSaveTime,
-        repoName: repo.id,
-        data: [...resultData],
-      });
-
-      saveResult(encodingSaveTime);
+      saveResult();
     } else if (currentStep === "save") {
       // 저장 모달 안에서 "확인" 버튼 눌렀을 때
       selectedAllFile([]);
@@ -239,10 +247,10 @@ export const AnalysisModal: React.FC<any> = ({
     }
   };
 
-  const saveResult = async (encodingSaveTime: string) => {
+  const saveResult = async () => {
     // 결과 data
     const analyzeRes = {
-      repoId: encodingSaveTime,
+      repoId: saveTime,
       repoName: repo.id,
       result: [...resultData],
     };
@@ -271,7 +279,7 @@ export const AnalysisModal: React.FC<any> = ({
 
       // 이미 존재하는 repo인지 확인하고 그 index를 가져옴
       const existRepo = analyzeFileResult.findIndex(
-        (res: TAnalyzeFileResult) => res.repoId === analyzeRes.repoId,
+        (res: TAnalyzeFileResult) => res.repoName === analyzeRes.repoName,
       );
 
       if (existRepo > -1) {
@@ -292,9 +300,10 @@ export const AnalysisModal: React.FC<any> = ({
     }
   };
 
-  console.log(currentStep);
-  console.log(reposState); //"MjAyNC0wOS0wOSAxMjoxNA=="
-  console.log(analyzeFileResult);
+  // console.log(saveTime);
+  // console.log(currentStep);
+  // console.log(reposState);
+  // console.log(analyzeFileResult);
 
   return (
     <div
