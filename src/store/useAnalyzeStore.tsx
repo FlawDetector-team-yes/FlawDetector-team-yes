@@ -94,7 +94,8 @@ export const useResultDataStore = create<TResultDataStore>((set) => ({
 // repoId로 묶은 결과 데이터
 export type TAnalyzeFileResult = {
   repoId: string;
-  result: TResultData[];
+  repoName: string;
+  data: TResultData[];
 };
 
 type TAnalyzeFileResultStore = {
@@ -107,7 +108,8 @@ export const useAnalyzeFileResultStore = create<TAnalyzeFileResultStore>(
   (set) => ({
     analyzeFileResult: {
       repoId: "",
-      result: [],
+      repoName: "",
+      data: [],
     },
     setAnalyzeFileResult: (res: TAnalyzeFileResult) => {
       set((state) => ({
