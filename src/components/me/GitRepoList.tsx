@@ -1,12 +1,13 @@
 "use client";
-import { useEffect, useState } from "react";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import plus from "/public/images/plus.png";
 import useUserStore from "@/store/useUserStore";
 import GitRepoListItem from "./GitRepoListItem";
 import GitRepoListLoading from "./GitRepoListLoading";
 import RepoSortDropdown from "./RepoSortDropdown";
+import { fetchUserRepos } from "@/lib/api/github/fetchUserRepos";
 
 export type TMyPageUserReposType = {
   label: string;
@@ -18,17 +19,20 @@ export type TSortType = "recent" | "oldest" | "name"; // pending, analyze, finis
 
 export default function GitRepoList() {
   const user = useUserStore((state) => state.userInfo);
+  const owner = sessionStorage.getItem("owner");
   const [repos, setRepos] = useState<TMyPageUserReposType[]>([]);
-  const [visibleCount, setVisibleCount] = useState<number>(12); // 초기 12개만 출력
+  const [visibleCount, setVisibleCount] = useState<number>(12);
 
-  // repos 길이가 12개 이하일 경우, 더보기 버튼을 숨김
   const isMoreItems = repos.length > visibleCount;
 
-  // 더보기 버튼 클릭 시, 12개씩 추가로 보여주기
   const handleLoadMore = () => {
     setVisibleCount((prev) => prev + 12);
   };
 
+  /**
+   * 레포지토리 정렬 함수
+   * @param {TSortType} sortType - 정렬 기준 ("recent", "oldest", "name")
+   */
   const handleSortRepos = (sortType: TSortType) => {
     const sortFunctions: Record<TSortType, (a: any, b: any) => number> = {
       recent: (a: any, b: any) =>
@@ -42,23 +46,18 @@ export default function GitRepoList() {
     setRepos(sortedRepos);
   };
 
-  // 사용자 github repo 목록 불러오기
-  const fetchUserRepos = async () => {
-    try {
-      if (user) {
-        const res = await await (
-          await fetch(`api/github/repos/${user.owner}`)
-        ).json();
-        setRepos(res);
-        console.log(JSON.stringify(res));
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
+  /**
+   * 컴포넌트가 마운트될 때 및 사용자 정보가 변경될 때
+   * 레포지토리 목록을 불러옴
+   */
   useEffect(() => {
-    fetchUserRepos();
+    const fetchRepos = async () => {
+      if (owner) {
+        const userRepos = await fetchUserRepos(owner);
+        setRepos(userRepos);
+      }
+    };
+    fetchRepos();
   }, [user]);
 
   return (
