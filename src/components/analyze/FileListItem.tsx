@@ -7,6 +7,7 @@ import errorImg from "../../../public/images/triangle-error.png";
 import xMarkImg from "../../../public/images/x-mark-off.png";
 import circleXMarkImg from "../../../public/images/circle-x-mark.png";
 import purpleSuccessImg from "../../../public/images/circle-purple-success.svg";
+import downloadImg from "../../../public/images/download.png";
 import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -37,6 +38,11 @@ type TToastSteps = {
     subText: string;
   };
   cancelToast: {
+    img: JSX.Element;
+    text: string;
+    subText: string;
+  };
+  saveToast: {
     img: JSX.Element;
     text: string;
     subText: string;
@@ -105,6 +111,11 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
       text: "검사 중단",
       subText: "검사가 중단되었습니다.",
     },
+    saveToast: {
+      img: <Image src={downloadImg} alt="downloadImg" width={30} height={30} />,
+      text: "검사 결과 저장 완료",
+      subText: "저장된 검사 결과를 확인해보세요.",
+    },
   };
 
   useEffect(() => {
@@ -116,22 +127,26 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
             <div className="h-[30px] w-[30px]">
               {currentStep === "analyze"
                 ? toastStep.analyzeToast.img
-                : currentStep === "finish"
+                : currentStep === "finish" || currentStep === "save"
                   ? toastStep.finishToast.img
                   : currentStep === "cancel"
                     ? toastStep.cancelToast.img
-                    : ""}
+                    : currentStep === "save"
+                      ? toastStep.saveToast.img
+                      : ""}
             </div>
 
             <div className="flex w-full flex-col gap-3">
               <h1 className="font-medium">
                 {currentStep === "analyze"
                   ? toastStep.analyzeToast.text
-                  : currentStep === "finish"
+                  : currentStep === "finish" || currentStep === "save"
                     ? toastStep.finishToast.text
                     : currentStep === "cancel"
                       ? toastStep.cancelToast.text
-                      : ""}
+                      : currentStep === "save"
+                        ? toastStep.saveToast.text
+                        : ""}
               </h1>
               <p className="text-neutral-50">
                 {currentStep === "analyze"
@@ -140,7 +155,9 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
                     ? toastStep.finishToast.subText
                     : currentStep === "cancel"
                       ? toastStep.cancelToast.subText
-                      : ""}
+                      : currentStep === "save"
+                        ? toastStep.saveToast.subText
+                        : ""}
               </p>
               {currentStep === "finish" && (
                 <button className="rounded-lg bg-primary-500 px-5 py-2 text-white">
@@ -149,9 +166,15 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
                   </Link>
                 </button>
               )}
+              {currentStep === "save" && (
+                <button className="rounded-lg bg-primary-500 px-5 py-2 text-white">
+                  <Link href={`/me/repos/${repo.id}/${encodingDate}`}>
+                    저장된 검사 결과 보러가기
+                  </Link>
+                </button>
+              )}
             </div>
           </div>
-
           <button onClick={() => toast.dismiss()}>
             <Image src={xMarkImg} alt="x-mark" width={20} height={20} />
           </button>

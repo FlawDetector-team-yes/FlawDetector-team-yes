@@ -1,6 +1,7 @@
 import useModal from "@/store/modalState";
 import bugImg from "../../../../public/images/bug.svg";
 import checkImg from "../../../../public/images/circle-purple-success.svg";
+import downloadImg from "../../../../public/images/download.png";
 import cancelImg from "../../../../public/images/circle-x-mark.png";
 import Image, { StaticImageData } from "next/image";
 import ModalFileList from "./ModalFileList";
@@ -25,6 +26,7 @@ import {
 } from "firebase/firestore";
 import db from "@/firebase/firebaseClient";
 import { Session } from "next-auth";
+import { format } from "date-fns";
 
 type TStepInfo = {
   headerText: string;
@@ -61,6 +63,13 @@ const stepInfo: Record<string, TStepInfo> = {
     nextBtnText: "저장하기",
     img: checkImg,
   },
+  save: {
+    headerText: "분석 결과 저장이 완료되었습니다",
+    mainText:
+      "모든 파일의 분석 결과 저장을 끝냈습니다. 검사를 끝내시려면 확인을 눌러주세요.",
+    nextBtnText: "확인",
+    img: downloadImg,
+  },
 };
 
 /**
@@ -91,8 +100,11 @@ export const AnalysisModal: React.FC<any> = ({
   const setAnalyzeFileResult = useAnalyzeFileResultStore(
     (state) => state.setAnalyzeFileResult,
   );
-  // const reposState = useReposStateStore((state) => state.reposState);
-  // const setReposState = useReposStateStore((state) => state.setReposState);
+  const selectedAllFile = useSelectedFilesStore(
+    (state) => state.selectedAllFile,
+  );
+  const reposState = useReposStateStore((state) => state.reposState);
+  const setReposState = useReposStateStore((state) => state.setReposState);
 
   /**
    * 검사하기 누를 경우 실행되는 로직
@@ -122,7 +134,7 @@ export const AnalysisModal: React.FC<any> = ({
 
           if (type === "progress") {
             setCurrentStep("analyze");
-            // setReposState({ repoId: repo.id, repoName: "", state: "analyze" });
+            setReposState({ repoId: "", repoName: repo.id, state: "analyze" });
             setAnalyzeFiles({ fileId, progressValue: percent, state: status });
           } else if (type === "completed") {
             setResultData({ sha: fileId, name, content, result });
@@ -142,7 +154,6 @@ export const AnalysisModal: React.FC<any> = ({
     try {
       await Promise.all(workerPromises); // 모든 워커 작업이 완료될 때까지 대기
       setCurrentStep("finish"); // 모든 작업이 끝나면 finish로 변경
-      // setReposState({ repoId: repo.id, repoName: "", state: "finish" });
     } catch (error) {
       console.error("One or more workers failed:", error);
     }
@@ -192,16 +203,49 @@ export const AnalysisModal: React.FC<any> = ({
     } else if (currentStep === "finish") {
       // 분석 완료 후 모달 닫기 및 저장 처리
       // TODO: 코드 검사 결과 페이지로 이동 처리
-      // store 저장 후, 데이터 베이스에 저장 (users - analyzeResult 저장)
-      setAnalyzeFileResult({ repoId: repo.id, result: [...resultData] });
-      saveResult();
+
+      // 특정 형식으로 날짜 data 문자열 format
+      const today = format(new Date(), "yyyy-MM-dd HH:mm");
+      // base64 encoding
+      const encodingSaveTime = btoa(today);
+
+      setReposState({
+        repoId: encodingSaveTime,
+        repoName: repo.id,
+        state: "finish",
+      });
+
+      setAnalyzeFileResult({
+        repoId: encodingSaveTime,
+        repoName: repo.id,
+        data: [...resultData],
+      });
+
+      saveResult(encodingSaveTime);
+    } else if (currentStep === "save") {
+      // 저장 모달 안에서 "확인" 버튼 눌렀을 때
+      selectedAllFile([]);
+      // analyzeFiles 초기화
+      selectedFiles.forEach((file) => {
+        setAnalyzeFiles({
+          fileId: file.sha,
+          progressValue: 0,
+          state: "canceled", // 상태를 "canceled"로 설정
+        });
+      });
+      closeModal?.();
     } else {
       closeModal?.();
     }
   };
 
-  const saveResult = async () => {
-    const analyzeRes = { repoId: repo.id, result: [...resultData] };
+  const saveResult = async (encodingSaveTime: string) => {
+    // 결과 data
+    const analyzeRes = {
+      repoId: encodingSaveTime,
+      repoName: repo.id,
+      result: [...resultData],
+    };
 
     try {
       const allUserRef = collection(db, "users");
@@ -237,6 +281,8 @@ export const AnalysisModal: React.FC<any> = ({
         // 존재하지 않는다면 결과를 push로 넣어줌.
         analyzeFileResult.push(analyzeRes);
       }
+      // currentStep 변경
+      setCurrentStep("save");
 
       // 값을 업데이트 시켜줌
       await updateDoc(userRef, { analyzeFileResult });
@@ -246,6 +292,8 @@ export const AnalysisModal: React.FC<any> = ({
     }
   };
 
+  console.log(currentStep);
+  console.log(reposState); //"MjAyNC0wOS0wOSAxMjoxNA=="
   console.log(analyzeFileResult);
 
   return (
