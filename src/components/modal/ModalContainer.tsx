@@ -2,6 +2,7 @@
 
 import useOutsideClick from "@/hook/useOutSideClick";
 import useModal from "@/store/modalState";
+import { Session } from "next-auth";
 import { useEffect, useRef } from "react";
 
 /**
@@ -9,7 +10,7 @@ import { useEffect, useRef } from "react";
  * 모달 외부 클릭을 감지하여 모달을 닫을 수 있으며,
  * 모달이 열릴 때 페이지의 스크롤을 비활성화합니다.
  */
-function ModalContainer() {
+function ModalContainer({ session }: { session: Session | null }) {
   const modalRef = useRef(null);
   useOutsideClick(modalRef);
   const { ModalContent } = useModal();
@@ -32,7 +33,7 @@ function ModalContainer() {
   return (
     <div className="fixed inset-0 z-20 flex items-center justify-center bg-gray-800 bg-opacity-50">
       <div ref={modalRef} className="inline-block overflow-hidden shadow-lg">
-        {ModalContent ? <ModalContent /> : null}
+        {ModalContent ? <ModalContent session={session} /> : null}
       </div>
     </div>
   );
