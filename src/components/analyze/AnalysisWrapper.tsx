@@ -10,7 +10,10 @@ import { useParams } from "next/navigation";
 import CodeViewer from "./CodeViewer";
 import OpenModalBtn from "./OpenModalBtn";
 import { useStepStore } from "@/store/useAnalyzeStore";
+import { useEffect, useRef, useState } from "react";
+import ToastBox from "./ToastBox";
 import useUserStore from "@/store/useUserStore";
+
 
 /**
  * `AnalysisWrapper` 컴포넌트
@@ -27,6 +30,44 @@ export default function AnalysisWrapper() {
   const folderPath = useSelectedFilesStore((state) => state.folderPath);
   const files = useFilesStore((state) => state.files);
   const currentStep = useStepStore((state) => state.currentStep); // 현재 단계 상태
+  const mainRef = useRef<HTMLDivElement>(null); // codeViewer의 사이즈를 알아냄
+  const sidebarRef = useRef<HTMLDivElement>(null); // 첫 번째 section의 사이즈를 알아냄
+  const [toastPosition, setToastPosition] = useState({ top: 0, right: 0 }); // toast의 위치를 지정해줌
+  const [sidebarHeight, setSidebarHeight] = useState(0); // 측정된 첫 번째 section의 높이
+
+  useEffect(() => {
+    // 첫 번째 section의 크기를 측정하여 state에 저장하는 함수
+    const updateSidebarHeight = () => {
+      if (sidebarRef.current) {
+        const rect = sidebarRef.current.getBoundingClientRect();
+        setSidebarHeight(rect.height);
+      }
+    };
+
+    // 페이지 로드 및 리사이즈 시 높이 업데이트
+    updateSidebarHeight();
+    window.addEventListener("resize", updateSidebarHeight);
+
+    // main의 위치를 계산하여 toast 위치를 설정합니다.
+    const updateToastPosition = () => {
+      if (mainRef.current) {
+        const rect = mainRef.current.getBoundingClientRect();
+        setToastPosition({
+          top: rect.top,
+          right: rect.right,
+        });
+      }
+    };
+
+    // 페이지 로드 및 리사이즈 시 위치 업데이트
+    updateToastPosition();
+    window.addEventListener("resize", updateToastPosition);
+
+    return () => {
+      window.removeEventListener("resize", updateSidebarHeight);
+      window.removeEventListener("resize", updateToastPosition);
+    };
+  }, []);
 
   /**
    * 전체 파일을 선택하고 파일 내용을 가져와 상태를 업데이트합니다.
@@ -64,10 +105,11 @@ export default function AnalysisWrapper() {
       }
     }
   };
+
   return (
     <>
-      <section className="flex h-full w-full min-w-[1760px] gap-7">
-        <section className="flex w-[247px] flex-col gap-7">
+      <section className="flex h-full w-full min-w-[1760px] gap-7 rounded-md">
+        <section ref={sidebarRef} className="flex w-[247px] flex-col gap-7">
           <button
             className="flex h-[107px] w-[247px] items-center justify-center gap-[10px] rounded-lg bg-primary-500 px-4 text-2xl font-semibold text-white"
             onClick={() => handleSelectedAllFile()}
@@ -76,10 +118,17 @@ export default function AnalysisWrapper() {
           </button>
           <FileSideBar />
         </section>
-        <main className="relative h-[1220px] w-full overflow-y-scroll">
+
+        <main
+          ref={mainRef}
+          style={{ height: `${sidebarHeight}px` }}
+          className="relative w-full overflow-y-scroll"
+        >
           <CodeViewer />
-          {currentStep === "analyze" && <OpenModalBtn />}
+          {/* toast 알림 */}
+          <ToastBox position={toastPosition} />
         </main>
+        {currentStep === "analyze" && <OpenModalBtn />}
       </section>
     </>
   );
