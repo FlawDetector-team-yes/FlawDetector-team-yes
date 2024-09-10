@@ -65,7 +65,7 @@ export const useAnalyzeFilesStore = create<TAnalyzeFilesStore>((set) => ({
 // result
 export type TResultData = {
   sha: string;
-  name?: string;
+  name: string;
   path?: string;
   content: string;
   result: string; // 결과 저장

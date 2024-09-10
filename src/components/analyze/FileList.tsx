@@ -26,7 +26,8 @@ export default function FileList() {
   const folderPath = useSelectedFilesStore((state) => state.folderPath);
   const moveFolderPath = useSelectedFilesStore((state) => state.moveFolderPath);
 
-  const owner = sessionStorage.getItem("owner");
+  const owner =
+    typeof window !== "undefined" ? sessionStorage.getItem("owner") : null;
   const repo = useParams<{ id: string }>();
 
   const isActiveMoveDir = folderPath !== "";

@@ -252,7 +252,7 @@ export const AnalysisModal: React.FC<any> = ({
     const analyzeRes = {
       repoId: saveTime,
       repoName: repo.id,
-      result: [...resultData],
+      data: [...resultData],
     };
 
     try {
