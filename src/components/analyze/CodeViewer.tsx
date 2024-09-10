@@ -13,36 +13,7 @@ import {
 } from "@codemirror/view";
 import { RangeSetBuilder, Extension } from "@codemirror/state";
 import useSelectedFilesStore from "@/store/useSelectedFilesStore";
-import { tags as t } from "@lezer/highlight";
-import { createTheme } from "@uiw/codemirror-themes";
 import Image from "next/image";
-
-const eclipseTheme = createTheme({
-  theme: "light",
-  settings: {
-    background: "#ffffff", // 배경색
-    foreground: "#000000", // 기본 텍스트 색상
-    caret: "#0e7c61", // 커서 색상
-    selection: "#d7d4f0", // 선택 영역 색상
-    selectionMatch: "#d7d4f0", // 선택된 단어 색상
-    gutterBackground: "#f7f7f7", // 라인 번호 배경
-    gutterForeground: "#333333", // 라인 번호 색상
-    gutterBorder: "#dddddd", // 라인 번호 테두리
-    lineHighlight: "#f3f3f3", // 현재 라인 하이라이트 배경
-  },
-  styles: [
-    { tag: t.comment, color: "#3f7f5f", fontStyle: "italic" }, // 주석
-    { tag: t.definition(t.typeName), color: "#d35400" }, // 타입 정의
-    { tag: t.typeName, color: "#d35400" }, // 타입 이름
-    { tag: t.tagName, color: "#7f0055" }, // 태그 이름
-    { tag: t.variableName, color: "#0000ff" }, // 변수 이름
-    { tag: t.string, color: "#2a00ff" }, // 문자열
-    { tag: t.number, color: "#164" }, // 숫자
-    { tag: t.keyword, color: "#7f0055", fontWeight: "bold" }, // 키워드
-    { tag: t.function(t.variableName), color: "#795e26" }, // 함수명
-    { tag: t.operator, color: "#000000" }, // 연산자
-  ],
-});
 
 /**
  * CodeViewer 컴포넌트는 선택된 파일의 코드를 CodeMirror를 사용하여 화면에 표시하는 역할을 합니다.
@@ -119,13 +90,17 @@ export default function CodeViewer() {
               javascript({ jsx: true }),
               highlightLinePlugin([...highlightLine]),
             ]}
-            theme={eclipseTheme}
+            theme={eclipse}
             onChange={(value) => {
               console.log("value:", value);
             }}
           />
           <style jsx global>{`
             /* CodeMirror 컨테이너 스타일 */
+            .cm-editor,
+            .cm-scroller {
+              border-radius: 10px;
+            }
             .cm-line {
               font-size: 17px; // 폰트 크기를 조절합니다
               margin-left: 10px;
