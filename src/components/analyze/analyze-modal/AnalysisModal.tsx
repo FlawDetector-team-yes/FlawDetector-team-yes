@@ -77,6 +77,7 @@ export const AnalysisModal: React.FC<any> = ({
   session: Session | undefined;
 }) => {
   const closeModal = useModalStore((state) => state.setIsClose); // 모달 닫기 함수
+  const isOpenModal = useModalStore((state) => state.isOpen);
   const currentStep = useStepStore((state) => state.currentStep); // 현재 단계 상태
   const setCurrentStep = useStepStore((state) => state.setCurrentStep); // 현재 단계 상태 업데이트
   const selectedFiles = useSelectedFilesStore((state) => state.selectedFiles);
@@ -170,6 +171,10 @@ export const AnalysisModal: React.FC<any> = ({
         repoName: repo.id,
         data: [...resultData],
       });
+
+      if (isOpenModal) {
+        resetAnalyze();
+      }
     } catch (error) {
       console.error("One or more workers failed:", error);
     }
