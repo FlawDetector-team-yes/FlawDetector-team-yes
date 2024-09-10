@@ -148,6 +148,7 @@ export const useReposStateStore = create<TReposStateStore>((set) => ({
   },
 }));
 
+// 검사 완료 시간 저장
 type TSaveTimeStore = {
   saveTime: string;
   setSaveTime: (t: string) => void;
@@ -159,6 +160,52 @@ export const useSaveTimeStore = create<TSaveTimeStore>((set) => ({
     set((state) => ({
       ...state,
       saveTime: t,
+    }));
+  },
+}));
+
+type TResSelectedStore = {
+  resSelected: TResultData;
+  setResSelected: (f: TResultData) => void;
+};
+
+export const useResSelectedStore = create<TResSelectedStore>((set) => ({
+  resSelected: { sha: "", name: "", content: "", result: "" },
+  setResSelected: (f: TResultData) => {
+    set((state) => ({
+      ...state,
+      resSelected: f,
+    }));
+  },
+}));
+
+export type TFormattedRes = {
+  title: string;
+  description: string;
+  code: string;
+  line: number;
+};
+
+type TFormattedResStore = {
+  securityRes: TFormattedRes[];
+  setSecurityRes: (r: TFormattedRes[]) => void;
+  suggestRes: TFormattedRes[];
+  setSuggestRes: (r: TFormattedRes[]) => void;
+};
+
+export const useFormattedResStore = create<TFormattedResStore>((set) => ({
+  securityRes: [],
+  setSecurityRes: (r: TFormattedRes[]) => {
+    set((state) => ({
+      ...state,
+      securityRes: r,
+    }));
+  },
+  suggestRes: [],
+  setSuggestRes: (r: TFormattedRes[]) => {
+    set((state) => ({
+      ...state,
+      onSelectRes: r,
     }));
   },
 }));
