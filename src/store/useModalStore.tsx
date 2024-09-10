@@ -25,7 +25,7 @@ function InitialContent() {
  * @param {Function} setModalContent - 모달의 내용을 설정하는 함수.
  */
 
-const useModal = create<ModalState>((set) => ({
+const useModalStore = create<ModalState>((set) => ({
   isOpen: false,
   ModalContent: InitialContent,
   props: {},
@@ -36,4 +36,4 @@ const useModal = create<ModalState>((set) => ({
   setModalContent: (value: FC<any>) => set(() => ({ ModalContent: value })),
 }));
 
-export default useModal;
+export default useModalStore;
