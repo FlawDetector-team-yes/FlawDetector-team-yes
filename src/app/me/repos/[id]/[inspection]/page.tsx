@@ -1,8 +1,7 @@
-import Image from "next/image";
-import leftVioletArrow from "../../../../../public/images/left-violet-arrow.png";
-import FileAnalysisSideBar from "@/components/analyze/ai-analyze/FileAnalysisSideBar";
-import FileAnalysisList from "@/components/analyze/ai-analyze/FileAnalysisList";
-//import { analysisResults } from "../data";
+import AnalyzeHeader from "@/components/analyze/AnalyzeHeader";
+import { SessionProvider } from "next-auth/react";
+import { getSession } from "@/lib/getSession";
+import FileAnalysisListContainer from "@/components/analyze/ai-analyze/FileAnalysisListContainer";
 
 /**
  * `AiAnalyzePage` 컴포넌트는 파일 분석 페이지를 렌더링합니다.
@@ -11,22 +10,18 @@ import FileAnalysisList from "@/components/analyze/ai-analyze/FileAnalysisList";
  *
  * @returns JSX.Element - 페이지 구성 요소.
  */
-function AiAnalyzePage() {
+async function AiAnalyzePage() {
+  const session = await getSession();
   return (
     <div className="container mx-auto flex min-w-[1760px] flex-col gap-[45px]">
       {/* 페이지 헤더 */}
       <section className="flex h-[79px] w-full items-center gap-6 rounded-full border-4 border-primary-500 p-5 text-primary-500">
-        <Image
-          src={leftVioletArrow}
-          alt="Left Violet Arrow"
-          width={36}
-          height={36}
-        />
-        <p className="flex items-center text-[38px] font-medium">sfacweb - 1</p>
+        <AnalyzeHeader />
       </section>
       <section className="flex gap-8">
-        <FileAnalysisSideBar />
-        <FileAnalysisList />
+        <SessionProvider session={session}>
+          <FileAnalysisListContainer />
+        </SessionProvider>
       </section>
     </div>
   );
