@@ -11,6 +11,7 @@ type TSelectedFilesState = {
     name: string,
     sha?: string,
     content?: string,
+    repoName?: string,
   ) => void;
   removeFile: (sha: string) => void;
 };
@@ -40,6 +41,7 @@ const useSelectedFilesStore = create<TSelectedFilesState>((set, get) => ({
     name: string,
     sha: string = "",
     content: string = "",
+    repoName: string = "",
   ) => {
     const { folderPath } = get();
     // 파일일 경우
@@ -50,6 +52,7 @@ const useSelectedFilesStore = create<TSelectedFilesState>((set, get) => ({
           {
             name,
             sha,
+            repoName,
             content,
           },
         ],
