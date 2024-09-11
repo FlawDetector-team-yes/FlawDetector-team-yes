@@ -25,7 +25,13 @@ export default async function addDataToFirebase(
 
     if (snapshot.empty) {
       // 동일한 subtitle이 없다면 새로운 데이터를 Firestore에 추가
-      await addDoc(vulnerabilityRef, { title, subtitle, content, arrayTable });
+      await addDoc(vulnerabilityRef, {
+        title,
+        subtitle,
+        content,
+        arrayTable,
+        view: 0,
+      });
       console.log("새로운 subtitle이 Firestore에 추가되었습니다.");
     } else {
       console.log("같은 subtitle이 이미 Firestore에 존재합니다.");
