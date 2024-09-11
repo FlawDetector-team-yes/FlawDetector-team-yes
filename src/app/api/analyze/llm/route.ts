@@ -32,7 +32,7 @@ export async function POST(req: Request) {
         "Cache-Control": "no-store",
       },
       body: JSON.stringify({
-        user_message: `${content}\n\nquestion: Please translate the result of analyzing the security vulnerability of the above code into Korean and respond only in Korean. Also, please inform us of the modified code by applying the security vulnerability analysis results.`,
+        user_message: `${content}\n\nquestion: Please translate the security vulnerability analysis results of the above code into Korean and respond in Korean only, following the requested format. Under each security vulnerability analysis result, write the modified code to which the analysis result is applied after "Modification Code:" and write the line number where the modified part is located after "Modification Line:". Once the security vulnerability analysis is complete, please provide a correction suggestion based on eslint. Under each correction suggestion result, write the modified code to which the correction suggestion is applied after "Correction code: ", and write the line number where the modified part is located after "Correction line:".`,
         temperature: 0.6,
         top_p: 0.6,
       }),

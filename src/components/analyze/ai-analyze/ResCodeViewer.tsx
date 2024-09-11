@@ -1,9 +1,9 @@
-"use client";
-
+import Image from "next/image";
+import { useEffect } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { eclipse } from "@uiw/codemirror-theme-eclipse";
-import magnifier from "../../../public/images/magnifier.png";
+import magnifier from "../../../../public/images/magnifier.png";
 import {
   EditorView,
   Decoration,
@@ -12,19 +12,19 @@ import {
   DecorationSet,
 } from "@codemirror/view";
 import { RangeSetBuilder, Extension } from "@codemirror/state";
-import useSelectedFilesStore from "@/store/useSelectedFilesStore";
-import Image from "next/image";
+import {
+  useAnalyzeFileResultStore,
+  useResSelectedStore,
+} from "@/store/useAnalyzeStore";
 
-/**
- * CodeViewer 컴포넌트는 선택된 파일의 코드를 CodeMirror를 사용하여 화면에 표시하는 역할을 합니다.
- * 선택된 파일이 없을 경우, 파일을 선택하라는 메시지를 표시합니다.
- */
-export default function CodeViewer() {
-  const selectedFiles = useSelectedFilesStore((state) => state.selectedFiles);
-  const fileCode = selectedFiles[selectedFiles.length - 1]?.content || "";
-  const testCode = fileCode || "";
+function ResCodeViewer() {
+  const analyzeFileResult = useAnalyzeFileResultStore(
+    (state) => state.analyzeFileResult,
+  );
+  const setResSelected = useResSelectedStore((state) => state.setResSelected);
+  const resSelected = useResSelectedStore((state) => state.resSelected);
   const highlightLine = [5, 10, 12, 13];
-  // const currentCode = "" // 현재 선택한 코드, 수정 예정
+  
 
   /**
    * 특정 라인을 하이라이트하는 플러그인을 생성합니다.
@@ -80,12 +80,12 @@ export default function CodeViewer() {
 
   return (
     <>
-      {testCode ? (
+      {resSelected?.content ? (
         <>
           <CodeMirror
-            value={testCode}
-            minHeight="400px"
-            //style={{ fontSize: "20px" }}
+            value={resSelected?.content}
+            height="400px"
+            id="resCodeViewer"
             extensions={[
               javascript({ jsx: true }),
               highlightLinePlugin([...highlightLine]),
@@ -97,9 +97,12 @@ export default function CodeViewer() {
           />
           <style jsx global>{`
             /* CodeMirror 컨테이너 스타일 */
-            .cm-editor,
-            .cm-scroller {
-              border-radius: 10px;
+            #resCodeViewer {
+              .cm-editor,
+              .cm-scroller {
+                padding: 0;
+                border-radius: 10px;
+              }
             }
             .cm-line {
               font-size: 17px; // 폰트 크기를 조절합니다
@@ -116,7 +119,7 @@ export default function CodeViewer() {
         </>
       ) : (
         <>
-          <div className="flex h-full items-center justify-center text-[32px] font-light text-primary-500">
+          <div className="flex h-[400px] items-center justify-center text-[32px] font-light text-primary-500">
             <div className="flex flex-col items-center justify-center gap-6">
               <Image src={magnifier} alt="Magnifier" width={50} height={50} />
               <span className="font-pretendard text-[32px] font-medium text-primary-500">
@@ -129,3 +132,4 @@ export default function CodeViewer() {
     </>
   );
 }
+export default ResCodeViewer;
