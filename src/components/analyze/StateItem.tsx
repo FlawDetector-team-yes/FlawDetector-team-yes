@@ -23,7 +23,7 @@ export default function StateItem({
         <Image src={src} alt={alt} width={20} height={20} />
         <p className="flex w-full justify-between">
           <span>{alt}</span>
-          <span>{count}</span>
+          <span>{alt === "문제 없음" ? "-" : count}</span>
         </p>
       </div>
     </>

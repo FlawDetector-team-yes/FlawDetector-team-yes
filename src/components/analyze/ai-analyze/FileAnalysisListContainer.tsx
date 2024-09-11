@@ -10,6 +10,8 @@ import { useSession } from "next-auth/react";
 import {
   TAnalyzeFileResult,
   useAnalyzeFileResultStore,
+  useFormattedResStore,
+  useResSelectedStore,
 } from "@/store/useAnalyzeStore";
 import ResCodeViewer from "./ResCodeViewer";
 
@@ -19,6 +21,8 @@ function FileAnalysisListContainer() {
   const setAnalyzeFileResult = useAnalyzeFileResultStore(
     (state) => state.setAnalyzeFileResult,
   );
+  const resSelected = useResSelectedStore((state) => state.resSelected);
+  const setResSelected = useResSelectedStore((state) => state.setResSelected);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [sidebarHeight, setSidebarHeight] = useState(0); // 측정된 첫 번째 section의 높이
 
@@ -65,6 +69,8 @@ function FileAnalysisListContainer() {
           )[0];
 
           setAnalyzeFileResult(filteredResults);
+          // 선택 안되어있을 경우, 첫번째 데이터를 기본 값을 지정해준다.
+          setResSelected(filteredResults.data[0]);
         } else {
           console.log("일치하는 유저가 없습니다.");
         }
