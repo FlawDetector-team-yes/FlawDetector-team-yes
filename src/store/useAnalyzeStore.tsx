@@ -188,24 +188,24 @@ export type TFormattedRes = {
 
 type TFormattedResStore = {
   securityRes: TFormattedRes[];
-  setSecurityRes: (r: TFormattedRes[]) => void;
+  setSecurityRes: (sr: TFormattedRes[]) => void;
   suggestRes: TFormattedRes[];
-  setSuggestRes: (r: TFormattedRes[]) => void;
+  setSuggestRes: (sg: TFormattedRes[]) => void;
 };
 
 export const useFormattedResStore = create<TFormattedResStore>((set) => ({
   securityRes: [],
-  setSecurityRes: (r: TFormattedRes[]) => {
+  setSecurityRes: (sr: TFormattedRes[]) => {
     set((state) => ({
       ...state,
-      securityRes: r,
+      securityRes: [...sr], // 보안 취약점 상태 업데이트
     }));
   },
   suggestRes: [],
-  setSuggestRes: (r: TFormattedRes[]) => {
+  setSuggestRes: (sg: TFormattedRes[]) => {
     set((state) => ({
       ...state,
-      onSelectRes: r,
+      suggestRes: [...sg], // 수정 제안 상태 업데이트
     }));
   },
 }));
