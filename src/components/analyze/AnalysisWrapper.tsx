@@ -4,7 +4,7 @@ import ProgressList from "./ProgressList";
 import CodeArea from "./CodeArea";
 import FileSideBar from "./FileSideBar";
 import useSelectedFilesStore from "@/store/useSelectedFilesStore";
-import useFilesStore, { fetchRepoContents } from "@/store/useFilesStore";
+import useFilesStore from "@/store/useFilesStore";
 import { decodeUnicode } from "@/lib/decodeUnicode";
 import { useParams } from "next/navigation";
 import CodeViewer from "./CodeViewer";
@@ -12,7 +12,7 @@ import OpenModalBtn from "./OpenModalBtn";
 import { useStepStore } from "@/store/useAnalyzeStore";
 import { useEffect, useRef, useState } from "react";
 import ToastBox from "./ToastBox";
-import useUserStore from "@/store/useUserStore";
+import { fetchRepoContents } from "@/lib/api/github/fetchRepoContents";
 
 /**
  * `AnalysisWrapper` 컴포넌트
@@ -24,7 +24,8 @@ import useUserStore from "@/store/useUserStore";
  */
 export default function AnalysisWrapper() {
   const repo = useParams<{ id: string }>();
-  const owner = useUserStore((state) => state.userInfo?.owner);
+  const owner =
+    typeof window !== "undefined" ? sessionStorage.getItem("owner") : null;
   const selectAllFile = useSelectedFilesStore((state) => state.selectedAllFile);
   const folderPath = useSelectedFilesStore((state) => state.folderPath);
   const files = useFilesStore((state) => state.files);

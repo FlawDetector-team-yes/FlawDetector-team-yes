@@ -15,7 +15,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
-import useFilesStore, { fetchRepoContents } from "@/store/useFilesStore";
+import useFilesStore from "@/store/useFilesStore";
 import useSelectedFilesStore from "@/store/useSelectedFilesStore";
 import {
   useAnalyzeFilesStore,
@@ -24,7 +24,6 @@ import {
 } from "@/store/useAnalyzeStore";
 import { decodeUnicode } from "@/lib/decodeUnicode";
 import { TGithubContent } from "@/app/me/repos/type";
-import useUserStore from "@/store/useUserStore";
 import { fetchRepoContents } from "@/lib/api/github/fetchRepoContents";
 
 type TFileListItemProps = {
