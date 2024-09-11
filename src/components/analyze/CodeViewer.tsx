@@ -90,6 +90,7 @@ export default function CodeViewer() {
               javascript({ jsx: true }),
               highlightLinePlugin([...highlightLine]),
             ]}
+            editable={false}
             theme={eclipse}
             onChange={(value) => {
               console.log("value:", value);

@@ -1,13 +1,8 @@
 import CodeMirror from "@uiw/react-codemirror";
-import { useAnalyzeFileResultStore } from "@/store/useAnalyzeStore";
 
 function ModifiedCode({ code }: { code: string }) {
-  // const analyzeFileResult = useAnalyzeFileResultStore(
-  //   (state) => state.analyzeFileResult,
-  // );
-  // const selectedFiles = useSelectedFilesStore((state) => state.selectedFiles);
-  const fileCode =
-    code || "";
+  
+  const fileCode = code || "";
 
   return (
     <>
@@ -16,6 +11,7 @@ function ModifiedCode({ code }: { code: string }) {
         id="modifiedCode"
         maxHeight="250px"
         theme="dark"
+        editable={false}
       />
       <style jsx global>{`
         /* CodeMirror 컨테이너 스타일 */
