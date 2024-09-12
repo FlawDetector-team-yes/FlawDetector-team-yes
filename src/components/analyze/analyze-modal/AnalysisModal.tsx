@@ -172,7 +172,7 @@ export const AnalysisModal: React.FC<any> = ({
         data: [...resultData],
       });
 
-      if (isOpenModal) {
+      if (!isOpenModal) {
         resetAnalyze();
       }
     } catch (error) {
@@ -276,8 +276,6 @@ export const AnalysisModal: React.FC<any> = ({
         // 존재하지 않는다면 결과를 push로 넣어줌.
         analyzeFileResult.push(analyzeRes);
       }
-      // currentStep 변경
-      setCurrentStep("save");
 
       // 값을 업데이트 시켜줌
       await updateDoc(userRef, { analyzeFileResult });
