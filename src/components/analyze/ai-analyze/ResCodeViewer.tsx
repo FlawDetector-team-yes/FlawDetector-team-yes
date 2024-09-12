@@ -13,18 +13,38 @@ import {
 } from "@codemirror/view";
 import { RangeSetBuilder, Extension } from "@codemirror/state";
 import {
-  useAnalyzeFileResultStore,
+  useFormattedResStore,
   useResSelectedStore,
 } from "@/store/useAnalyzeStore";
+import { securityResDummyData, suggestResDummyData } from "./dummydata";
 
 function ResCodeViewer() {
-  const analyzeFileResult = useAnalyzeFileResultStore(
-    (state) => state.analyzeFileResult,
-  );
-  const setResSelected = useResSelectedStore((state) => state.setResSelected);
   const resSelected = useResSelectedStore((state) => state.resSelected);
-  const highlightLine = [5, 10, 12, 13];
-  
+  const suggestRes = useFormattedResStore((state) => state.suggestRes);
+  const securityRes = useFormattedResStore((state) => state.securityRes);
+
+  // 보안 취약점 검출 코드 라인
+  const scLines = securityRes.map((res) => {
+    return res.line;
+  });
+
+  // eslint 기반 수정 제안 코드 라인
+  const sgLines = suggestRes.map((res) => {
+    return res.line;
+  });
+
+  // 보안 취약점 검출 코드 라인
+  const scDummyLines = securityResDummyData.map((res) => {
+    return res.line;
+  });
+
+  // eslint 기반 수정 제안 코드 라인
+  const sgDummyLines = suggestResDummyData.map((res) => {
+    return res.line;
+  });
+
+  const highLightDummyLine = [...scDummyLines, ...sgDummyLines];
+  const highlightLine = [...scLines, ...sgLines];
 
   /**
    * 특정 라인을 하이라이트하는 플러그인을 생성합니다.
@@ -88,8 +108,13 @@ function ResCodeViewer() {
             id="resCodeViewer"
             extensions={[
               javascript({ jsx: true }),
-              highlightLinePlugin([...highlightLine]),
+              highlightLinePlugin(
+                highlightLine.length === 0
+                  ? [...highLightDummyLine]
+                  : [...highlightLine],
+              ),
             ]}
+            editable={false}
             theme={eclipse}
             onChange={(value) => {
               console.log("value:", value);
