@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import db from "@/firebase/firebaseClient";
 import { Session } from "next-auth";
+import { fetchGitHubUserInfo } from "@/lib/api/github/fetchUserInfo";
 
 /**
  * 사용자가 Firestore 데이터베이스에 등록되어 있는지 확인하고, 등록되지 않은 경우 새로 등록합니다.

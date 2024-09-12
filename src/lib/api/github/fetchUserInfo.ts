@@ -11,7 +11,7 @@
  *                                   만약 요청이 실패하거나 오류가 발생할 경우 null을 반환.
  * @throws {Error} 사용자 정보를 가져오지 못할 경우 에러를 발생시킴
  */
-async function fetchGitHubUserInfo(userNumber: string) {
+export async function fetchGitHubUserInfo(userNumber: string) {
   const url = `https://api.github.com/user/${userNumber}`;
   try {
     const response = await fetch(url);
