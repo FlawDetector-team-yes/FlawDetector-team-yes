@@ -1,5 +1,6 @@
 import { useFormattedResStore } from "@/store/useAnalyzeStore";
 import Infobox from "./Infobox";
+import { securityResDummyData } from "./dummydata";
 
 /**
  * `FileAnalysisList` 컴포넌트는 주어진 분석 결과 배열을 기반으로

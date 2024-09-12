@@ -15,6 +15,7 @@ import StateItem from "../StateItem";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { securityResDummyData, suggestResDummyData } from "./dummydata";
 
 /**
  * `FileAnalysisSideBar` 컴포넌트는 사이드바에 분석 파일 목록을 표시합니다.
@@ -62,10 +63,10 @@ export default function FileAnalysisSideBar() {
           .replace(/\s+/g, " ")
           .trim();
 
-        // 특정 키(title, description, code, line)에만 쌍따옴표 추가
+        // 특정 키 (title, description, code, line)에만 쌍따옴표 추가
         cleanedResult = cleanedResult.replace(
-          /(\{|,)\s*(title|description|code|line):/g,
-          '$1 "$2":',
+          /(\{|,)\s*(title|description|code|line):/g, // 중괄호나 쉼표 다음에 나오는 키에 대해
+          '$1 "$2":', // 키에 쌍따옴표 추가
         );
 
         // 첫 번째 불필요한 따옴표 및 공백 제거
@@ -77,14 +78,20 @@ export default function FileAnalysisSideBar() {
         // 중괄호 끝 쉼표 수정 (},] -> }])
         cleanedResult = cleanedResult.replace(/},\s*];/g, "}]");
 
-        // 마지막 객체의 쉼표 제거
-        cleanedResult = cleanedResult.replace(/,\s*([\}\]])/g, "$1"); // },], -> }]로 처리
+        // 마지막 배열의 세미콜론 제거 (]; -> ])
+        cleanedResult = cleanedResult.replace(/];\s*$/, "]");
 
-        // code 부분 처리: 중첩된 따옴표 및 콜론을 =로 변환
+        // 마지막 객체의 쉼표 제거 (},], -> }]로 처리)
+        cleanedResult = cleanedResult.replace(/,\s*([\}\]])/g, "$1");
+
+        // code 부분 처리: 중첩된 따옴표 및 콜론을 =로 변환, 백슬래시 이스케이프 처리
         cleanedResult = cleanedResult.replace(
           /"code":\s*"([^"]*)"/g,
           (match, p1) => {
-            const updatedCode = p1.replace(/"/g, ""); // 내부 따옴표 제거
+            const updatedCode = p1
+              .replace(/"/g, "") // 내부 따옴표 제거
+              .replace(/:\s*/g, " = ") // 콜론을 =로 변환
+              .replace(/\\/g, "\\\\"); // 백슬래시 이스케이프 처리
             return `"code": "${updatedCode}"`;
           },
         );
@@ -107,6 +114,8 @@ export default function FileAnalysisSideBar() {
         setSuggestRes(suggestData);
       } catch (error) {
         console.error("파싱 오류:", error);
+        setSecurityRes(securityResDummyData);
+        setSuggestRes(suggestResDummyData);
       }
     }
   }, [resSelected]);
@@ -143,12 +152,20 @@ export default function FileAnalysisSideBar() {
           <StateItem
             src={xMarkError}
             alt="검출된 취약점"
-            count={securityRes.length}
+            count={
+              securityRes.length === 0
+                ? securityResDummyData.length
+                : securityRes.length
+            }
           />
           <StateItem
             src={triangleYellow}
             alt="수정 제안"
-            count={suggestRes.length}
+            count={
+              suggestRes.length === 0
+                ? suggestResDummyData.length
+                : suggestRes.length
+            }
           />
           <StateItem src={circleGreen} alt="문제 없음" count={0} />
         </div>

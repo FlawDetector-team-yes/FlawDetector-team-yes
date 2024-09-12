@@ -16,6 +16,7 @@ import {
   useFormattedResStore,
   useResSelectedStore,
 } from "@/store/useAnalyzeStore";
+import { securityResDummyData, suggestResDummyData } from "./dummydata";
 
 function ResCodeViewer() {
   const resSelected = useResSelectedStore((state) => state.resSelected);
@@ -32,6 +33,17 @@ function ResCodeViewer() {
     return res.line;
   });
 
+  // 보안 취약점 검출 코드 라인
+  const scDummyLines = securityResDummyData.map((res) => {
+    return res.line;
+  });
+
+  // eslint 기반 수정 제안 코드 라인
+  const sgDummyLines = suggestResDummyData.map((res) => {
+    return res.line;
+  });
+
+  const highLightDummyLine = [...scDummyLines, ...sgDummyLines];
   const highlightLine = [...scLines, ...sgLines];
 
   /**
@@ -96,7 +108,11 @@ function ResCodeViewer() {
             id="resCodeViewer"
             extensions={[
               javascript({ jsx: true }),
-              highlightLinePlugin([...highlightLine]),
+              highlightLinePlugin(
+                highlightLine.length === 0
+                  ? [...highLightDummyLine]
+                  : [...highlightLine],
+              ),
             ]}
             editable={false}
             theme={eclipse}
