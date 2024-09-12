@@ -1,7 +1,5 @@
 "use client";
 
-import ProgressList from "./ProgressList";
-import CodeArea from "./CodeArea";
 import FileSideBar from "./FileSideBar";
 import useSelectedFilesStore from "@/store/useSelectedFilesStore";
 import useFilesStore from "@/store/useFilesStore";
@@ -29,6 +27,7 @@ export default function AnalysisWrapper() {
   const selectAllFile = useSelectedFilesStore((state) => state.selectedAllFile);
   const folderPath = useSelectedFilesStore((state) => state.folderPath);
   const files = useFilesStore((state) => state.files);
+
   const currentStep = useStepStore((state) => state.currentStep); // 현재 단계 상태
   const mainRef = useRef<HTMLDivElement>(null); // codeViewer의 사이즈를 알아냄
   const sidebarRef = useRef<HTMLDivElement>(null); // 첫 번째 section의 사이즈를 알아냄
@@ -62,7 +61,6 @@ export default function AnalysisWrapper() {
     // 페이지 로드 및 리사이즈 시 위치 업데이트
     updateToastPosition();
     window.addEventListener("resize", updateToastPosition);
-
     return () => {
       window.removeEventListener("resize", updateSidebarHeight);
       window.removeEventListener("resize", updateToastPosition);
@@ -82,26 +80,30 @@ export default function AnalysisWrapper() {
 
     // file이 존재한다면,
     if (fileItems) {
-      const fileContentsPromises = fileItems.map((file) =>
-        fetchRepoContents(owner || "", repo.id, `${folderPath}/${file.name}`),
-      );
-      try {
-        // file 정보를 불러오는 api를 Promise.all로 병렬적으로 요청
-        const fileContentsArray = await Promise.all(fileContentsPromises);
+      if (owner) {
+        const fileContentsPromises = fileItems.map((file) =>
+          fetchRepoContents(owner, repo.id, `${folderPath}/${file.name}`),
+        );
 
-        // 파일 내용을 base64로 디코딩하고 selectedFiles 상태 업데이트
-        const selectedFiles = fileContentsArray.map((file) => {
-          const decodedContent = decodeUnicode(file.content);
-          console.log(decodedContent);
-          return {
-            sha: file.sha,
-            name: file.name,
-            content: decodedContent,
-          };
-        });
-        selectAllFile(selectedFiles);
-      } catch (error) {
-        console.error("Error fetching or decoding files:", error);
+        try {
+          // file 정보를 불러오는 api를 Promise.all로 병렬적으로 요청
+          const fileContentsArray = await Promise.all(fileContentsPromises);
+
+          // 파일 내용을 base64로 디코딩하고 selectedFiles 상태 업데이트
+          const selectedFiles = fileContentsArray.map((file) => {
+            const decodedContent = decodeUnicode(file.content);
+            console.log(decodedContent);
+            return {
+              sha: file.sha,
+              name: file.name,
+              content: decodedContent,
+              repoName: repo.id,
+            };
+          });
+          selectAllFile(selectedFiles);
+        } catch (error) {
+          console.error("Error fetching or decoding files:", error);
+        }
       }
     }
   };

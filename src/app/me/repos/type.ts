@@ -23,6 +23,7 @@ export type TSelectedFiles = {
   name: string;
   sha: string;
   content: string;
+  repoName: string;
   //progress: number; // 검사 진행도
 };
 

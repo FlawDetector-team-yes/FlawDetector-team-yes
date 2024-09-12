@@ -2,8 +2,9 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import ModalContainer from "./ModalContainer";
-import useModal from "@/store/modalState";
+
 import { useSession } from "next-auth/react";
+import useModalStore from "@/store/useModalStore";
 
 /**
  * 모달이 열려 있는지에 따라 모달을 렌더링합니다.
@@ -13,7 +14,7 @@ const ModalProvider = () => {
   const { data: session } = useSession();
 
   const [mounted, setMounted] = useState(false);
-  const { isOpen } = useModal();
+  const { isOpen } = useModalStore();
 
   useEffect(() => {
     setMounted(true);

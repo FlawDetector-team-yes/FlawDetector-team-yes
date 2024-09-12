@@ -1,6 +1,6 @@
 "use client";
 
-import useModal from "@/store/modalState";
+import useModalStore from "@/store/useModalStore";
 
 type CloseModalProps = {
   buttonText: string;
@@ -19,7 +19,7 @@ function CloseModalButton({
   onClick,
   ...rest
 }: CloseModalProps) {
-  const { setIsClose } = useModal();
+  const { setIsClose } = useModalStore();
 
   const handleCloseModal = () => {
     onClick && onClick();

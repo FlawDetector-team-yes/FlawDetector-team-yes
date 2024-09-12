@@ -1,7 +1,8 @@
 "use client";
 
 import useOutsideClick from "@/hook/useOutSideClick";
-import useModal from "@/store/modalState";
+import useModalStore from "@/store/useModalStore";
+
 import { Session } from "next-auth";
 import { useEffect, useRef } from "react";
 
@@ -13,7 +14,7 @@ import { useEffect, useRef } from "react";
 function ModalContainer({ session }: { session: Session | null }) {
   const modalRef = useRef(null);
   useOutsideClick(modalRef);
-  const { ModalContent } = useModal();
+  const { ModalContent } = useModalStore();
 
   useEffect(() => {
     const $body = document.querySelector("body");

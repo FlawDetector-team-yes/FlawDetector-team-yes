@@ -28,6 +28,7 @@ function UserProfile({ isSession }: { isSession: Session | null }) {
           await fetch(`/api/github/user/${userNumber}`)
         ).json();
         sessionStorage.setItem("owner", owner);
+        sessionStorage.setItem("userProfile", profileImg || "");
 
         setUserData({
           email: session.user?.email,

@@ -42,12 +42,14 @@ export type TAnalyzeFiles = {
 
 type TAnalyzeFilesStore = {
   analyzeFiles: TAnalyzeFiles[];
+  resetAnlyzeFliles: () => void;
   setAnalyzeFiles: (files: TAnalyzeFiles) => void;
 };
 
 // Progress Store 생성
 export const useAnalyzeFilesStore = create<TAnalyzeFilesStore>((set) => ({
   analyzeFiles: [],
+  resetAnlyzeFliles: () => set({ analyzeFiles: [] }),
   setAnalyzeFiles: (files: TAnalyzeFiles) => {
     set((state) => {
       // 기존 progress 배열에서 동일한 fileId를 가진 항목을 제거

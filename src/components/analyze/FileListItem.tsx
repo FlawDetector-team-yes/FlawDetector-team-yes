@@ -13,7 +13,7 @@ import downloadImg from "../../../public/images/download.png";
 import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import useFilesStore from "@/store/useFilesStore";
 import useSelectedFilesStore from "@/store/useSelectedFilesStore";
@@ -47,11 +47,6 @@ type TToastSteps = {
     text: string;
     subText: string;
   };
-  saveToast: {
-    img: JSX.Element;
-    text: string;
-    subText: string;
-  };
 };
 
 /**
@@ -70,8 +65,10 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
   const selectedFiles = useSelectedFilesStore((state) => state.selectedFiles);
   const repo = useParams<{ id: string }>();
   const currentStep = useStepStore((state) => state.currentStep); // 현재 단계 상태
+  const setCurrentStep = useStepStore((state) => state.setCurrentStep);
   const analyzeFiles = useAnalyzeFilesStore((state) => state.analyzeFiles); // 검사 중인 파일들
   const saveTime = useSaveTimeStore((state) => state.saveTime); // 검사 완료 시간
+  const router = useRouter();
 
   const toastStep: TToastSteps = {
     analyzeToast: {
@@ -111,66 +108,58 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
       text: "검사 중단",
       subText: "검사가 중단되었습니다.",
     },
-    saveToast: {
-      img: <Image src={downloadImg} alt="downloadImg" width={30} height={30} />,
-      text: "검사 결과 저장 완료",
-      subText: "저장된 검사 결과를 확인해보세요.",
-    },
+  };
+
+  const handleClickFinishToast = () => {
+    toast.dismiss();
+    setCurrentStep("select");
+    router.push(`/me/repos/${repo.id}/${saveTime}`);
   };
 
   useEffect(() => {
-    analyzeFiles &&
-      currentStep !== "select" &&
+    console.log(currentStep);
+
+    if (currentStep === "select") {
+      toast.custom(() => <></>);
+      return; // "select"일 경우 이후 로직을 실행하지 않음
+    }
+
+    if (analyzeFiles && currentStep !== "select") {
+      const getToastContent = (): {
+        img: React.ReactNode;
+        text: string;
+        subText: string;
+      } => {
+        switch (currentStep) {
+          case "analyze":
+            return toastStep.analyzeToast;
+          case "finish":
+          case "save":
+            return toastStep.finishToast;
+          case "cancel":
+            return toastStep.cancelToast;
+          default:
+            return { img: null, text: "", subText: "" };
+        }
+      };
+
+      const { img, text, subText } = getToastContent();
+
       toast.custom(() => (
         <div className="flex w-[400px] items-start justify-between rounded-lg bg-white p-8 shadow-lg">
           <div className="flex w-full gap-5">
-            <div className="h-[30px] w-[30px]">
-              {currentStep === "analyze"
-                ? toastStep.analyzeToast.img
-                : currentStep === "finish" || currentStep === "save"
-                  ? toastStep.finishToast.img
-                  : currentStep === "cancel"
-                    ? toastStep.cancelToast.img
-                    : currentStep === "save"
-                      ? toastStep.saveToast.img
-                      : ""}
-            </div>
+            <div className="h-[30px] w-[30px]">{img}</div>
 
             <div className="flex w-full flex-col gap-3">
-              <h1 className="font-medium">
-                {currentStep === "analyze"
-                  ? toastStep.analyzeToast.text
-                  : currentStep === "finish" || currentStep === "save"
-                    ? toastStep.finishToast.text
-                    : currentStep === "cancel"
-                      ? toastStep.cancelToast.text
-                      : currentStep === "save"
-                        ? toastStep.saveToast.text
-                        : ""}
-              </h1>
-              <p className="text-neutral-50">
-                {currentStep === "analyze"
-                  ? toastStep.analyzeToast.subText
-                  : currentStep === "finish"
-                    ? toastStep.finishToast.subText
-                    : currentStep === "cancel"
-                      ? toastStep.cancelToast.subText
-                      : currentStep === "save"
-                        ? toastStep.saveToast.subText
-                        : ""}
-              </p>
+              <h1 className="font-medium">{text}</h1>
+              <p className="text-neutral-50">{subText}</p>
+
               {currentStep === "finish" && (
-                <button className="rounded-lg bg-primary-500 px-5 py-2 text-white">
-                  <Link href={`/me/repos/${repo.id}/${saveTime}`}>
-                    검사 결과 보러가기
-                  </Link>
-                </button>
-              )}
-              {currentStep === "save" && (
-                <button className="rounded-lg bg-primary-500 px-5 py-2 text-white">
-                  <Link href={`/me/repos/${repo.id}/${saveTime}`}>
-                    저장된 검사 결과 보러가기
-                  </Link>
+                <button
+                  onClick={handleClickFinishToast}
+                  className="rounded-lg bg-primary-500 px-5 py-2 text-white"
+                >
+                  검사 결과 보러가기
                 </button>
               )}
             </div>
@@ -180,6 +169,7 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
           </button>
         </div>
       ));
+    }
   }, [currentStep]);
 
   const owner = sessionStorage.getItem("owner");
@@ -206,7 +196,13 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
             );
             if (fileData && fileData.content) {
               const decodedContent = decodeUnicode(fileData.content);
-              selectFile("file", fileData.name, fileData.sha, decodedContent);
+              selectFile(
+                "file",
+                fileData.name,
+                fileData.sha,
+                decodedContent,
+                repo.id,
+              );
             }
           }
         } catch (error) {
