@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import xMarkError from "../../../public/images/x-mark-error.png";
 import triangleYellow from "../../../public/images/triangle-yellow.png";
@@ -5,8 +7,9 @@ import circleGreen from "../../../public/images/circle-green.png";
 import menuRepoFolder from "../../../public/images/menu-repo-folder.png";
 import StateItem from "./StateItem";
 import FileList from "./FileList";
-import useModal from "@/store/modalState";
 import { AnalysisModal } from "./analyze-modal/AnalysisModal";
+import { useEffect, useState } from "react";
+import useModalStore from "@/store/useModalStore";
 
 /**
  * `FileSideBar` 컴포넌트는 사이드바를 렌더링하며, 통계와 프로필, 파일 목록을 포함합니다.
@@ -20,9 +23,10 @@ import { AnalysisModal } from "./analyze-modal/AnalysisModal";
  */
 export default function FileSideBar() {
   // 모달을 열기 위한 함수와 모달 콘텐츠를 설정하는 함수
-  const openModal = useModal((state) => state.setIsOpen);
-  const modalContent = useModal((state) => state.setModalContent);
-
+  const openModal = useModalStore((state) => state.setIsOpen);
+  const modalContent = useModalStore((state) => state.setModalContent);
+  const [userProfile, setUserProfile] = useState<string | null>(null);
+  const [owner, setOwner] = useState<string | null>(null);
   /**
    * 분석 버튼 클릭 시 호출되는 함수입니다.
    * 모달을 열고 분석 모달을 콘텐츠로 설정합니다.
@@ -33,6 +37,13 @@ export default function FileSideBar() {
       modalContent(AnalysisModal);
     }
   };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setUserProfile(sessionStorage.getItem("userProfile"));
+      setOwner(sessionStorage.getItem("owner"));
+    }
+  }, []);
 
   return (
     <>
@@ -48,14 +59,19 @@ export default function FileSideBar() {
           {/* 프로필 */}
           <div className="flex h-[70px] justify-between rounded-t-xl bg-primary-50 p-5">
             <div className="flex items-center gap-[10px] text-xl">
-              <img
-                className="rounded-full"
-                src="https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg"
-                alt="Profile Image"
-                width={30}
-                height={30}
-              />
-              <p>testProfile</p>
+              {userProfile ? (
+                <Image
+                  className="rounded-full"
+                  src={userProfile}
+                  alt="Profile Image"
+                  width={30}
+                  height={30}
+                />
+              ) : (
+                <div className="h-[30px] w-[30px] animate-pulse rounded-full bg-gray-400"></div>
+              )}
+
+              <p>{owner}</p>
             </div>
             <div className="flex items-center">
               <Image

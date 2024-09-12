@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import plus from "/public/images/plus.png";
 import useUserStore from "@/store/useUserStore";
-import GitRepoListItem from "./GitRepoListItem";
+import GitRepoListItem, { TRepoState } from "./GitRepoListItem";
 import GitRepoListLoading from "./GitRepoListLoading";
 import RepoSortDropdown from "./RepoSortDropdown";
 import { fetchUserRepos } from "@/lib/api/github/fetchUserRepos";
+import { useReposStateStore } from "@/store/useAnalyzeStore";
 
 export type TMyPageUserReposType = {
   label: string;
@@ -19,7 +20,9 @@ export type TSortType = "recent" | "oldest" | "name"; // pending, analyze, finis
 
 export default function GitRepoList() {
   const user = useUserStore((state) => state.userInfo);
-  const owner = sessionStorage.getItem("owner");
+  const owner =
+    typeof window !== "undefined" ? sessionStorage.getItem("owner") : null;
+  const reposState = useReposStateStore((state) => state.reposState);
   const [repos, setRepos] = useState<TMyPageUserReposType[]>([]);
   const [visibleCount, setVisibleCount] = useState<number>(12);
 
@@ -44,6 +47,23 @@ export default function GitRepoList() {
     const sortedRepos = [...repos].sort(sortFunctions[sortType]);
 
     setRepos(sortedRepos);
+  };
+
+  const isRepoAnalyze = () => {
+    return reposState.some((repoState) => repoState.state === "analyze");
+  };
+
+  const checkRepoState = (repoName: string): TRepoState => {
+    const repo = reposState.find((repo) => repo.repoName === repoName);
+    if (
+      repo &&
+      (repo.state === "pending" ||
+        repo.state === "analyze" ||
+        repo.state === "finish")
+    ) {
+      return repo.state as TRepoState; // 명확한 타입을 보장함
+    }
+    return "pending"; // 기본값
   };
 
   /**
@@ -77,11 +97,18 @@ export default function GitRepoList() {
         {!repos.length ? (
           <GitRepoListLoading />
         ) : (
-          repos
-            .slice(0, visibleCount)
-            .map((repo, index) => (
-              <GitRepoListItem key={index} repo={repo} repoState={"pending"} />
-            ))
+          repos.slice(0, visibleCount).map((repo, index) => {
+            const state: TRepoState = checkRepoState(repo.name); // 상태 체크 로직
+            const isAnalyze = isRepoAnalyze();
+            return (
+              <GitRepoListItem
+                key={index}
+                repo={repo}
+                repoState={state}
+                isAnalyze={isAnalyze}
+              />
+            );
+          })
         )}
       </div>
 
