@@ -29,6 +29,7 @@ function UserProfile({ isSession }: { isSession: Session | null }) {
         ).json();
         sessionStorage.setItem("owner", owner);
         sessionStorage.setItem("userProfile", profileImg || "");
+
         setUserData({
           email: session.user?.email,
           username: session.user?.name,
