@@ -4,7 +4,15 @@ import menuDot from "/public/images/menu-dot.png";
 import Image from "next/image";
 import { type } from "os";
 import plus from "/public/images/plus.png";
-import LibrarySort from "./LibrarySort";
+import RepoSortDropdown from "./RepoSortDropdown";
+import { TSortType } from "./GitRepoList";
+
+type TArticle = {
+  label: string;
+  title: string;
+  sub: string;
+};
+
 // /me/clip 스크랩 아이템요소 컴포넌트
 export default function ClippingArticleItem() {
   let array = new Array(15);
@@ -17,6 +25,9 @@ export default function ClippingArticleItem() {
   const [showMore, setShowMore] = useState(false);
   //삭제,공유 각 인덱스에 맞춰 활성화 해야하기때문에 초기값은 null
   const [miniModal, setMiniModal] = useState<number | null>(null);
+
+  const [articles, setArticles] = useState<TArticle[]>([]);
+
   // 컴포넌트가 마운트될 때 배열 길이가 12보다 크면 "더보기" 버튼을 표시
   useEffect(() => {
     if (12 < array.length) {
@@ -48,9 +59,31 @@ export default function ClippingArticleItem() {
     setMiniModal((prev) => (prev === index ? null : index));
   }
 
+  // 스크랩 정렬
+  const handleSortArticles = (sortType: TSortType) => {
+    const sortFunctions: Record<TSortType, (a: any, b: any) => number> = {
+      recent: (a: any, b: any) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      oldest: (a: any, b: any) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+      name: (a: any, b: any) => a.name.localeCompare(b.name),
+    };
+    const sortedArticles = [...articles].sort(sortFunctions[sortType]);
+
+    setArticles(sortedArticles);
+  };
+
   return (
     <>
-      <LibrarySort />
+      <div className="mt-14 flex w-full justify-between">
+        <div>
+          <h1 className="text-[32px] font-medium">Library</h1>
+        </div>
+        {/* 레포 드롭다운 */}
+        <div className="flex gap-4">
+          <RepoSortDropdown typeName={"sort"} sort={handleSortArticles} />
+        </div>
+      </div>
       <div
         style={{
           height: styleHeight < count ? `${styleHeight}px` : "auto",

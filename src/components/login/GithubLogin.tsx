@@ -8,30 +8,6 @@ import db from "@/firebase/firebaseClient";
 import { Session } from "next-auth";
 
 /**
- * 주어진 사용자 번호를 기반으로 GitHub 사용자 정보를 가져옵니다.
- * GitHub 사용자 이름을 소문자로 변환합니다.
- *
- * @param {string} userNumber - GitHub 프로필 이미지 URL에서 추출된 사용자 번호입니다.
- * @returns {Promise<string | null>} GitHub 사용자 이름의 소문자 버전 또는 오류 발생 시 null입니다.
- */
-async function fetchGitHubUserInfo(userNumber: string) {
-  const url = `https://api.github.com/user/${userNumber}`;
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("사용자 정보 가져오기 실패");
-    }
-    const data = await response.json();
-    return (data.login as string).replace(/[A-Z]/g, (letter) =>
-      letter.toLowerCase(),
-    );
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
-
-/**
  * 사용자가 Firestore 데이터베이스에 등록되어 있는지 확인하고, 등록되지 않은 경우 새로 등록합니다.
  * 프로필 이미지 URL에서 사용자 번호를 추출하고, 가능할 경우 추가적인 GitHub 사용자 정보를 가져옵니다.
  *
@@ -74,7 +50,6 @@ async function registerUserIfNeeded(session: Session) {
  */
 async function GithubLogin() {
   const session = await getSession();
-  console.log(JSON.stringify(session));
 
   if (session !== null) {
     // Firestore에 사용자 등록 여부 확인

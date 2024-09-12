@@ -5,6 +5,8 @@ import localFont from "next/font/local";
 import Gnb from "@/components/common/Gnb";
 import Footer from "@/components/common/Footer";
 import ModalProvider from "@/components/modal/ModalProvider";
+import { SessionProvider } from "next-auth/react";
+import { getSession } from "@/lib/getSession";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,16 +24,20 @@ export const metadata: Metadata = {
     "인공지능의 뛰어난 분석 능력을 활용하여 코드의 보안 취약점을 신속하게 해결하세요.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getSession();
+  
   return (
     <html lang="ko">
       <body className={`${inter.className} ${pretendard.variable} relative`}>
         <Gnb />
-        <ModalProvider />
+        <SessionProvider session={session}>
+          <ModalProvider />
+        </SessionProvider>
         {children}
         <Footer />
       </body>

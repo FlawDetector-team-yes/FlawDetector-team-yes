@@ -1,4 +1,5 @@
 "use client";
+
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { eclipse } from "@uiw/codemirror-theme-eclipse";
@@ -84,6 +85,7 @@ export default function CodeViewer() {
           <CodeMirror
             value={testCode}
             minHeight="400px"
+            //style={{ fontSize: "20px" }}
             extensions={[
               javascript({ jsx: true }),
               highlightLinePlugin([...highlightLine]),
@@ -95,8 +97,12 @@ export default function CodeViewer() {
           />
           <style jsx global>{`
             /* CodeMirror 컨테이너 스타일 */
+            .cm-editor,
+            .cm-scroller {
+              border-radius: 10px;
+            }
             .cm-line {
-              font-size: 17px; /* 폰트 크기를 조절합니다 */
+              font-size: 17px; // 폰트 크기를 조절합니다
               margin-left: 10px;
             }
             .cm-content {

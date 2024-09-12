@@ -11,6 +11,7 @@ type TSelectedFilesState = {
     name: string,
     sha?: string,
     content?: string,
+    repoName?: string,
   ) => void;
   removeFile: (sha: string) => void;
 };
@@ -31,7 +32,7 @@ type TSelectedFilesState = {
 
 const useSelectedFilesStore = create<TSelectedFilesState>((set, get) => ({
   selectedFiles: [],
-  folderPath: "src",
+  folderPath: "",
   moveFolderPath: (path: string) => set({ folderPath: path }),
   selectedAllFile: (selectedAllFiles: TSelectedFiles[]) =>
     set({ selectedFiles: selectedAllFiles }),
@@ -40,6 +41,7 @@ const useSelectedFilesStore = create<TSelectedFilesState>((set, get) => ({
     name: string,
     sha: string = "",
     content: string = "",
+    repoName: string = "",
   ) => {
     const { folderPath } = get();
     // 파일일 경우
@@ -50,6 +52,7 @@ const useSelectedFilesStore = create<TSelectedFilesState>((set, get) => ({
           {
             name,
             sha,
+            repoName,
             content,
           },
         ],

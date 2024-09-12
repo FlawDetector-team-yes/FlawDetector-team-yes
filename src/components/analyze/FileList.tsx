@@ -8,6 +8,7 @@ import useFilesStore from "@/store/useFilesStore";
 import Image from "next/image";
 import { TGithubContent } from "@/app/me/repos/type";
 import { useParams } from "next/navigation";
+import useUserStore from "@/store/useUserStore";
 
 /**
  * `FileList` 컴포넌트는 파일 목록을 렌더링하는 역할을 합니다.
@@ -18,14 +19,18 @@ import { useParams } from "next/navigation";
  */
 
 export default function FileList() {
-  const repo = useParams<{ id: string }>();
-  const selectedFiles = useSelectedFilesStore((state) => state.selectedFiles);
   const files = useFilesStore((state) => state.files);
   const fetchFiles = useFilesStore((state) => state.fecthFiles);
+
+  const selectedFiles = useSelectedFilesStore((state) => state.selectedFiles);
   const folderPath = useSelectedFilesStore((state) => state.folderPath);
   const moveFolderPath = useSelectedFilesStore((state) => state.moveFolderPath);
 
-  const isActiveMoveDir = folderPath !== "src";
+  const owner =
+    typeof window !== "undefined" ? sessionStorage.getItem("owner") : null;
+  const repo = useParams<{ id: string }>();
+
+  const isActiveMoveDir = folderPath !== "";
   const prevDirPath = folderPath.substring(0, folderPath.lastIndexOf("/"));
   const moveDirName = folderPath.split("/")[folderPath.split("/").length - 1];
 
@@ -47,9 +52,8 @@ export default function FileList() {
    * 이전 폴더의 경로로 파일을 가져오고 상태를 업데이트합니다.
    */
   const handleClickPrevFolder = () => {
-    console.log();
-    if (prevDirPath) {
-      fetchFiles("flawdetector-team-yes", repo.id, prevDirPath);
+    if (owner) {
+      fetchFiles(owner, repo.id, prevDirPath);
       moveFolderPath(prevDirPath);
     }
   };
@@ -58,7 +62,10 @@ export default function FileList() {
    * 컴포넌트가 마운트될 때 초기 폴더의 파일들을 가져오는 효과를 설정합니다.
    */
   useEffect(() => {
-    fetchFiles("flawdetector-team-yes", repo.id, "src");
+    if (owner) {
+      fetchFiles(owner, repo.id, "");
+      moveFolderPath("");
+    }
   }, []);
 
   return (

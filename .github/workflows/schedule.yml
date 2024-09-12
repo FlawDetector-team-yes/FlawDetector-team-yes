@@ -1,0 +1,50 @@
+name: Run JavaScript File Weekly
+
+on:
+  workflow_dispatch: # 수동 실행을 위한 설정
+  schedule:
+    - cron: '0 0 * * 0' # 매주 일요일 자정에 실행 (UTC 기준)
+
+jobs:
+  run-js-file:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    #원하는 버전의 Node.js 설정
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20.17.0'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Install puppeteer
+      run: npm install puppeteer
+
+    - name: Set up Firebase
+      run: node src/firebase/firebaseClient.js
+      env:
+        NEXT_PUBLIC_USERNAME: ${{ secrets.NEXT_PUBLIC_USERNAME }}
+        NEXT_PUBLIC_PASSWORD: ${{ secrets.NEXT_PUBLIC_PASSWORD }}
+        NEXT_PUBLIC_API_KEY: ${{ secrets.NEXT_PUBLIC_API_KEY }}
+        NEXT_PUBLIC_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_AUTH_DOMAIN }}
+        NEXT_PUBLIC_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_PROJECT_ID }}
+        NEXT_PUBLIC_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_STORAGE_BUCKET }}
+        NEXT_PUBLIC_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_MESSAGING_SENDER_ID }}
+
+    - name: Run JavaScript file
+      run: node src/scripts/crawling.mjs
+      env:
+        NEXT_PUBLIC_USERNAME: ${{ secrets.NEXT_PUBLIC_USERNAME }}
+        NEXT_PUBLIC_PASSWORD: ${{ secrets.NEXT_PUBLIC_PASSWORD }}
+        NEXT_PUBLIC_API_KEY: ${{ secrets.NEXT_PUBLIC_API_KEY }}
+        NEXT_PUBLIC_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_AUTH_DOMAIN }}
+        NEXT_PUBLIC_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_PROJECT_ID }}
+        NEXT_PUBLIC_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_STORAGE_BUCKET }}
+        NEXT_PUBLIC_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_MESSAGING_SENDER_ID }}
+        NEXT_PUBLIC_APP_ID: ${{ secrets.NEXT_PUBLIC_APP_ID }}
+        NEXT_PUBLIC_MEASUREMENT_ID: ${{ secrets.NEXT_PUBLIC_MEASUREMENT_ID }}

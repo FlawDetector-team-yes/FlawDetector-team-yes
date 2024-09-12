@@ -1,36 +1,7 @@
 import { TGithubContent } from "@/app/me/repos/type";
+import { fetchRepoContents } from "@/lib/api/github/fetchRepoContents";
 import { sortDirOverFiles } from "@/lib/sortDirOverFiles";
 import { create } from "zustand";
-
-/**
- * GitHub 저장소의 특정 경로에서 파일 콘텐츠를 가져오는 함수입니다.
- *
- * 이 함수는 주어진 저장소와 경로에 대한 API 요청을 수행하여 파일 내용을 가져옵니다.
- *
- * @param {string} owner - GitHub 저장소 소유자의 사용자 이름.
- * @param {string} repo - GitHub 저장소의 이름.
- * @param {string} path - 가져올 파일의 경로.
- * @returns {Promise<TGithubContent[]>} - API 요청의 결과로 얻어진 파일 내용의 배열입니다. 요청이 실패하면 빈 배열을 반환합니다.
- */
-export const fetchRepoContents = async (
-  owner: string,
-  repo: string,
-  path: string,
-) => {
-  try {
-    const response = await fetch(
-      `/api/analyze/repository?owner=${owner}&repo=${repo}&path=${path}`,
-    );
-    if (!response.ok) {
-      throw new Error("Failed to fetch repository contents");
-    }
-    const result = await response.json();
-    return result;
-  } catch (err) {
-    console.error("Error fetching repository contents:", err);
-    return [];
-  }
-};
 
 type TFileState = {
   files: TGithubContent[];

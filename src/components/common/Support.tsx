@@ -3,8 +3,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useModal from "@/store/modalState";
 import SupportMessageModal from "../modal/SupportMessageModal";
+import useModalStore from "@/store/useModalStore";
 
 // 유효성 검사
 const schema = z.object({
@@ -34,7 +34,7 @@ const labelStyles =
  */
 function Support() {
   // 모달
-  const { setIsOpen, setModalContent } = useModal();
+  const { setIsOpen, setModalContent } = useModalStore();
 
   // Form 관련 로직
   const {
