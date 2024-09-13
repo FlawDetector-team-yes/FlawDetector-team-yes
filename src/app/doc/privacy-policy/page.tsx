@@ -8,24 +8,24 @@ function PrivacyPolicyPage() {
       </div>
 
       <div className="flex flex-col gap-5 text-sm">
-        <p>
+        <pre>
           스팩스페이스 (이하 "회사")는 개인정보를 소중하게 생각하고 개인정보를
           보호하기 위하여 최선을 다하고 있습니다.
-        </p>
-        <p>
+        </pre>
+        <pre>
           "회사"는 본 개인정보처리방침을 통하여 이용자가 제공하는 개인정보가
           어떠한 용도와 방식으로 이용되고 있으며 개인정보보호를 위해 어떠한
           조치가 취해지고 있는지 알려드리고자 합니다.
-        </p>
-        <p>
+        </pre>
+        <pre>
           본 개인정보처리방침은 정부의 법률 및 지침 변경이나 "회사"의 내부 방침
           변경 등으로 인하여 수시로 변경될 수 있으며, 변경될 경우 변경된
           개인정보처리방침을 "회사"가 제공하는 서비스 페이지에 공지하도록
           하겠습니다.
-        </p>
-        <p className="pt-10 font-semibold">
+        </pre>
+        <pre className="pt-10 font-semibold">
           "회사"의 개인정보처리방침은 다음과 같은 내용을 포함하고 있습니다.
-        </p>
+        </pre>
       </div>
       <div className="border-b border-stroke-10 pb-10">
         <ul className="flex flex-col gap-1 indent-5 text-sm">
@@ -68,15 +68,15 @@ function PrivacyPolicyPage() {
       <div className="flex flex-col gap-5 pt-5 text-sm">
         <h2 className="text-xl font-semibold">2. 권익침해 구제방법</h2>
         <div className="flex flex-col gap-5 border-b border-stroke-10 pb-10">
-          <p>
+          <pre>
             이용자는 개인정보침해로 인한 구제를 받기 위하여
             개인정보분쟁조정위원회, 한국인터넷진흥원 개인정보침해신고센터 등에
             분쟁해결이나 상담 등을 신청할 수 있습니다.
-          </p>
-          <p>
+          </pre>
+          <pre>
             이 밖에 기타 개인정보침해의 신고, 상담에 대하여는 아래의 기관에
             문의하시기 바랍니다.
-          </p>
+          </pre>
           <ul className="flex flex-col gap-1 indent-5">
             <li>
               1. 개인정보분쟁조정위원회 : (국번없이) 1833-6972
@@ -92,14 +92,14 @@ function PrivacyPolicyPage() {
         <div className="flex flex-col gap-5">
           <h2 className="pt-5 text-xl font-semibold">3. 고지의 의무</h2>
           <div className="flex flex-col gap-2">
-            <p>
+            <pre>
               회사는 개인정보처리방침이 변경되는 경우에는 “회사”의 사이트
               “공지사항”을 통하여 변경 및 시행의 시기, 변경 내용을 공지합니다.
-            </p>
-            <p>
+            </pre>
+            <pre>
               변경된 개인정보처리방침은 게시된 날로부터 7일 후부터 효력이
               발생합니다.
-            </p>
+            </pre>
           </div>
         </div>
       </div>
