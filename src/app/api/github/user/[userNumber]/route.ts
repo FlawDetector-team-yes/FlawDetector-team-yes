@@ -16,7 +16,7 @@ export async function GET(
   try {
     const response = await fetch(url);
     if (!response.ok) {
-      throw new Error("사용자 정보 가져오기 실패");
+      return new Response("사용자 정보를 가져올 수 없습니다.", { status: 404 });
     }
     const data = await response.json();
     const owner = (data.login as string).replace(/[A-Z]/g, (letter) =>
@@ -25,6 +25,6 @@ export async function GET(
     return NextResponse.json({ owner });
   } catch (error) {
     console.error(error);
-    return null;
+    return new Response("서버 오류가 발생했습니다.", { status: 500 });
   }
 }
