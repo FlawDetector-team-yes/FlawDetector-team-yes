@@ -1,3 +1,7 @@
+import { NextRequest, NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic"; // 동적 렌더링을 강제
+
 /**
  * 주어진 요청에 따라 GitHub 리포지토리의 특정 경로에 있는 콘텐츠를 가져오는 함수.
  *
@@ -11,12 +15,14 @@
  * // 요청 URL 예시:
  * // https://api.github.com/repos/{owner}/{repo}/contents/{path}
  */
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = request.nextUrl;
+
     const owner = searchParams.get("owner");
     const repo = searchParams.get("repo");
     const path = searchParams.get("path");
+
     const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
     const res = await fetch(url, {
       headers: {
@@ -27,10 +33,18 @@ export async function GET(request: Request) {
 
     const data = await res.json();
     if (!res.ok) {
-      throw new Error("Failed to fetch repository contents");
+      return new Response(
+        JSON.stringify({ error: "Failed to fetch repository contents" }),
+        { status: 404 },
+      );
     }
-    return Response.json(data);
+
+    return NextResponse.json(data);
   } catch (e) {
-    console.log(e);
+    console.error(e);
+    return new Response(
+      JSON.stringify({ error: "Failed to fetch repository contents" }),
+      { status: 500 },
+    );
   }
 }
