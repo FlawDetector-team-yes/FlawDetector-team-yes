@@ -1,3 +1,7 @@
+import { NextRequest, NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic"; // 동적 렌더링을 강제
+
 /**
  * 주어진 요청에 따라 GitHub 리포지토리의 특정 경로에 있는 콘텐츠를 가져오는 함수.
  *
@@ -11,13 +15,15 @@
  * // 요청 URL 예시:
  * // https://api.github.com/repos/{owner}/{repo}/contents/{path}
  */
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     // 요청 URL에서 쿼리 매개변수 추출
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = request.nextUrl;
+
     const owner = searchParams.get("owner");
     const repo = searchParams.get("repo");
     const path = searchParams.get("path");
+
 
     // GitHub API 요청 URL 생성
     const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
@@ -43,19 +49,18 @@ export async function GET(request: Request) {
 
     // 요청이 실패한 경우, 에러 응답 반환
     if (!res.ok) {
-      return new Response("Failed to fetch repository contents", {
-        status: res.status,
-      });
+      return new Response(
+        JSON.stringify({ error: "Failed to fetch repository contents" }),
+        { status: 404 },
+      );
     }
 
-    // 성공적으로 데이터를 받아왔을 경우 JSON 데이터를 응답으로 반환
-    return new Response(JSON.stringify(data), {
-      headers: { "Content-Type": "application/json" },
-      status: 200,
-    });
+    return NextResponse.json(data);
   } catch (e) {
-    // 에러가 발생한 경우, 서버 오류 응답 반환
     console.error(e);
-    return new Response("Internal Server Error", { status: 500 });
+    return new Response(
+      JSON.stringify({ error: "Failed to fetch repository contents" }),
+      { status: 500 },
+    )
   }
 }
