@@ -1,4 +1,4 @@
-import { TGithubContent } from "@/app/me/(analyze)/type";
+import { TGithubContent } from "@/app/me/repos/type";
 
 /**
  * 주어진 항목 배열을 정렬하여 디렉토리(`dir`) 항목이 파일(`file`) 항목보다 먼저 오도록 합니다.
