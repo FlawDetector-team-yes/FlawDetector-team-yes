@@ -1,30 +1,30 @@
 function TermsOfServicePage() {
   return (
     <div className="mx-auto mb-[60px] flex w-[65vw] flex-col gap-[20px]">
-      <div className="bg-primary-50/30 mt-5 rounded-md">
+      <div className="mt-5 rounded-md bg-primary-50/30">
         <h1 className="w-full bg-[url('/images/bg-circles.png')] bg-cover pb-5 pl-5 pt-5 text-2xl font-semibold">
           서비스 이용약관
         </h1>
       </div>
-      <div className="border-stroke-10 flex flex-col gap-5 border-b pb-10 text-sm">
+      <div className="flex flex-col gap-5 border-b border-stroke-10 pb-10 text-sm">
         <h2 className="text-lg font-semibold">제1장. 약관 및 계약</h2>
         <h3 className="indent-2 text-base font-semibold">제1조. 목적</h3>
-        <p className="indent-2 leading-6">
+        <pre className="indent-2 leading-6">
           이 이용약관(이하 ”본 약관”이라 합니다)은 스팩스페이스(이하 ”회사”라
           합니다)이 제공하는 FlawDetector 및 관련 제반 서비스를 이용함에 있어
           회사와 이용자 간의 권리, 의무 및 책임사항, 기타 필요한 사항을 규정함을
           목적으로 합니다.
-        </p>
+        </pre>
       </div>
-      <div className="border-stroke-10 flex flex-col gap-5 border-b pb-10">
+      <div className="flex flex-col gap-5 border-b border-stroke-10 pb-10">
         <h3 className="indent-2 text-base font-semibold">제2조. 용어의 정의</h3>
         <div className="flex flex-col gap-2 indent-2 text-sm">
-          <p>본 약관에서 사용하는 용어의 정의는 다음과 같습니다.</p>
-          <p>
+          <pre>본 약관에서 사용하는 용어의 정의는 다음과 같습니다.</pre>
+          <pre>
             본 약관에서 사용하는 용어 중 제1항에서 정하지 아니한 것은 관련법령
             및 회사의 정책에서 정하는 바에 따르며, 그 외에는 일반 관례에
             따릅니다.
-          </p>
+          </pre>
         </div>
 
         <ul className="flex flex-col gap-2 indent-4 text-sm">
@@ -54,7 +54,7 @@ function TermsOfServicePage() {
           </li>
         </ul>
       </div>
-      <div className="border-stroke-10 flex flex-col gap-5 border-b pb-10 pt-5 text-sm">
+      <div className="flex flex-col gap-5 border-b border-stroke-10 pb-10 pt-5 text-sm">
         <h3 className="indent-2 text-base font-semibold">제3조. 약관의 해석</h3>
         <ul className="flex flex-col gap-2 indent-4">
           <li>
@@ -89,10 +89,10 @@ function TermsOfServicePage() {
         <h3 className="indent-2 text-base font-semibold">
           제4조. 서비스의 이용
         </h3>
-        <div className="border-stroke-10 flex flex-col gap-5 border-b pb-10">
-          <p className="indent-2">
+        <div className="flex flex-col gap-5 border-b border-stroke-10 pb-10">
+          <pre className="indent-2">
             “회사”가 제공하는 서비스의 내용은 다음과 같습니다.
-          </p>
+          </pre>
           <ul className="flex flex-col gap-2 indent-4">
             <li>1. 전체 폴더 코드검사 서비스</li>
             <li>2. 개별 파일 코드검사 서비스</li>
@@ -104,13 +104,13 @@ function TermsOfServicePage() {
             </li>
           </ul>
           <div className="flex flex-col gap-2 indent-2">
-            <p>
+            <pre>
               “회사”는 필요한 경우 서비스의 내용을 추가 또는 변경할 수 있습니다.
-            </p>
-            <p>
+            </pre>
+            <pre>
               단, 이 경우 “회사”는 추가 또는 변경내용을 약관 개정에 준하는
               방법으로 “회원”에게 공지해야 합니다.
-            </p>
+            </pre>
           </div>
         </div>
         <div className="flex flex-col gap-5">
@@ -130,10 +130,10 @@ function TermsOfServicePage() {
               3. “회원“은 서비스의 이용에 관하여 관련법률에 특별한 규정이 없는
               한 “회사“에게 별도의 배상 및 보상을 청구할 수 없습니다.
             </li>
-            <p>
+            <pre>
               변경된 개인정보처리방침은 게시된 날로부터 7일 후부터 효력이
               발생합니다.
-            </p>
+            </pre>
           </ul>
         </div>
       </div>
