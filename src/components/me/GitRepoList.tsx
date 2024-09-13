@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import plus from "/public/images/plus.png";
+import plus from "../../../public/images/plus.png";
 import useUserStore from "@/store/useUserStore";
 import GitRepoListItem, { TRepoState } from "./GitRepoListItem";
 import GitRepoListLoading from "./GitRepoListLoading";

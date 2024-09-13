@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import triangleDown from "/public/images/triangle-Down.png";
+import triangleDown from "../../../public/images/triangle-Down.png";
 import Image from "next/image";
 import { TSortType } from "./GitRepoList";
 
