@@ -9,6 +9,8 @@ import {
   TAnalyzeFileResult,
   useAnalyzeFileResultStore,
   useAnalyzeFilesStore,
+  useErrorMsgStore,
+  useFormattedResStore,
   useReposStateStore,
   useResultDataStore,
   useSaveTimeStore,
@@ -103,6 +105,9 @@ export const AnalysisModal: React.FC<any> = ({
   const setReposState = useReposStateStore((state) => state.setReposState);
   const router = useRouter();
   const repo = useParams<{ id: string }>();
+  const setSuggestRes = useFormattedResStore((state) => state.setSuggestRes);
+  const setSecurityRes = useFormattedResStore((state) => state.setSecurityRes);
+  const setErrorMsg = useErrorMsgStore((state) => state.setErrorMsg);
   /**
    * 검사하기 누를 경우 실행되는 로직
    * web worker가 실행됨.
@@ -246,6 +251,10 @@ export const AnalysisModal: React.FC<any> = ({
     resetAnlyzeFliles();
     // resultData 초기화
     resetResultData();
+    // 결과 페이지 보여야 할 값 초기화
+    setSecurityRes([]);
+    setSuggestRes([]);
+    setErrorMsg({title: "", msg: ""});
     // 검사 단계 초기화
     setCurrentStep("select");
     // 모달 닫기
