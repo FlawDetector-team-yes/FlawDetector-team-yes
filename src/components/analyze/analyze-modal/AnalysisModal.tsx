@@ -91,6 +91,7 @@ export const AnalysisModal: React.FC<any> = ({
     (state) => state.setAnalyzeFiles,
   ); // 검사 중인 파일 업데이트
   const resultData = useResultDataStore((state) => state.resultData); // 검사 결과
+  const resetResultData = useResultDataStore((state) => state.resetResultData); // 검사 결과 초기화
   const setResultData = useResultDataStore((state) => state.setResultData); // 검사 결과 업데이트
   const addWorker = useWorkerStore((state) => state.addWorker);
   const clearWorkers = useWorkerStore((state) => state.clearWorkers);
@@ -155,7 +156,7 @@ export const AnalysisModal: React.FC<any> = ({
       // 모든 작업이 끝나면 finish로 변경
       setCurrentStep("finish");
       // 특정 형식으로 날짜 data 문자열 format
-      const today = format(new Date(), "yyyy-MM-dd HH:mm");
+      const today = format(new Date(), "yyyy-MM-dd HH:mm:ss");
       // base64 encoding
       const encodingSaveTime = btoa(today);
       setSaveTime(encodingSaveTime);
@@ -233,6 +234,8 @@ export const AnalysisModal: React.FC<any> = ({
     selectedAllFile([]);
     // 분석중인 파일 리스트 초기화
     resetAnlyzeFliles();
+    // resultData 초기화
+    resetResultData();
     // 검사 단계 초기화
     setCurrentStep("select");
     // 모달 닫기
