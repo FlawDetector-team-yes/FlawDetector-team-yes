@@ -145,6 +145,16 @@ export const AnalysisModal: React.FC<any> = ({
             );
             worker.terminate();
             reject(event.data.message); // 에러 발생 시 reject 호출
+
+            // selectedFiles.forEach((file) => {
+            //   setAnalyzeFiles({
+            //     fileId: file.sha,
+            //     progressValue: 0,
+            //     state: "canceled", // 상태를 "canceled"로 설정
+            //   });
+            // });
+
+            // setCurrentStep("cancel"); // 상태를 cancle로 변경하여 중단 시킴
           }
         };
       });
