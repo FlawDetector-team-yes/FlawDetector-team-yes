@@ -38,7 +38,7 @@ export default function FileAnalysisList() {
           {resSelected.result === '""' && (
             <Infobox type="nodata" resData={initResData} key={"nodata"} />
           )}
-          {resSelected.result !== '""' && errorMsg && (
+          {resSelected.result !== '""' && errorMsg.title !== "" && (
             <Infobox type="error" resData={initResData} key={"parsingerror"} />
           )}
         </ul>
