@@ -92,7 +92,7 @@ export default function GitRepoList() {
           <RepoSortDropdown typeName={"sort"} sort={handleSortRepos} />
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-10 pt-5">
+      <div className="grid grid-cols-4 gap-10 pb-10 pt-5">
         {/* 레포 목록 */}
         {!repos.length ? (
           <GitRepoListLoading />
@@ -114,7 +114,7 @@ export default function GitRepoList() {
 
       {/* 더보기 버튼 */}
       {isMoreItems && (
-        <div className="mt-12 flex w-full justify-center">
+        <div className="mb-24 mt-12 flex w-full justify-center">
           <button
             className="flex h-[54px] w-[103px] items-center justify-center gap-1 rounded-lg border border-solid border-primary-500 text-[#6100FF]"
             onClick={handleLoadMore}
