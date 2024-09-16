@@ -16,12 +16,17 @@ const config: Config = {
         pretendard: ["var(--font-pretendard)"],
       },
       animation: {
+        rotateLeft: "rotateLeft 15s linear infinite",
         fadeIn: "fadeIn 7.5s ease-in forwards",
         ripple: "ripple 5s ease-out",
         "slide-right": "slide-right 120s linear infinite",
         slideIn: "slideIn 1s ease-out forwards",
       },
       keyframes: {
+        rotateLeft: {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(-360deg)" },
+        },
         fadeIn: {
           "0%": {
             opacity: "0", // 완전히 투명
