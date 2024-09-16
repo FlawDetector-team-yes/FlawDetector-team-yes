@@ -1,10 +1,7 @@
-export type TMsg = {
-  title: string;
-  msg: string;
-};
+import { TMsg } from "@/store/useAnalyzeStore";
 
 // 데이터 파싱 오류 시 출력
-export const PasingErrorMsg: TMsg = {
+export const ParsingErrorMsg: TMsg = {
   title: "데이터를 처리할 수 없습니다.",
   msg: "데이터를 가져오는 과정에서 오류가 발생했습니다. 검사를 다시 진행해주세요.",
 };

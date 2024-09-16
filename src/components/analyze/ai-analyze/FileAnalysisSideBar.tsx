@@ -8,6 +8,7 @@ import circleGreen from "../../../../public/images/circle-green.png";
 import menuRepoFolder from "../../../../public/images/menu-repo-folder.png";
 import {
   useAnalyzeFileResultStore,
+  useErrorMsgStore,
   useFormattedResStore,
   useResSelectedStore,
 } from "@/store/useAnalyzeStore";
@@ -16,6 +17,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { securityResDummyData, suggestResDummyData } from "./dummydata";
+import { ParsingErrorMsg } from "./anlaysisResultMsg";
 
 /**
  * `FileAnalysisSideBar` 컴포넌트는 사이드바에 분석 파일 목록을 표시합니다.
@@ -45,6 +47,7 @@ export default function FileAnalysisSideBar() {
   const securityRes = useFormattedResStore((state) => state.securityRes);
   const setSuggestRes = useFormattedResStore((state) => state.setSuggestRes);
   const setSecurityRes = useFormattedResStore((state) => state.setSecurityRes);
+  const setErrorMsg = useErrorMsgStore((state) => state.setErrorMsg);
 
   useEffect(() => {
     if (resSelected?.result) {
@@ -79,7 +82,7 @@ export default function FileAnalysisSideBar() {
         cleanedResult = cleanedResult.replace(/},\s*];/g, "}]");
 
         // 마지막 배열의 세미콜론 제거 (]; -> ])
-        cleanedResult = cleanedResult.replace(/];\s*$/, "]");
+        cleanedResult = cleanedResult.replace(/];\s*(?=,|"suggestRes")/g, "]");
 
         // 마지막 객체의 쉼표 제거 (},], -> }]로 처리)
         cleanedResult = cleanedResult.replace(/,\s*([\}\]])/g, "$1");
@@ -114,8 +117,7 @@ export default function FileAnalysisSideBar() {
         setSuggestRes(suggestData);
       } catch (error) {
         console.error("파싱 오류:", error);
-        setSecurityRes(securityResDummyData);
-        setSuggestRes(suggestResDummyData);
+        setErrorMsg(ParsingErrorMsg);
       }
     }
   }, [resSelected]);
@@ -144,6 +146,8 @@ export default function FileAnalysisSideBar() {
   useEffect(() => {
     console.log("Updated securityRes:", securityRes);
   }, [securityRes]);
+
+  console.log(analyzeFileResult);
 
   return (
     <>

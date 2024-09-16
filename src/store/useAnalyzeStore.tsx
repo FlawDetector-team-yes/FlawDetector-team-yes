@@ -213,3 +213,23 @@ export const useFormattedResStore = create<TFormattedResStore>((set) => ({
     }));
   },
 }));
+
+export type TMsg = {
+  title: string;
+  msg: string;
+};
+
+type TErrorMsgStore = {
+  errorMsg: TMsg;
+  setErrorMsg: (e: TMsg) => void;
+};
+
+export const useErrorMsgStore = create<TErrorMsgStore>((set) => ({
+  errorMsg: { title: "", msg: "" },
+  setErrorMsg: (e: TMsg) => {
+    set((state) => ({
+      ...state,
+      errorMsg: e,
+    }));
+  },
+}));

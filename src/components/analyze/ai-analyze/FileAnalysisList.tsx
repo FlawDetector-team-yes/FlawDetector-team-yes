@@ -1,4 +1,5 @@
 import {
+  useErrorMsgStore,
   useFormattedResStore,
   useResSelectedStore,
 } from "@/store/useAnalyzeStore";
@@ -17,6 +18,9 @@ export default function FileAnalysisList() {
   const resSelected = useResSelectedStore((state) => state.resSelected);
   const suggestRes = useFormattedResStore((state) => state.suggestRes);
   const securityRes = useFormattedResStore((state) => state.securityRes);
+  const errorMsg = useErrorMsgStore((state) => state.errorMsg);
+
+  const initResData = { title: "", description: "", code: "", line: 0 };
 
   return (
     <>
@@ -32,11 +36,10 @@ export default function FileAnalysisList() {
           ))}
           {/** 취약점 및 수정 제안 없음 */}
           {resSelected.result === '""' && (
-            <Infobox
-              type="nodata"
-              resData={{ title: "", description: "", code: "", line: 0 }}
-              key={"nodata"}
-            />
+            <Infobox type="nodata" resData={initResData} key={"nodata"} />
+          )}
+          {resSelected.result !== '""' && errorMsg && (
+            <Infobox type="error" resData={initResData} key={"parsingerror"} />
           )}
         </ul>
       </main>
