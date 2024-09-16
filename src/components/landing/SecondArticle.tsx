@@ -1,6 +1,7 @@
 import Image from "next/image";
 import bug from "/public/images/bug.svg";
 import circleOfSquaresIcon from "../../../public/images/circle-of-squares.svg";
+import CaretDoubleDown from "./head-article/CaretDoubleDown";
 
 /**
  * Landing Page의 두 번째 아티클 -
@@ -36,7 +37,9 @@ function SecondArticle() {
             </p>
           </div>
         </div>
-
+        <div className="absolute bottom-28 left-[1000px]">
+          <CaretDoubleDown />
+        </div>
         <div className="absolute left-[1920px] top-0 z-10 h-full w-[700px] bg-primary-50" />
         <div className="absolute left-[1200px] top-[400px] z-10 h-[382px] w-[360px] rounded-lg bg-white px-[95px] py-[93px] shadow-2xl shadow-primary-300">
           <Image src={bug} alt="bugDecoIcon" width={190} height={196} />
