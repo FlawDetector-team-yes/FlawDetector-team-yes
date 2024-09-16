@@ -1,8 +1,9 @@
 import CodeMirror from "@uiw/react-codemirror";
+import { javascript } from "@codemirror/lang-javascript";
 
 function ModifiedCode({ code }: { code: string }) {
-  
-  const fileCode = code || "";
+  const getCode = code.split("\\").join("\n");
+  const fileCode = getCode || "";
 
   return (
     <>
@@ -10,6 +11,7 @@ function ModifiedCode({ code }: { code: string }) {
         value={fileCode}
         id="modifiedCode"
         maxHeight="250px"
+        extensions={[javascript({ jsx: true })]}
         theme="dark"
         editable={false}
       />
