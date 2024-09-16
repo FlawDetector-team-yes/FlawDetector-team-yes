@@ -1,5 +1,5 @@
 import Image from "next/image";
-import CheckingImg from "/public/images/Checking.svg";
+import CheckingImg from "/public/images/checking.svg";
 
 /**
  * Landing Page의 세 번째 아티클 -
@@ -11,8 +11,14 @@ import CheckingImg from "/public/images/Checking.svg";
  */
 function ThirdArticle() {
   return (
-    <div className="relative z-0 flex h-[1280px] min-w-[1880px] items-center justify-center gap-80">
-      <Image src={CheckingImg} alt="Checking" width={725} height={977} />
+    <div className="relative z-0 flex h-[1280px] min-w-[1880px] items-center justify-center gap-[88px] overflow-hidden">
+      <Image
+        src={CheckingImg}
+        alt="Checking"
+        width={985}
+        height={977}
+        className="relative top-[400px]"
+      />
       <div className="flex h-[280px] flex-col items-end justify-center gap-[34px]">
         <h2 className="text-right font-['Inter'] text-6xl font-bold leading-[80px] text-primary-500">
           최신 보안 동향을
