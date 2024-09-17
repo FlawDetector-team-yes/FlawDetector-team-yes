@@ -184,6 +184,11 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
   const handleClickFinishToast = () => {
     toast.dismiss();
     saveResult();
+    // 결과 페이지 보여야 할 값 초기화
+    setSecurityRes([]);
+    setSuggestRes([]);
+    setErrorMsg({ title: "", msg: "" });
+
     router.push(`/me/repos/${repo.id}/${saveTime}`);
     resetAnalyze();
   };
@@ -195,10 +200,6 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
     resetAnlyzeFliles();
     // resultData 초기화
     resetResultData();
-    // 결과 페이지 보여야 할 값 초기화
-    setSecurityRes([]);
-    setSuggestRes([]);
-    setErrorMsg({ title: "", msg: "" });
     // 검사 단계 초기화
     setCurrentStep("select");
   };
