@@ -110,7 +110,7 @@ export default function AnalysisWrapper() {
 
   return (
     <>
-      <section className="flex h-full w-full min-w-[1760px] gap-7 rounded-md">
+      <section className="mb-10 flex h-full w-full min-w-[1760px] gap-7 rounded-md">
         <section ref={sidebarRef} className="flex w-[247px] flex-col gap-7">
           <button
             className="flex h-[107px] w-[247px] items-center justify-center gap-[10px] rounded-lg bg-primary-500 px-4 text-2xl font-semibold text-white"
