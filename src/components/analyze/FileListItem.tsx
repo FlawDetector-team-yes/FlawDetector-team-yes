@@ -18,13 +18,26 @@ import { toast } from "sonner";
 import useFilesStore from "@/store/useFilesStore";
 import useSelectedFilesStore from "@/store/useSelectedFilesStore";
 import {
+  TAnalyzeFileResult,
   useAnalyzeFilesStore,
+  useErrorMsgStore,
+  useFormattedResStore,
+  useResultDataStore,
   useSaveTimeStore,
   useStepStore,
 } from "@/store/useAnalyzeStore";
 import { decodeUnicode } from "@/lib/decodeUnicode";
 import { TGithubContent } from "@/app/me/repos/type";
 import { fetchRepoContents } from "@/lib/api/github/fetchRepoContents";
+import {
+  collection,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import db from "@/firebase/firebaseClient";
+import { useSession } from "next-auth/react";
 
 type TFileListItemProps = {
   file: TGithubContent;
@@ -58,6 +71,7 @@ type TToastSteps = {
  * @returns {JSX.Element} - 파일 항목을 렌더링하는 JSX 요소
  */
 function FileListItem({ file, isSelected }: TFileListItemProps) {
+  const { data: session } = useSession();
   const fetchFiles = useFilesStore((state) => state.fecthFiles);
   const prevFolder = useSelectedFilesStore((state) => state.folderPath);
   const selectFile = useSelectedFilesStore((state) => state.selectFile);
@@ -69,6 +83,17 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
   const analyzeFiles = useAnalyzeFilesStore((state) => state.analyzeFiles); // 검사 중인 파일들
   const saveTime = useSaveTimeStore((state) => state.saveTime); // 검사 완료 시간
   const router = useRouter();
+  const resultData = useResultDataStore((state) => state.resultData); // 검사 결과
+  const selectedAllFile = useSelectedFilesStore(
+    (state) => state.selectedAllFile,
+  );
+  const resetAnlyzeFliles = useAnalyzeFilesStore(
+    (state) => state.resetAnlyzeFliles,
+  ); // 선택된 파일들
+  const resetResultData = useResultDataStore((state) => state.resetResultData); // 검사 결과 초기화
+  const setSuggestRes = useFormattedResStore((state) => state.setSuggestRes);
+  const setSecurityRes = useFormattedResStore((state) => state.setSecurityRes);
+  const setErrorMsg = useErrorMsgStore((state) => state.setErrorMsg);
 
   const toastStep: TToastSteps = {
     analyzeToast: {
@@ -110,10 +135,72 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
     },
   };
 
+  const saveResult = async () => {
+    // 결과 data
+    const analyzeRes = {
+      repoId: saveTime,
+      repoName: repo.id,
+      data: [...resultData],
+    };
+
+    try {
+      const allUserRef = collection(db, "users");
+      const currUser = query(
+        allUserRef,
+        where("email", "==", session?.user?.email),
+      );
+
+      const userDocs = await getDocs(currUser);
+
+      if (userDocs.empty) {
+        console.error("사용자를 찾을 수 없습니다.");
+        return;
+      }
+      const userDoc = userDocs.docs[0];
+      const userRef = userDoc.ref;
+      const userData = userDoc.data();
+      // analyzeFileResult 필드가 있는지 확인하고 필드가 없으면 빈 배열로 설정
+      const analyzeFileResult = userData?.analyzeFileResult || [];
+      // 이미 존재하는 repo인지 확인하고 그 index를 가져옴
+      const existRepo = analyzeFileResult.findIndex(
+        (res: TAnalyzeFileResult) => res.repoName === analyzeRes.repoName,
+      );
+      if (existRepo > -1) {
+        // 이미 존재한다면 해당 위치에 있는 결과를 바꿔줌
+        analyzeFileResult[existRepo] = analyzeRes;
+      } else {
+        // 존재하지 않는다면 결과를 push로 넣어줌.
+        analyzeFileResult.push(analyzeRes);
+      }
+
+      // 값을 업데이트 시켜줌
+      await updateDoc(userRef, { analyzeFileResult });
+      console.log("분석 결과가 성공적으로 저장되었습니다!");
+    } catch (error) {
+      console.error("분석 결과를 저장하는 중 오류가 발생했습니다: ", error);
+    }
+  };
+
   const handleClickFinishToast = () => {
     toast.dismiss();
-    setCurrentStep("select");
+    saveResult();
     router.push(`/me/repos/${repo.id}/${saveTime}`);
+    resetAnalyze();
+  };
+
+  const resetAnalyze = () => {
+    // 선택한 파일 리스트 초기화
+    selectedAllFile([]);
+    // 분석중인 파일 리스트 초기화
+    resetAnlyzeFliles();
+    // resultData 초기화
+    resetResultData();
+    // 결과 페이지 보여야 할 값 초기화
+    setSecurityRes([]);
+    setSuggestRes([]);
+    setErrorMsg({ title: "", msg: "" });
+    // 검사 단계 초기화
+    setCurrentStep("select");
   };
 
   useEffect(() => {
