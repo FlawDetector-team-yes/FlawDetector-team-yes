@@ -2,20 +2,22 @@
 
 import Image from "next/image";
 import fileImg from "../../../../public/images/file.png";
+import checkImg from "../../../../public/images/check.png";
 import xMarkError from "../../../../public/images/x-mark-error.png";
 import triangleYellow from "../../../../public/images/triangle-yellow.png";
 import circleGreen from "../../../../public/images/circle-green.png";
 import menuRepoFolder from "../../../../public/images/menu-repo-folder.png";
 import {
   useAnalyzeFileResultStore,
+  useErrorMsgStore,
   useFormattedResStore,
   useResSelectedStore,
 } from "@/store/useAnalyzeStore";
 import StateItem from "../StateItem";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { securityResDummyData, suggestResDummyData } from "./dummydata";
+import { useEffect } from "react";
+import { ParsingErrorMsg } from "./anlaysisResultMsg";
 
 /**
  * `FileAnalysisSideBar` 컴포넌트는 사이드바에 분석 파일 목록을 표시합니다.
@@ -32,19 +34,11 @@ export default function FileAnalysisSideBar() {
   );
   const setResSelected = useResSelectedStore((state) => state.setResSelected);
   const resSelected = useResSelectedStore((state) => state.resSelected);
-  const [onClick, setOnClick] = useState<{
-    sha: string;
-    name: string;
-    state: boolean;
-  }>({
-    sha: "",
-    name: "",
-    state: true,
-  });
   const suggestRes = useFormattedResStore((state) => state.suggestRes);
   const securityRes = useFormattedResStore((state) => state.securityRes);
   const setSuggestRes = useFormattedResStore((state) => state.setSuggestRes);
   const setSecurityRes = useFormattedResStore((state) => state.setSecurityRes);
+  const setErrorMsg = useErrorMsgStore((state) => state.setErrorMsg);
 
   useEffect(() => {
     if (resSelected?.result) {
@@ -79,7 +73,7 @@ export default function FileAnalysisSideBar() {
         cleanedResult = cleanedResult.replace(/},\s*];/g, "}]");
 
         // 마지막 배열의 세미콜론 제거 (]; -> ])
-        cleanedResult = cleanedResult.replace(/];\s*$/, "]");
+        cleanedResult = cleanedResult.replace(/];\s*(?=,|"suggestRes")/g, "]");
 
         // 마지막 객체의 쉼표 제거 (},], -> }]로 처리)
         cleanedResult = cleanedResult.replace(/,\s*([\}\]])/g, "$1");
@@ -112,10 +106,14 @@ export default function FileAnalysisSideBar() {
         // Zustand store에 데이터 업데이트
         setSecurityRes(securityData);
         setSuggestRes(suggestData);
+        // error store 초기화
+        setErrorMsg({ title: "", msg: "" });
       } catch (error) {
         console.error("파싱 오류:", error);
-        setSecurityRes(securityResDummyData);
-        setSuggestRes(suggestResDummyData);
+        setErrorMsg(ParsingErrorMsg);
+        // securityRes, suggestRes 초기화
+        setSecurityRes([]);
+        setSuggestRes([]);
       }
     }
   }, [resSelected]);
@@ -126,13 +124,6 @@ export default function FileAnalysisSideBar() {
     result: string;
     content: string;
   }) => {
-    setOnClick((prev) => ({
-      ...prev,
-      sha: f.sha,
-      name: f.name,
-      state: !prev.state,
-    }));
-
     setResSelected(f);
   };
 
@@ -145,6 +136,8 @@ export default function FileAnalysisSideBar() {
     console.log("Updated securityRes:", securityRes);
   }, [securityRes]);
 
+  console.log(analyzeFileResult);
+
   return (
     <>
       <aside className="flex max-h-fit w-[247px] flex-col justify-between gap-5">
@@ -152,20 +145,12 @@ export default function FileAnalysisSideBar() {
           <StateItem
             src={xMarkError}
             alt="검출된 취약점"
-            count={
-              securityRes.length === 0
-                ? securityResDummyData.length
-                : securityRes.length
-            }
+            count={securityRes.length === 0 ? "-" : securityRes.length}
           />
           <StateItem
             src={triangleYellow}
             alt="수정 제안"
-            count={
-              suggestRes.length === 0
-                ? suggestResDummyData.length
-                : suggestRes.length
-            }
+            count={suggestRes.length === 0 ? "-" : suggestRes.length}
           />
           <StateItem src={circleGreen} alt="문제 없음" count={0} />
         </div>
@@ -174,7 +159,7 @@ export default function FileAnalysisSideBar() {
             <div className="flex items-center gap-[10px] text-xl">
               <img
                 className="rounded-full"
-                src="https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg"
+                src={sessionStorage.getItem("userProfile") || ""}
                 alt="Profile Image"
                 width={30}
                 height={30}
@@ -197,15 +182,22 @@ export default function FileAnalysisSideBar() {
                 key={f.sha}
                 onClick={() => onClickFile(f)}
                 className={`flex h-[44px] cursor-pointer items-center gap-2 border border-[#E6E6E6] p-2 ${
-                  onClick.sha === f.sha &&
-                  onClick.name === f.name &&
-                  onClick.state
+                  resSelected.sha === f.sha && resSelected.name === f.name
                     ? "bg-[#E3E1E7]"
                     : "hover:bg-[#E3E1E7]"
                 }`}
               >
                 <button className="flex gap-1">
-                  <Image src={fileImg} alt="File" width={24} height={24} />
+                  {resSelected.sha === f.sha && resSelected.name === f.name ? (
+                    <Image
+                      src={checkImg}
+                      alt="Checked file"
+                      width={24}
+                      height={24}
+                    />
+                  ) : (
+                    <Image src={fileImg} alt="File" width={24} height={24} />
+                  )}
                   <span>{f.name}</span>
                 </button>
               </li>
