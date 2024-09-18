@@ -10,7 +10,6 @@ import { useSession } from "next-auth/react";
 import {
   TAnalyzeFileResult,
   useAnalyzeFileResultStore,
-  useFormattedResStore,
   useResSelectedStore,
 } from "@/store/useAnalyzeStore";
 import ResCodeViewer from "./ResCodeViewer";
@@ -21,7 +20,6 @@ function FileAnalysisListContainer() {
   const setAnalyzeFileResult = useAnalyzeFileResultStore(
     (state) => state.setAnalyzeFileResult,
   );
-  const resSelected = useResSelectedStore((state) => state.resSelected);
   const setResSelected = useResSelectedStore((state) => state.setResSelected);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [sidebarHeight, setSidebarHeight] = useState(0); // 측정된 첫 번째 section의 높이
