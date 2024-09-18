@@ -1,3 +1,8 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Terms of service",
+};
 function TermsOfServicePage() {
   return (
     <div className="mx-auto mb-[60px] flex w-[65vw] flex-col gap-[20px]">

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import leftVioletArrow from "../../../../../public/images/left-violet-arrow.png";
 import AnalysisWrapper from "@/components/analyze/AnalysisWrapper";
+import { Metadata } from "next";
 
 /**
  * `AnalyzePage` 컴포넌트는 분석 페이지의 레이아웃을 구성합니다.
@@ -8,7 +9,15 @@ import AnalysisWrapper from "@/components/analyze/AnalysisWrapper";
  *
  * @returns {JSX.Element} - 분석 페이지 구성 요소
  */
+
+export const metadata: Metadata = {
+  title: "Analyze",
+  description:
+    "인공지능의 뛰어난 분석 능력을 활용하여 코드의 보안 취약점을 신속하게 해결하세요.",
+};
+
 async function AnalyzePage() {
+  console.log("AnalyzePage");
   return (
     <div className="container mx-auto flex min-w-[1760px] flex-col gap-[45px]">
       {/* 헤더 섹션 */}

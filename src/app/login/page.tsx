@@ -1,7 +1,11 @@
 import GithubLogin from "@/components/login/GithubLogin";
 import Image from "next/image";
 import MainBackground from "/public/images/MainBackground.svg";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Login",
+};
 function Page() {
   return (
     <article className="relative flex h-[1172px] min-w-[1920px] items-center justify-center">
