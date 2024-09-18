@@ -5,9 +5,6 @@ import db from "./firebaseClient"; // Firestore 초기화된 객체
  * @returns {Promise<string[] | null>} 핀된 문서 ID 배열을 반환, 없으면 빈 배열 반환
  */
 async function fetchPinnedId(session: any) {
-  // const session = await getSession();
-
-  console.log(session); //undefined
   const userName = session?.user?.name;
 
   if (!userName) {
@@ -33,7 +30,6 @@ async function fetchPinnedId(session: any) {
     const userDoc = querySnapshot.docs[0];
     const userData = userDoc.data();
     const pins = userData.pins || [];
-    console.log(pins);
     return pins; // pins 필드를 배열로 반환 (없으면 빈 배열)
   } catch (error) {
     console.error("Firestore에서 유저 핀을 가져오는 중 오류 발생:", error);
