@@ -89,7 +89,7 @@ export default async function RootLayout({
   return (
     <html lang="ko">
       <body className={`${inter.className} ${pretendard.variable} relative`}>
-        <NextTopLoader />
+        <NextTopLoader color="#6100ff" />
         <Gnb />
         <SessionProvider session={session}>
           <ModalProvider />
