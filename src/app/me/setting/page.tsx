@@ -5,7 +5,11 @@ import { Inter } from "next/font/google";
 import Link from "next/link";
 import ToggleSwitch from "@/components/me/ToggleSwitch";
 import { SessionProvider } from "next-auth/react";
+import { Metadata } from "next";
 const inter = Inter({ subsets: ["latin"] });
+export const metadata: Metadata = {
+  title: "Setting",
+};
 export default function SettingPage() {
   return (
     <>

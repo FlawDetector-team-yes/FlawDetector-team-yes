@@ -3,7 +3,15 @@ import { Inter } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import { getSession } from "@/lib/getSession";
 import GitRepoList from "@/components/me/GitRepoList";
+import { Metadata } from "next";
 const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: "My Library",
+  description:
+    "인공지능의 뛰어난 분석 능력을 활용하여 코드의 보안 취약점을 신속하게 해결하세요.",
+};
+
 
 async function MyPage() {
   const session = await getSession();

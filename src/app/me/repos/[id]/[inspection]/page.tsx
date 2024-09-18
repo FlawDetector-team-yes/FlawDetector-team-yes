@@ -2,6 +2,7 @@ import AnalyzeHeader from "@/components/analyze/AnalyzeHeader";
 import { SessionProvider } from "next-auth/react";
 import { getSession } from "@/lib/getSession";
 import FileAnalysisListContainer from "@/components/analyze/ai-analyze/FileAnalysisListContainer";
+import { Metadata } from "next";
 
 /**
  * `AiAnalyzePage` 컴포넌트는 파일 분석 페이지를 렌더링합니다.
@@ -10,6 +11,12 @@ import FileAnalysisListContainer from "@/components/analyze/ai-analyze/FileAnaly
  *
  * @returns JSX.Element - 페이지 구성 요소.
  */
+export const metadata: Metadata = {
+  title: "Analyze Result",
+  description:
+    "인공지능의 뛰어난 분석 능력을 활용하여 코드의 보안 취약점을 신속하게 해결하세요.",
+};
+
 async function AiAnalyzePage() {
   const session = await getSession();
   return (

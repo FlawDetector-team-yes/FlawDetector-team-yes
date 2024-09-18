@@ -5,7 +5,11 @@ import leftArrow from "/public/images/left-violet-arrow.png";
 import { Inter } from "next/font/google";
 import ProfileInfo from "@/components/me/ProfileInfo";
 import ClippingArticleItem from "@/components/me/ClippingArticleItem";
+import { Metadata } from "next";
 const inter = Inter({ subsets: ["latin"] });
+export const metadata: Metadata = {
+  title: "Clip",
+};
 export default function ClipPage() {
   return (
     <>
