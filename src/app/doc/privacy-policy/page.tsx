@@ -1,3 +1,8 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "PrivacyPolicy",
+};
 function PrivacyPolicyPage() {
   return (
     <div className="mx-auto mb-[70px] flex w-[65vw] flex-col gap-[20px]">
