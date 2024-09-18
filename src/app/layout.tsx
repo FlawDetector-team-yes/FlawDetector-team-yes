@@ -7,6 +7,7 @@ import Footer from "@/components/common/Footer";
 import ModalProvider from "@/components/modal/ModalProvider";
 import { SessionProvider } from "next-auth/react";
 import { getSession } from "@/lib/getSession";
+import NextTopLoader from "nextjs-toploader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -88,6 +89,7 @@ export default async function RootLayout({
   return (
     <html lang="ko">
       <body className={`${inter.className} ${pretendard.variable} relative`}>
+        <NextTopLoader />
         <Gnb />
         <SessionProvider session={session}>
           <ModalProvider />
