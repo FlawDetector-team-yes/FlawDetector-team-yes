@@ -3,7 +3,7 @@ import Image from "next/image";
 import sfacspace from "/public/images/sfacspace.svg";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import MainBackground from "/public/images/MainBackground.svg";
+import MainBackground from "../../../public/images/bg-circle.svg";
 
 function Footer() {
   const currentPath = usePathname();
