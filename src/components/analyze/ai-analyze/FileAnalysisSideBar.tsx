@@ -106,9 +106,14 @@ export default function FileAnalysisSideBar() {
         // Zustand store에 데이터 업데이트
         setSecurityRes(securityData);
         setSuggestRes(suggestData);
+        // error store 초기화
+        setErrorMsg({ title: "", msg: "" });
       } catch (error) {
         console.error("파싱 오류:", error);
         setErrorMsg(ParsingErrorMsg);
+        // securityRes, suggestRes 초기화
+        setSecurityRes([]);
+        setSuggestRes([]);
       }
     }
   }, [resSelected]);
