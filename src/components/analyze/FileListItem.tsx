@@ -117,8 +117,6 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
   };
 
   useEffect(() => {
-    console.log(currentStep);
-
     if (currentStep === "select") {
       toast.custom(() => <></>);
       return; // "select"일 경우 이후 로직을 실행하지 않음
@@ -240,7 +238,7 @@ function FileListItem({ file, isSelected }: TFileListItemProps) {
       />
       <div className="flex w-full justify-between">
         <span
-          className={`${isSelected && "w-[130px] truncate"} text-base text-[#3F3F3F]`}
+          className={`${isSelected ? "w-[130px]" : "w-[180px]"} truncate text-base text-[#3F3F3F]`}
         >
           {file.name}
         </span>
