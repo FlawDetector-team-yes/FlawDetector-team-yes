@@ -19,6 +19,12 @@ const pretendard = localFont({
 });
 
 export const metadata: Metadata = {
+  verification: {
+    google: "PzhWXZjlHrXotb_thskWaz0x2z0r6nf9NzGOMXBcIqA",
+    other: {
+      "naver-site-verification": "427e28e912f5e1728ee62411dc97d1db21d26441",
+    },
+  },
   title: {
     template: "%s | FlawDetector",
     default: "FlawDetector",
@@ -50,14 +56,14 @@ export const metadata: Metadata = {
     ],
     type: "website",
   },
-  //icons: [
-  //  {
-  //    rel: "icon",
-  //    type: "image/png",
-  //    sizes: "180x180",
-  //    url: "/images/bug-favicon.png",
-  //  },
-  //],
+  icons: [
+    {
+      rel: "icon",
+      type: "image/png",
+      sizes: "180x180",
+      url: "/images/bug-favicon.png",
+    },
+  ],
   robots: {
     index: true,
     follow: true,
