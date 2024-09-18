@@ -20,7 +20,6 @@ type TPinState = {
 function Clip({ id }: { id: string }) {
   const { pinnedId, togglePinnedId } = usePinnedStore();
   const { data: session } = useSession();
-  console.log(pinnedId);
 
   /**
    * 핀 상태를 확인하는 함수입니다.
