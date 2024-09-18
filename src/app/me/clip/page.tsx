@@ -1,17 +1,21 @@
 import Link from "next/link";
 import Image from "next/image";
 import leftArrow from "/public/images/left-violet-arrow.png";
-import { Inter } from "next/font/google";
-import ClippingArticleItem from "@/components/me/ClippingArticleItem";
 import { Metadata } from "next";
-const inter = Inter({ subsets: ["latin"] });
+
 export const metadata: Metadata = {
   title: "Clip",
 };
-export default function ClipPage() {
+
+import ClippingArticleItem from "@/components/me/ClippingArticleItem";
+import { SessionProvider } from "next-auth/react";
+import { getSession } from "@/lib/getSession";
+
+export default async function ClipPage() {
+  const session = await getSession();
   return (
     <>
-      <div className={inter.className}>
+      <div>
         <div className="mx-auto flex h-auto w-[1314px] flex-col">
           <div className="mb-[80px] flex w-full flex-col items-center text-4xl text-[#6100FF]">
             <Link href="/me/my-profile">
@@ -27,7 +31,9 @@ export default function ClipPage() {
               </button>
             </Link>
           </div>
-          <ClippingArticleItem />
+          <SessionProvider session={session}>
+            <ClippingArticleItem />
+          </SessionProvider>
         </div>
       </div>
     </>
