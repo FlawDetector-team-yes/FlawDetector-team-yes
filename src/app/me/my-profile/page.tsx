@@ -4,8 +4,12 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import { SessionProvider } from "next-auth/react";
+import { Metadata } from "next";
 const inter = Inter({ subsets: ["latin"] });
 
+export const metadata: Metadata = {
+  title: "My Profile",
+};
 function MyProfile() {
   return (
     <>

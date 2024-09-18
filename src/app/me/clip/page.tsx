@@ -1,11 +1,13 @@
-"use client";
 import Link from "next/link";
 import Image from "next/image";
 import leftArrow from "/public/images/left-violet-arrow.png";
 import { Inter } from "next/font/google";
-import ProfileInfo from "@/components/me/ProfileInfo";
 import ClippingArticleItem from "@/components/me/ClippingArticleItem";
+import { Metadata } from "next";
 const inter = Inter({ subsets: ["latin"] });
+export const metadata: Metadata = {
+  title: "Clip",
+};
 export default function ClipPage() {
   return (
     <>
@@ -25,7 +27,6 @@ export default function ClipPage() {
               </button>
             </Link>
           </div>
-
           <ClippingArticleItem />
         </div>
       </div>

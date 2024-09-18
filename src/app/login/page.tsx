@@ -2,7 +2,11 @@ import GithubLogin from "@/components/login/GithubLogin";
 import Image from "next/image";
 import MainBackground from "../../../public/images/bg-circle.svg";
 import BackgroundCircles from "@/components/landing/head-article/BackgroundCircles";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Login",
+};
 function Page() {
   return (
     <article className="relative flex h-[1172px] min-w-[1920px] items-center justify-center">
