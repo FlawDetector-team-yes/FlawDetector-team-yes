@@ -19,7 +19,9 @@ function Footer() {
   }
 
   return (
-    <footer className="bg-[rgba(250, 248, 255, 0.5)] relative bottom-0 left-0 right-0 flex justify-between px-20 py-10">
+    <footer
+      className={`bg-[rgba(250, 248, 255, 0.5)] ${currentPath === "/me/clip" || currentPath === "/me/my-profile" || currentPath === "/me/setting" ? "fixed" : "relative"} bottom-0 left-0 right-0 flex justify-between px-20 py-10`}
+    >
       {/* 배경 이미지 */}
       <Image
         src={MainBackground}

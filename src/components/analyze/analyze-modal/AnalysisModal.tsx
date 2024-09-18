@@ -9,6 +9,8 @@ import {
   TAnalyzeFileResult,
   useAnalyzeFileResultStore,
   useAnalyzeFilesStore,
+  useErrorMsgStore,
+  useFormattedResStore,
   useReposStateStore,
   useResultDataStore,
   useSaveTimeStore,
@@ -91,6 +93,7 @@ export const AnalysisModal: React.FC<any> = ({
     (state) => state.setAnalyzeFiles,
   ); // 검사 중인 파일 업데이트
   const resultData = useResultDataStore((state) => state.resultData); // 검사 결과
+  const resetResultData = useResultDataStore((state) => state.resetResultData); // 검사 결과 초기화
   const setResultData = useResultDataStore((state) => state.setResultData); // 검사 결과 업데이트
   const addWorker = useWorkerStore((state) => state.addWorker);
   const clearWorkers = useWorkerStore((state) => state.clearWorkers);
@@ -102,6 +105,9 @@ export const AnalysisModal: React.FC<any> = ({
   const setReposState = useReposStateStore((state) => state.setReposState);
   const router = useRouter();
   const repo = useParams<{ id: string }>();
+  const setSuggestRes = useFormattedResStore((state) => state.setSuggestRes);
+  const setSecurityRes = useFormattedResStore((state) => state.setSecurityRes);
+  const setErrorMsg = useErrorMsgStore((state) => state.setErrorMsg);
   /**
    * 검사하기 누를 경우 실행되는 로직
    * web worker가 실행됨.
@@ -144,6 +150,16 @@ export const AnalysisModal: React.FC<any> = ({
             );
             worker.terminate();
             reject(event.data.message); // 에러 발생 시 reject 호출
+
+            selectedFiles.forEach((file) => {
+              setAnalyzeFiles({
+                fileId: file.sha,
+                progressValue: 0,
+                state: "canceled", // 상태를 "canceled"로 설정
+              });
+            });
+
+            setCurrentStep("cancel"); // 상태를 cancle로 변경하여 중단 시킴
           }
         };
       });
@@ -155,7 +171,7 @@ export const AnalysisModal: React.FC<any> = ({
       // 모든 작업이 끝나면 finish로 변경
       setCurrentStep("finish");
       // 특정 형식으로 날짜 data 문자열 format
-      const today = format(new Date(), "yyyy-MM-dd HH:mm");
+      const today = format(new Date(), "yyyy-MM-dd HH:mm:ss");
       // base64 encoding
       const encodingSaveTime = btoa(today);
       setSaveTime(encodingSaveTime);
@@ -233,6 +249,12 @@ export const AnalysisModal: React.FC<any> = ({
     selectedAllFile([]);
     // 분석중인 파일 리스트 초기화
     resetAnlyzeFliles();
+    // resultData 초기화
+    resetResultData();
+    // 결과 페이지 보여야 할 값 초기화
+    setSecurityRes([]);
+    setSuggestRes([]);
+    setErrorMsg({ title: "", msg: "" });
     // 검사 단계 초기화
     setCurrentStep("select");
     // 모달 닫기
