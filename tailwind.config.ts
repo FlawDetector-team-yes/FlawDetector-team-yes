@@ -16,10 +16,35 @@ const config: Config = {
         pretendard: ["var(--font-pretendard)"],
       },
       animation: {
+        rotateLeft: "rotateLeft 15s linear infinite",
+        fadeIn: "fadeIn 7.5s ease-in forwards",
+        ripple: "ripple 5s ease-out",
         "slide-right": "slide-right 120s linear infinite",
         slideIn: "slideIn 1s ease-out forwards",
       },
       keyframes: {
+        rotateLeft: {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(-360deg)" },
+        },
+        fadeIn: {
+          "0%": {
+            opacity: "0", // 완전히 투명
+          },
+          "100%": {
+            opacity: "1", // 완전히 불투명
+          },
+        },
+        ripple: {
+          "0%": {
+            transform: "scale(1.0)",
+            opacity: "1",
+          },
+          "100%": {
+            transform: "scale(12.0)",
+            opacity: "0",
+          },
+        },
         slideIn: {
           "0%": { transform: "translateX(-100%)", opacity: "0" },
           "100%": { transform: "translateX(0)", opacity: "1" },

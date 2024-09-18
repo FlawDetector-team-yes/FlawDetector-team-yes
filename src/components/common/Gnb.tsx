@@ -18,7 +18,7 @@ async function Gnb() {
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
               <Image src={bug} alt="bug-icon" width={34} height={34} />
-              <h1 className="ml-3 mr-24 text-center font-['Aldrich'] text-[40px] font-normal text-black">
+              <h1 className="ml-3 mr-24 text-center text-[40px] font-normal text-black">
                 FLAWDETECTOR
               </h1>
             </Link>
