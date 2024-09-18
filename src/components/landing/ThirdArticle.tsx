@@ -1,5 +1,5 @@
 import Image from "next/image";
-import CheckingImg from "/public/images/Checking.svg";
+import CheckingImg from "../../../public/images/Checking.svg";
 
 /**
  * Landing Page의 세 번째 아티클 -
