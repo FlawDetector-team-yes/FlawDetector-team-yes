@@ -1,5 +1,5 @@
 import Image from "next/image";
-import CheckingImg from "../../../public/images/checking.svg";
+import CheckingImg from "../../../public/images/checking.png";
 import CaretDoubleDown from "./head-article/CaretDoubleDown";
 
 /**
