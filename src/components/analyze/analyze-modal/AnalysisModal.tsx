@@ -151,15 +151,15 @@ export const AnalysisModal: React.FC<any> = ({
             worker.terminate();
             reject(event.data.message); // 에러 발생 시 reject 호출
 
-            // selectedFiles.forEach((file) => {
-            //   setAnalyzeFiles({
-            //     fileId: file.sha,
-            //     progressValue: 0,
-            //     state: "canceled", // 상태를 "canceled"로 설정
-            //   });
-            // });
+            selectedFiles.forEach((file) => {
+              setAnalyzeFiles({
+                fileId: file.sha,
+                progressValue: 0,
+                state: "canceled", // 상태를 "canceled"로 설정
+              });
+            });
 
-            // setCurrentStep("cancel"); // 상태를 cancle로 변경하여 중단 시킴
+            setCurrentStep("cancel"); // 상태를 cancle로 변경하여 중단 시킴
           }
         };
       });
@@ -254,7 +254,7 @@ export const AnalysisModal: React.FC<any> = ({
     // 결과 페이지 보여야 할 값 초기화
     setSecurityRes([]);
     setSuggestRes([]);
-    setErrorMsg({title: "", msg: ""});
+    setErrorMsg({ title: "", msg: "" });
     // 검사 단계 초기화
     setCurrentStep("select");
     // 모달 닫기
