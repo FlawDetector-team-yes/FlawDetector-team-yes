@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 async function AiAnalyzePage() {
   const session = await getSession();
   return (
-    <div className="container mx-auto flex min-w-[1760px] flex-col gap-[45px]">
+    <div className="container mx-auto mb-16 flex min-w-[1760px] flex-col gap-[45px]">
       {/* 페이지 헤더 */}
       <section className="flex h-[79px] w-full items-center gap-6 rounded-full border-4 border-primary-500 p-5 text-primary-500">
         <AnalyzeHeader />

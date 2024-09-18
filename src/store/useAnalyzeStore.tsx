@@ -75,12 +75,14 @@ export type TResultData = {
 
 type TResultDataStore = {
   resultData: TResultData[];
+  resetResultData: () => void;
   setResultData: (res: TResultData) => void;
 };
 
 // Result Store 생성
 export const useResultDataStore = create<TResultDataStore>((set) => ({
   resultData: [],
+  resetResultData: () => set({ resultData: [] }),
   setResultData: (res: TResultData) => {
     set((state) => {
       // 기존 resultData 배열에서 동일한 sha를 가진 항목을 제거
@@ -208,6 +210,26 @@ export const useFormattedResStore = create<TFormattedResStore>((set) => ({
     set((state) => ({
       ...state,
       suggestRes: [...sg], // 수정 제안 상태 업데이트
+    }));
+  },
+}));
+
+export type TMsg = {
+  title: string;
+  msg: string;
+};
+
+type TErrorMsgStore = {
+  errorMsg: TMsg;
+  setErrorMsg: (e: TMsg) => void;
+};
+
+export const useErrorMsgStore = create<TErrorMsgStore>((set) => ({
+  errorMsg: { title: "", msg: "" },
+  setErrorMsg: (e: TMsg) => {
+    set((state) => ({
+      ...state,
+      errorMsg: e,
     }));
   },
 }));

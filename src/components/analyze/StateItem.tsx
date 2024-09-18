@@ -15,7 +15,7 @@ export default function StateItem({
 }: {
   src: StaticImageData;
   alt: string;
-  count: number;
+  count: number | string;
 }) {
   return (
     <>
