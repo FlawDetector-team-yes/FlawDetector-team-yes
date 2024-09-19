@@ -3,7 +3,7 @@ import Image from "next/image";
 import pin from "/public/images/pin.png";
 import pinActive from "/public/images/pin-active.png";
 import { useSession } from "next-auth/react";
-import useFetchPin from "@/firebase/useFetchPin";
+import fetchPin from "@/firebase/fetchPin";
 import { usePinnedStore } from "@/store/usePinnedStore";
 
 /**
@@ -33,7 +33,7 @@ function Clip({ id }: { id: string }) {
 
   const handlePinState = async (id: string, session: any) => {
     togglePinnedId(id); // 핀 상태를 토글
-    await useFetchPin(id, session); // 핀 상태를 서버와 동기화
+    await fetchPin(id, session); // 핀 상태를 서버와 동기화
   };
 
   return (
