@@ -1,77 +1,113 @@
 "use client";
 import { useState, useEffect } from "react";
-import menuDot from "/public/images/menu-dot.png";
-import Image from "next/image";
-import { type } from "os";
-import plus from "/public/images/plus.png";
-import RepoSortDropdown from "./RepoSortDropdown";
-import { TSortType } from "./GitRepoList";
+import db from "@/firebase/firebaseClient";
+import { collection, getDocs, query, where } from "firebase/firestore"; // Firestore 관련 함수
+import ClipPagination from "../vulnerability-db/ClipPagination";
+import SortDropdown from "./SortDropdown";
+import { useSession } from "next-auth/react";
+import fetchPinnedId from "@/firebase/fetchPinnedId"; // pinnedId를 가져오는 함수
+import { useSearchParams } from "next/navigation"; // URL 쿼리 파라미터 가져오기
 
+// TArticle 타입 정의
 type TArticle = {
+  id: string;
   label: string;
   title: string;
-  sub: string;
+  subtitle: string;
 };
 
-// /me/clip 스크랩 아이템요소 컴포넌트
 export default function ClippingArticleItem() {
-  let array = new Array(15);
-  // 배열 길이를 기준으로 표시할 항목의 총 높이 계산
-  let arrLength = Math.ceil((array.length * 170) / 3);
-  // 상태 초기화: 높이와 overflow 스타일, 항목 수, "더보기" 버튼 표시 여부
-  const [styleHeight, setStyleHeight] = useState<number | string>(600);
-  const [styleOverflow, setStyleOverflow] = useState("hidden");
-  const [count, setCount] = useState<number | string>(arrLength);
-  const [showMore, setShowMore] = useState(false);
-  //삭제,공유 각 인덱스에 맞춰 활성화 해야하기때문에 초기값은 null
-  const [miniModal, setMiniModal] = useState<number | null>(null);
+  const { data: session } = useSession(); // next-auth로 세션 정보 가져오기
+  const [pinnedArticles, setPinnedArticles] = useState<TArticle[]>([]);
+  const [pinnedIds, setPinnedIds] = useState<string[]>([]); // pinnedIds 상태를 문자열 배열로 관리
+  const searchParams = useSearchParams(); // URL에서 쿼리 파라미터 가져오기
+  const articlesPerPage = 16;
 
-  const [articles, setArticles] = useState<TArticle[]>([]);
+  const page = parseInt(searchParams.get("page") || "1", 10); // 현재 페이지 값 (기본값 1)
+  const sort = searchParams.get("sort") || "recent"; // 정렬 값 (기본값 recent)
 
-  // 컴포넌트가 마운트될 때 배열 길이가 12보다 크면 "더보기" 버튼을 표시
-  useEffect(() => {
-    if (12 < array.length) {
-      setShowMore(!showMore);
-    }
-  }, []);
-  useEffect(() => {
-    if (styleHeight < count) {
-      setStyleOverflow("hidden");
-      // 그렇지 않으면 overflow를 보이게 하고 높이를 auto로 설정, "더보기" 버튼을 숨김
-    } else {
-      setStyleOverflow("visible");
-    }
-  }, [moreHandler]);
+  // Firestore에서 pinnedIds에 해당하는 문서를 가져오는 함수
+  async function getPinnedArticles(pinnedIds: string[]) {
+    try {
+      const q = query(
+        collection(db, "vulnerability"),
+        where("__name__", "in", pinnedIds),
+      );
+      const querySnapshot = await getDocs(q);
 
-  // "더보기" 버튼 클릭 시 호출되는 함수
-  function moreHandler() {
-    // 현재 높이가 count보다 작으면 높이를 증가시키고 overflow를 숨김
-    if (styleHeight < count) {
-      setStyleHeight((prev) => (typeof prev === "number" ? prev + 600 : prev));
-      // 그렇지 않으면 overflow를 보이게 하고 높이를 auto로 설정, "더보기" 버튼을 숨김
-    } else {
-      setStyleHeight("auto");
+      let articles: TArticle[] = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        label: doc.data().label,
+        title: doc.data().title,
+        subtitle: doc.data().subtitle,
+      }));
+
+      // 정렬 처리
+      if (sort === "recent") {
+        articles = articles.sort((a, b) =>
+          b.subtitle.localeCompare(a.subtitle),
+        ); // 최근순
+      } else if (sort === "oldest") {
+        articles = articles.sort((a, b) =>
+          a.subtitle.localeCompare(b.subtitle),
+        ); // 오래된 순
+      } else if (sort === "report") {
+        // 취약성 보고서가 먼저
+        articles = [
+          ...articles.filter((item) => item.label === "취약성 보고서"),
+          ...articles.filter((item) => item.label !== "취약성 보고서"),
+        ];
+      } else if (sort === "notice") {
+        // 취약성 알림이 먼저
+        articles = [
+          ...articles.filter((item) => item.label === "취약성 알림"),
+          ...articles.filter((item) => item.label !== "취약성 알림"),
+        ];
+      } else if (sort === "etc") {
+        // 기타: 보고서나 알림이 아닌 것들 먼저
+        articles = [
+          ...articles.filter(
+            (item) =>
+              item.label !== "취약성 보고서" && item.label !== "취약성 알림",
+          ),
+          ...articles.filter(
+            (item) =>
+              item.label === "취약성 보고서" || item.label === "취약성 알림",
+          ),
+        ];
+      }
+
+      // 페이지네이션 처리: 해당 페이지에 맞는 데이터만 자르기
+      const startIndex = (page - 1) * articlesPerPage;
+      const paginatedArticles = articles.slice(
+        startIndex,
+        startIndex + articlesPerPage,
+      );
+
+      setPinnedArticles(paginatedArticles); // 정렬 및 페이지네이션된 데이터 저장
+    } catch (error) {
+      console.error("Error fetching pinned articles:", error);
     }
   }
 
-  function miniModalHandler(index: number) {
-    // 클릭한 인덱스가 현재 열려 있는 모달의 인덱스와 같으면 닫고, 다르면 열리게 설정
-    setMiniModal((prev) => (prev === index ? null : index));
-  }
+  useEffect(() => {
+    async function fetchData() {
+      if (session) {
+        // 세션이 있을 때만 pinnedIds를 가져옴
+        const ids = await fetchPinnedId(session); // fetchPinnedId 함수가 세션을 받아 ID 배열을 반환
+        setPinnedIds(ids); // pinnedIds 상태 업데이트
+      }
+    }
 
-  // 스크랩 정렬
-  const handleSortArticles = (sortType: TSortType) => {
-    const sortFunctions: Record<TSortType, (a: any, b: any) => number> = {
-      recent: (a: any, b: any) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      oldest: (a: any, b: any) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-      name: (a: any, b: any) => a.name.localeCompare(b.name),
-    };
-    const sortedArticles = [...articles].sort(sortFunctions[sortType]);
+    fetchData();
+  }, [session]);
 
-    setArticles(sortedArticles);
-  };
+  // pinnedIds가 업데이트되거나 페이지, 정렬이 바뀔 때 문서 데이터를 가져옴
+  useEffect(() => {
+    if (pinnedIds.length > 0) {
+      getPinnedArticles(pinnedIds); // Firestore에서 문서 가져오기
+    }
+  }, [pinnedIds, page, sort]);
 
   return (
     <>
@@ -80,70 +116,45 @@ export default function ClippingArticleItem() {
           <h1 className="text-[32px] font-medium">Library</h1>
         </div>
         {/* 레포 드롭다운 */}
-        <div className="flex gap-4">
-          <RepoSortDropdown typeName={"sort"} sort={handleSortArticles} />
-        </div>
+        <SortDropdown />
       </div>
-      <div
-        style={{
-          height: styleHeight < count ? `${styleHeight}px` : "auto",
-          overflow: styleOverflow,
-        }}
-        className="grid grid-cols-4"
-      >
-        {array
-          .fill({
-            label: "취약성 보고서",
-            imgSrc: menuDot,
-            title: "Microsoft의 여러  보안 취약점에 대한 CNNVD의 보고서",
-            sub: "2024.03.08 13:30:24",
-          })
-          .map((item, index) => (
-            <div
-              key={index}
-              className="mt-[30px] flex h-[170px] w-[310px] flex-col justify-between rounded-xl border border-solid border-[#C3C3C3] px-4 py-4"
-            >
-              <div className="relative flex h-[30px] justify-between">
-                <div
-                  className={`h-[23px] w-[83px] rounded-full px-1 py-[2px] text-center text-[12px] font-semibold ${item.label === "취약성 알림" ? "bg-[#F2EBFF] text-[#6100FF]" : item.label === "취약성 보고서" ? "bg-[#F1F1F1] text-[#969696]" : "bg-[#FFEFEF] text-[#FF6D6D]"}`}
-                >
-                  {item.label}
-                </div>
-                <div
-                  className="w-[10px] cursor-pointer"
-                  onClick={() => miniModalHandler(index)}
-                >
-                  <Image src={item.imgSrc} alt="삼단바" width={3} height={17} />
-                </div>
-                {miniModal === index && (
-                  <div className="absolute right-[-1px] top-5 flex h-[94px] w-[70px] flex-col justify-center gap-4 rounded-lg bg-[#ffffff] text-[16px] font-medium shadow-md">
-                    <span className="w-full text-center">삭제</span>
-                    <span className="w-full text-center">공유</span>
-                  </div>
-                )}
-              </div>
-              <div className="flex flex-col gap-2">
-                <span className="text-[18px]">{item.title}</span>
-                <span className="text-[14px] font-light text-[#969696]">
-                  {item.sub}
-                </span>
-              </div>
-            </div>
-          ))}
-      </div>
-      {styleOverflow === "hidden" && (
-        <div className="mt-10 flex w-full justify-center">
-          <button
-            className="flex h-[54px] w-[103px] items-center justify-center rounded-lg border border-solid border-[#6100FF] text-[#6100FF]"
-            onClick={moreHandler}
+
+      {/* Pinned Articles 표시 */}
+      <div className="mb-5 grid grid-cols-4 gap-4">
+        {pinnedArticles.map((item) => (
+          <div
+            key={item.id}
+            className="mt-[30px] flex h-[170px] w-[310px] flex-col justify-between rounded-xl border border-solid border-[#C3C3C3] p-7"
           >
-            <span>more </span>
-            <div>
-              <Image src={plus} alt="더보기" width={18} height={18} />
+            <div className="relative flex h-[30px] justify-between">
+              <div
+                className={`h-[23px] w-[83px] rounded-full px-1 py-[2px] text-center text-[12px] font-semibold ${
+                  item.label === "취약성 알림"
+                    ? "bg-[#F2EBFF] text-[#6100FF]"
+                    : item.label === "취약성 보고서"
+                      ? "bg-[#F1F1F1] text-[#969696]"
+                      : "bg-[#FFEFEF] text-[#FF6D6D]"
+                }`}
+              >
+                {/* {item.label} */}
+                취약성 알림
+              </div>
             </div>
-          </button>
-        </div>
-      )}
+            <div className="flex flex-col gap-2">
+              <span className="line-clamp-2 font-['Pretendard'] text-lg font-semibold leading-[33.60px] text-black">
+                {item.title}
+              </span>
+              <span className="text-[14px] font-light text-[#969696]">
+                {item.subtitle}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <ClipPagination
+        totalPage={Math.ceil(pinnedIds.length / articlesPerPage)}
+      />
     </>
   );
 }
