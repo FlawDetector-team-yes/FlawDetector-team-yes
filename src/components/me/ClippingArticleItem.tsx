@@ -119,7 +119,7 @@ export default function ClippingArticleItem() {
 
   return (
     <>
-      <div className="mt-14 flex w-full justify-between">
+      <div className="mb-4 mt-14 flex w-full justify-between">
         <div>
           <h1 className="text-[32px] font-medium">Library</h1>
         </div>
