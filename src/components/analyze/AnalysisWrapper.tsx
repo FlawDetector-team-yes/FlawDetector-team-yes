@@ -92,7 +92,7 @@ export default function AnalysisWrapper() {
           // 파일 내용을 base64로 디코딩하고 selectedFiles 상태 업데이트
           const selectedFiles = fileContentsArray.map((file) => {
             const decodedContent = decodeUnicode(file.content);
-            console.log(decodedContent);
+            //console.log(decodedContent);
             return {
               sha: file.sha,
               name: file.name,

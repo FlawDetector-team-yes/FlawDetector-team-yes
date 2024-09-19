@@ -44,7 +44,6 @@ export default function ModalFileListItem({
               style={{ width: `${fileProgress?.progressValue || 0}%` }}
             ></div>
           </div>
-          {/* <span>대기중</span> */}
           <span>{fileProgress?.progressValue || 0}%</span>
         </div>
       </li>

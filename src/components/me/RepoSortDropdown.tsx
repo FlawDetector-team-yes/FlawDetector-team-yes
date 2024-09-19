@@ -10,9 +10,9 @@ import { TSortType } from "./GitRepoList";
  * @type {Record<string, TSortType>}
  */
 const OPTION_MAP: Record<string, TSortType> = {
-  //검사전: "pending",
-  //검사중: "analyze",
-  //검사완료: "finish",
+  검사전: "pending",
+  검사중: "analyze",
+  검사완료: "finish",
   최신순: "recent",
   "오래된 순": "oldest",
   이름순: "name",
