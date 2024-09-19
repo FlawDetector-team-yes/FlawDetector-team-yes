@@ -301,7 +301,7 @@ export const AnalysisModal: React.FC<any> = ({
 
       // 값을 업데이트 시켜줌
       await updateDoc(userRef, { analyzeFileResult });
-      console.log("분석 결과가 성공적으로 저장되었습니다!");
+      //console.log("분석 결과가 성공적으로 저장되었습니다!");
     } catch (error) {
       console.error("분석 결과를 저장하는 중 오류가 발생했습니다: ", error);
     }

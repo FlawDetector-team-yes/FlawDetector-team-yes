@@ -8,7 +8,6 @@ import Link from "next/link";
 function AnalyzeHeader() {
   const currentPath = usePathname();
   const { id } = useParams();
-  console.log(id);
   return (
     <>
       <Link

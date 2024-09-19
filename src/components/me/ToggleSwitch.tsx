@@ -9,7 +9,7 @@ export default function ToggleSwitch() {
       <div
         onClick={() => {
           setToggle(!toggle);
-          console.log(toggle);
+          //console.log(toggle);
         }}
         className={
           toggle === false

@@ -21,7 +21,6 @@ export const metadata: Metadata = {
 
 async function AnalyzePage() {
   const session = await getSession();
-  console.log("AnalyzePage");
   return (
     <div className="container mx-auto flex min-w-[1760px] flex-col gap-[45px]">
       {/* 헤더 섹션 */}
