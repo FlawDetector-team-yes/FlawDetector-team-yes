@@ -26,9 +26,7 @@ function Card({ children, color, bgColor, labelText, image }: CardProps) {
       </Label>
       {image && <div className="text-center text-[120px]">{image}</div>}
       <div className="flex h-[52px] items-center justify-center">
-        <div className="text-center font-['Inter'] text-base text-[#5f5f5f]">
-          {children}
-        </div>
+        <div className="text-center text-base text-[#5f5f5f]">{children}</div>
       </div>
     </div>
   );

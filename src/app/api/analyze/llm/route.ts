@@ -18,7 +18,7 @@ export async function POST(req: Request) {
       body: formdata,
     };
     const token = await fetch(
-      `http://43.203.238.76:8000/auth/token`,
+      `http://3.34.255.163:8000/auth/token`,
       tokenOption,
     ).then((res) => res.json());
 
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
       }),
     };
     const result = await fetch(
-      `http://43.203.238.76:8000/generate`,
+      `http://3.34.255.163:8000/generate`,
       option,
     ).then((res) => res.text());
 

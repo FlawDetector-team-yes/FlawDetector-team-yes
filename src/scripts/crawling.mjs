@@ -4,7 +4,7 @@ import parseTextToArray from "./parseTextToArray.js";
 import fetchToken from "./fetch-token.js";
 import addDataToFirebase from "./addDataToFirebase.js";
 
-crawling();
+// crawling();
 
 /**
  * 웹 스크래핑을 수행하여 데이터를 추출하는 함수입니다.
@@ -241,5 +241,5 @@ async function translateAndLogData(pageData, token) {
   console.log(`테이블: ${arrayTable}`);
 
   // 파이어베이스에 데이터 넣기
-  await addDataToFirebase(title, subtitle, content, arrayTable);
+  // await addDataToFirebase(title, subtitle, content, arrayTable);
 }

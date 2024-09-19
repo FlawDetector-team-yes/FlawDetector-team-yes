@@ -1,19 +1,17 @@
 import ProfileInfo from "@/components/me/ProfileInfo";
 import leftArrow from "/public/images/left-violet-arrow.png";
 import Image from "next/image";
-import { Inter } from "next/font/google";
 import Link from "next/link";
 import ToggleSwitch from "@/components/me/ToggleSwitch";
 import { SessionProvider } from "next-auth/react";
 import { Metadata } from "next";
-const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Setting",
 };
 export default function SettingPage() {
   return (
     <>
-      <div className={inter.className}>
+      <div>
         <div className="mx-auto flex w-[1314px] flex-col">
           <div className="mb-[80px] flex w-full flex-col items-center text-4xl text-[#6100FF]">
             <Link href="/me">

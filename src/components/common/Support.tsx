@@ -19,8 +19,7 @@ type FormData = z.infer<typeof schema>;
 const inputBaseStyles =
   "w-[866px] flex items-start justify-start gap-2.5 rounded-lg border border-neutral-10 p-3 focus:outline-none";
 const inputFocusStyles = "focus:border-[#6100FF]";
-const labelStyles =
-  "font-['Inter'] text-lg font-medium leading-[27px] text-black";
+const labelStyles = " text-lg font-medium leading-[27px] text-black";
 
 /**
  * `Support` 컴포넌트는 사용자가 문의사항을 작성하여 제출할 수 있는 폼을 제공합니다.
@@ -59,10 +58,10 @@ function Support() {
     >
       {/* Header */}
       <div className="flex flex-col items-start justify-start gap-[23px]">
-        <h2 className="text-center font-['Inter'] text-2xl font-bold leading-9 text-black">
+        <h2 className="text-center text-2xl font-bold leading-9 text-black">
           문의하기
         </h2>
-        <p className="font-['Inter'] text-base font-medium leading-normal text-[#8e8e8e]">
+        <p className="text-base font-medium leading-normal text-[#8e8e8e]">
           문의하고싶은 내용을 구체적으로 작성해주셔야 피드백이 정상적으로
           반영됩니다.
         </p>
@@ -118,7 +117,7 @@ function Support() {
         type="submit"
         className="inline-flex h-[53px] w-[866px] items-center justify-center gap-2.5 rounded-lg bg-primary-500"
       >
-        <span className="font-['Inter'] text-lg font-semibold leading-[27px] text-white">
+        <span className="text-lg font-semibold leading-[27px] text-white">
           문의 보내기
         </span>
       </button>
