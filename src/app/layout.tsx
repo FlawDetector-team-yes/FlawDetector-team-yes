@@ -27,8 +27,8 @@ export const metadata: Metadata = {
     },
   },
   title: {
-    template: "%s | FlawDetector",
-    default: "FlawDetector",
+    template: "%s | 플로디텍터",
+    default: "플로디텍터",
   },
   description:
     "인공지능의 뛰어난 분석 능력을 활용하여 코드의 보안 취약점을 신속하게 해결하세요.",
@@ -39,6 +39,7 @@ export const metadata: Metadata = {
     "Next.js 보안",
     "코드 보안 최신 이슈",
     "취약점 탐지",
+    "FlawDetector",
   ],
   applicationName: "플로디텍터",
   openGraph: {
