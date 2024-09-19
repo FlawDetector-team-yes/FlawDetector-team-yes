@@ -8,7 +8,7 @@ export default async function handler(message, token) {
   const url = "http://43.203.238.76:8000/generate";
 
   const data = {
-    user_message: `${message} 한글로 번역, 글자 생략 금지`,
+    user_message: `${message} When 【 appears, replace it with [. When 】 appears, replace it with ] `,
     temperature: 0.9,
     top_p: 0.9,
   };

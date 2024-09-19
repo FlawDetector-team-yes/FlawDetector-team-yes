@@ -3,7 +3,7 @@
  * @returns {Promise<string | undefined>} - 성공 시 서버에서 받은 액세스 토큰 문자열을 반환합니다. 실패 시 undefined를 반환합니다.
  */
 export default async function fetchToken() {
-  const url = "http://43.203.238.76:8000/auth/token";
+  const url = "http://3.34.255.163:8000/auth/token";
 
   // 요청에 사용할 데이터 생성
   const data = new URLSearchParams({
