@@ -15,7 +15,7 @@ import db from "./firebaseClient"; // Firestore 초기화된 객체
  * @param {string} docId - 핀하거나 해제할 문서의 ID
  * @returns {Promise<void>}
  */
-async function useFetchPin(docId: string, session: any) {
+async function fetchPin(docId: string, session: any) {
   const userName = session?.user?.name;
   console.log(userName);
 
@@ -63,4 +63,4 @@ async function useFetchPin(docId: string, session: any) {
   }
 }
 
-export default useFetchPin;
+export default fetchPin;
