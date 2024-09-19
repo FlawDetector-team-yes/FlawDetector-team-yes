@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: "/private/",
     },
-    sitemap: "https://flaw-detector-team-yes-seven.vercel.app//sitemap.xml",
+    sitemap: "https://flaw-detector-team-yes-seven.vercel.app/sitemap.xml",
   };
 }
 

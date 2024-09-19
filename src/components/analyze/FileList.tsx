@@ -82,7 +82,9 @@ export default function FileList() {
               width={24}
               height={24}
             />
-            <span className="text-base text-[#3F3F3F]">{moveDirName}</span>
+            <span className="w-[180px] truncate text-base text-[#3F3F3F]">
+              {moveDirName}
+            </span>
           </div>
         )}
         {files.map((file) => {
