@@ -5,7 +5,7 @@ export async function POST(req: Request) {
 
   console.log(body);
   try {
-    const auth_url = "http://43.203.238.76:8000/auth/token";
+    const auth_url = "http://3.34.255.163:8000/auth/token";
     const formData = new URLSearchParams();
     formData.append("username", `${process.env.NEXT_PUBLIC_USERNAME}`);
     formData.append("password", `${process.env.NEXT_PUBLIC_PASSWORD}`);
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
       }),
     };
     const result = await fetch(
-      `http://43.203.238.76:8000/generate`,
+      `http://3.34.255.163:8000/generate`,
       resultRequest,
     ).then((res) => res.text());
     return NextResponse.json(result);

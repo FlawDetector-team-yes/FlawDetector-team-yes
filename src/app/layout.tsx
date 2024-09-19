@@ -88,8 +88,8 @@ export default async function RootLayout({
   const session = await getSession();
 
   return (
-    <html lang="ko">
-      <body className={`${inter.className} ${pretendard.variable} relative`}>
+    <html lang="ko" className={pretendard.variable}>
+      <body className={`relative`}>
         <NextTopLoader color="#6100ff" />
         <Gnb />
         <SessionProvider session={session}>

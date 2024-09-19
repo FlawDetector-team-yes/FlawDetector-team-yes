@@ -3,6 +3,14 @@
 @tailwind utilities;
 
 @import "../components/common/button/button.css";
+:root {
+  --font-family: var(--font-pretendard);
+}
+
+html,
+body {
+  font-family: var(--font-family), sans-serif !important;
+}
 /* width */
 ::-webkit-scrollbar {
   width: 10px;
