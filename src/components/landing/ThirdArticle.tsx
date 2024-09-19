@@ -24,12 +24,12 @@ function ThirdArticle() {
         <CaretDoubleDown />
       </div>
       <div className="flex h-[280px] flex-col items-end justify-center gap-[34px]">
-        <h2 className="text-right font-['Inter'] text-6xl font-bold leading-[80px] text-primary-500">
+        <h2 className="text-right text-6xl font-bold leading-[80px] text-primary-500">
           최신 보안 동향을
           <br />
           실시간으로 확인하세요.
         </h2>
-        <p className="text-right font-['Inter'] text-xl font-medium text-[#969696]">
+        <p className="text-right text-xl font-medium text-[#969696]">
           실시간으로 최신 보안 동향을 제공하여
           <br />
           개발자들이 보안 취약점에 대한 최신 정보를 받을 수 있어

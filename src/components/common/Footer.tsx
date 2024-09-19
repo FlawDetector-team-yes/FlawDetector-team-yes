@@ -9,8 +9,7 @@ function Footer() {
   const currentPath = usePathname();
 
   //텍스트 스타일
-  const textBaseClass =
-    "text-center font-['Inter'] text-base font-medium leading-normal";
+  const textBaseClass = "text-center  text-base font-medium leading-normal";
   const textGrayClass = `${textBaseClass} text-[#969696]`;
   const textDarkClass = `${textBaseClass} text-[#3f3f3f]`;
 
