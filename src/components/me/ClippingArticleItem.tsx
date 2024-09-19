@@ -18,6 +18,7 @@ type TArticle = {
 
 export default function ClippingArticleItem() {
   const { data: session } = useSession(); // next-auth로 세션 정보 가져오기
+  const [firstArticles, setFirstArticles] = useState<TArticle[]>([]);
   const [pinnedArticles, setPinnedArticles] = useState<TArticle[]>([]);
   const [pinnedIds, setPinnedIds] = useState<string[]>([]); // pinnedIds 상태를 문자열 배열로 관리
   const searchParams = useSearchParams(); // URL에서 쿼리 파라미터 가져오기
@@ -28,19 +29,26 @@ export default function ClippingArticleItem() {
 
   // Firestore에서 pinnedIds에 해당하는 문서를 가져오는 함수
   async function getPinnedArticles(pinnedIds: string[]) {
-    try {
-      const q = query(
-        collection(db, "vulnerability"),
-        where("__name__", "in", pinnedIds),
-      );
-      const querySnapshot = await getDocs(q);
+    let articles: TArticle[] = [...firstArticles]; // 처음에 firstArticles 값으로 시작
 
-      let articles: TArticle[] = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        label: doc.data().label,
-        title: doc.data().title,
-        subtitle: doc.data().subtitle,
-      }));
+    try {
+      if (firstArticles.length === 0) {
+        // firstArticles가 비어 있으면 Firestore에서 데이터를 가져옴
+        const q = query(
+          collection(db, "vulnerability"),
+          where("__name__", "in", pinnedIds),
+        );
+        const querySnapshot = await getDocs(q);
+
+        articles = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          label: doc.data().label,
+          title: doc.data().title,
+          subtitle: doc.data().subtitle,
+        }));
+
+        setFirstArticles(articles); // 처음 데이터를 firstArticles에 저장
+      }
 
       // 정렬 처리
       if (sort === "recent") {
@@ -111,7 +119,7 @@ export default function ClippingArticleItem() {
 
   return (
     <>
-      <div className="mt-14 flex w-full justify-between">
+      <div className="mb-4 mt-14 flex w-full justify-between">
         <div>
           <h1 className="text-[32px] font-medium">Library</h1>
         </div>
@@ -120,11 +128,11 @@ export default function ClippingArticleItem() {
       </div>
 
       {/* Pinned Articles 표시 */}
-      <div className="mb-5 grid grid-cols-4 gap-4">
+      <div className="mb-5 grid min-h-[728px] grid-cols-4 gap-4">
         {pinnedArticles.map((item) => (
           <div
             key={item.id}
-            className="mt-[30px] flex h-[170px] w-[310px] flex-col justify-between rounded-xl border border-solid border-[#C3C3C3] p-7"
+            className="flex h-[170px] w-[310px] flex-col justify-between rounded-xl border border-solid border-[#C3C3C3] p-7"
           >
             <div className="relative flex h-[30px] justify-between">
               <div
