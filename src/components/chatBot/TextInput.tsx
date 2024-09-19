@@ -71,7 +71,7 @@ export default function TextInput() {
   useEffect(() => {
     if (aiTextResponse !== "") {
       addAiText(aiTextResponse);
-      console.log(aiTextList);
+      //console.log(aiTextList);
     }
   }, [aiTextResponse]);
 

@@ -17,7 +17,6 @@ import db from "./firebaseClient"; // Firestore 초기화된 객체
  */
 async function fetchPin(docId: string, session: any) {
   const userName = session?.user?.name;
-  console.log(userName);
 
   if (!userName) {
     console.error("로그인된 유저가 없습니다.");
@@ -50,13 +49,13 @@ async function fetchPin(docId: string, session: any) {
       await updateDoc(userDocRef, {
         pins: arrayRemove(docId),
       });
-      console.log(`Document ID ${docId} removed from pins`);
+      //console.log(`Document ID ${docId} removed from pins`);
     } else {
       // 핀되지 않은 경우 -> 핀 추가 (배열에 추가)
       await updateDoc(userDocRef, {
         pins: arrayUnion(docId),
       });
-      console.log(`Document ID ${docId} added to pins`);
+      //console.log(`Document ID ${docId} added to pins`);
     }
   } catch (error) {
     console.error("Firestore에서 핀 상태 업데이트 중 오류 발생:", error);

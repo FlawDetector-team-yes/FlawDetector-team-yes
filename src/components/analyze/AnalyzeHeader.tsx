@@ -7,7 +7,6 @@ import Link from "next/link";
 
 function AnalyzeHeader() {
   const { id } = useParams();
-  console.log(id);
   return (
     <>
       <Link href={`/me/repos/${id}`}>

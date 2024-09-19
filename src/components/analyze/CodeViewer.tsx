@@ -92,9 +92,9 @@ export default function CodeViewer() {
             ]}
             editable={false}
             theme={eclipse}
-            onChange={(value) => {
-              console.log("value:", value);
-            }}
+            //onChange={(value) => {
+            //  console.log("value:", value);
+            //}}
           />
           <style jsx global>{`
             /* CodeMirror 컨테이너 스타일 */
