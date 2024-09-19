@@ -43,7 +43,6 @@ export default function FileAnalysisSideBar() {
   useEffect(() => {
     if (resSelected?.result) {
       const result = `${resSelected.result}`.trim(); // resSelected에서 result를 가져옴
-      console.log(result); // 데이터가 잘 들어오는지 확인
 
       try {
         // 보안 취약점 부분을 JSON 형식으로 변환
@@ -93,11 +92,8 @@ export default function FileAnalysisSideBar() {
         // JSON.parse가 가능한 형태로 만들기 위해 cleanedResult를 {}로 감싸서 변환
         const finalResult = `{${cleanedResult}}`;
 
-        console.log("Final JSON String:", finalResult);
-
         // JSON.parse를 사용해 문자열을 객체로 변환
         const parsedData = JSON.parse(finalResult);
-        console.log("Parsed Data:", parsedData);
 
         // 보안 취약점 데이터 추출
         const securityData = parsedData.securityRes || [];
@@ -128,15 +124,15 @@ export default function FileAnalysisSideBar() {
   };
 
   // 상태 확인용 콘솔 로그
-  useEffect(() => {
-    console.log("Updated suggestRes:", suggestRes);
-  }, [suggestRes]);
+  //useEffect(() => {
+  //  console.log("Updated suggestRes:", suggestRes);
+  //}, [suggestRes]);
 
-  useEffect(() => {
-    console.log("Updated securityRes:", securityRes);
-  }, [securityRes]);
+  //useEffect(() => {
+  //  console.log("Updated securityRes:", securityRes);
+  //}, [securityRes]);
 
-  console.log(analyzeFileResult);
+  //console.log(analyzeFileResult);
 
   return (
     <>

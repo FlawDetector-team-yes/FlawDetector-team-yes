@@ -48,7 +48,7 @@ function Support() {
   const onSubmit = (data: FormData) => {
     setIsOpen && setIsOpen();
     setModalContent && setModalContent(SupportMessageModal);
-    console.log(data);
+    //console.log(data);
     // 여기서 데이터 처리
   };
 

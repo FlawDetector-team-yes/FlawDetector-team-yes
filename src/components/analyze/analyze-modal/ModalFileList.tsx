@@ -14,7 +14,6 @@ export default function ModalFileList() {
   const selectedFiles = useSelectedFilesStore((state) => state.selectedFiles);
   const params = useParams<{ id: string }>();
   const repoName = params.id;
-  console.log(JSON.stringify(selectedFiles));
   return (
     <>
       <ul className="h-[220px] w-[590px] overflow-y-auto rounded-lg border-[1px] border-[#C3C3C3]">

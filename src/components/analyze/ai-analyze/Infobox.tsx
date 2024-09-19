@@ -26,7 +26,6 @@ function Infobox({
   // 코드 복사 로직
   const handleCopyCode = (code: string) => {
     navigator.clipboard.writeText(code);
-    console.log("코드가 복사되었습니다.");
   };
 
   return (

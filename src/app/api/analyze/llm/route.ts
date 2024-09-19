@@ -22,8 +22,6 @@ export async function POST(req: Request) {
       tokenOption,
     ).then((res) => res.json());
 
-    // console.log(content);
-
     const option = {
       method: "POST",
       headers: {
@@ -41,7 +39,6 @@ export async function POST(req: Request) {
       `http://43.203.238.76:8000/generate`,
       option,
     ).then((res) => res.text());
-    console.log(result);
 
     return NextResponse.json(result);
   } catch (e: any) {
