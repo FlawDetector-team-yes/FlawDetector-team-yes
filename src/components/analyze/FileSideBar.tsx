@@ -50,9 +50,9 @@ export default function FileSideBar() {
       <aside className="flex max-h-fit w-[247px] flex-col justify-between gap-5">
         {/* 통계 */}
         <div className="flex h-fit w-[246px] flex-col justify-evenly gap-6 rounded-lg border-[1px] border-[#C3C3C3] p-5">
-          <StateItem src={xMarkError} alt="검출된 취약점" count={12} />
-          <StateItem src={triangleYellow} alt="수정 제안" count={8} />
-          <StateItem src={circleGreen} alt="문제 없음" count={23} />
+          <StateItem src={xMarkError} alt="검출된 취약점" count={"-"} />
+          <StateItem src={triangleYellow} alt="수정 제안" count={"-"} />
+          <StateItem src={circleGreen} alt="문제 없음" count={"-"} />
         </div>
 
         <div className="h-[994px] w-[247px] scroll-smooth rounded-xl border-[1px] border-[#C3C3C3]">

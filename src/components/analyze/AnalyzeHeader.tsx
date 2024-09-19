@@ -2,14 +2,17 @@
 
 import Image from "next/image";
 import leftVioletArrow from "../../../public/images/left-violet-arrow.png";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import Link from "next/link";
 
 function AnalyzeHeader() {
+  const currentPath = usePathname();
   const { id } = useParams();
   return (
     <>
-      <Link href={`/me/repos/${id}`}>
+      <Link
+        href={currentPath === `/me/repos/${id}` ? "/me" : `/me/repos/${id}`}
+      >
         <Image
           src={leftVioletArrow}
           alt="Left Violet Arrow"
