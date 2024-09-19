@@ -58,14 +58,14 @@ export const metadata: Metadata = {
     ],
     type: "website",
   },
-  icons: [
-    {
-      rel: "icon",
-      type: "image/png",
-      sizes: "180x180",
-      url: "/images/bug-favicon.png",
-    },
-  ],
+  icons: {
+    icon: [
+      {
+        type: "image/png",
+        url: "/images/bug-favicon.png",
+      },
+    ],
+  },
   robots: {
     index: true,
     follow: true,
