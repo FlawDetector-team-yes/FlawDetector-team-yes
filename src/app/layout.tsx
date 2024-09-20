@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   ],
   applicationName: "플로디텍터",
   openGraph: {
-    title: "AI기반 코드 보안 취약점 분석 플랫폼 | 플로디텍터",
+    title: "플로디텍터 | AI기반 코드 보안 취약점 분석 플랫폼",
     description:
       "인공지능의 뛰어난 분석 능력을 활용하여 코드의 보안 취약점을 신속하게 해결하세요.",
     url: "https://flaw-detector-team-yes-seven.vercel.app/",
