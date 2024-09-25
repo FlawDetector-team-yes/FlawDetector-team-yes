@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+![Logo](https://github.com/user-attachments/assets/3abf54ad-3240-419a-9e21-67a150995085)
 
-## Getting Started
+# 😉 [FlawDetector](https://www.easy-me.com/)
 
-First, run the development server:
+**사이트 바로 가기 👉 [클릭!](https://www.easy-me.com/)**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+TODO: 간단한 소개글
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+<br>
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+# 🌈 Background
+웅진씽크빅 Udemy 주최 일경험 지원사업, 스나이퍼 팩토리의 기획안을 받아 프로젝트를 진행.
 
-## Learn More
+TODO: 아래같은 느낌으로 추가
+EASYME.md를 통해 조금이라도 개발자들이 README를 작성하는데 겪는 불편함이 해소되길 바라는 마음으로 만들게 되었습니다.
 
-To learn more about Next.js, take a look at the following resources:
+<br>
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# 🔗 Link
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- [https://www.easy-me.com](https://www.easy-me.com/)
 
-## Deploy on Vercel
+## Github Repositories
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Client: [https://github.com/EASYME-md/client](https://github.com/EASYME-md/client)
+- Server: [https://github.com/EASYME-md/server](https://github.com/EASYME-md/server)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+<br>
+
+# 🔍 Preview
+TODO: 각 페이지별로 gif와 간략한 설명 또는 어떤 점을 고민해서 만들었는지?
+![title](public/assets/readme/preview.gif)
+
+<br>
+
+
+# ⚠️ Requirement
+TODO: llm 제공과 관련된 ..
+최신 Chrome Browser 사용을 권장합니다.
+
+<br>
+
+
+
+# 🪃 Skills
+
+## Client
+
+- ES2015+
+- React
+- React Router
+- React Helmet
+- Redux Toolkit
+- Redux Saga
+- Google Analytics
+- Emotion
+
+## Server
+
+- ES2015+
+- Node.js
+- Express
+- MongoDB Atlas
+- Mongoose
+
+## Test
+
+- Client: Jest, Testing Library
+- Server: Mocha, Chai, Supertest
+
+<br>
+
+# 🪛 Project Control
+
+- Version Control: Git, Github
+- Task Control: Notion, Figma
+
+<br>
+
+# 🚀 Deployment
+
+- Client: Netlify
+- Server: AWS Elastic Beanstalk
+
+<br>
+
+# 🧗회고
+TODO: 회고 링크
+
+<br>
+
+# 🙏 마무리하며..
+TODO:
+"가능할까? 가능하다!"   팀 YES 뭐 이런..?
