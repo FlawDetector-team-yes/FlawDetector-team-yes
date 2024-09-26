@@ -128,7 +128,7 @@ export default function ClippingArticleItem() {
       </div>
 
       {/* Pinned Articles 표시 */}
-      <div className="mb-5 grid min-h-[728px] grid-cols-4 gap-4">
+      <div className="mb-5 grid min-h-[728px] grid-cols-4 grid-rows-4 gap-4">
         {pinnedArticles.map((item) => (
           <div
             key={item.id}
