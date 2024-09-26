@@ -72,18 +72,17 @@ YES(예쓰) 개발 팀
 
 <br />
 
-
-
 # 🔍 Preview
 |||
 |---|---|
-|<img src="https://user-images.githubusercontent.com/59721896/231935159-46048a19-0043-452e-888d-6c55705fab6b.gif">|<img src="https://user-images.githubusercontent.com/59721896/231935775-97f354b5-db19-4e7c-9a2d-abdd117f7f57.gif">|
-|`메인 화면` 서비스 소개|`전통주 검색` ElasticSearch|
-|<img src="https://user-images.githubusercontent.com/59721896/231935357-de6b71b9-3abd-4c48-a9ef-a331122d917e.gif">|<img src="https://user-images.githubusercontent.com/59721896/231945641-3333531f-9df2-4673-90c6-1a55564385da.gif">|
-|`전통주 페이지` 카테고리, 정렬|`전통주 상세 페이지` 안주, 비슷한 술, 맛 보정, 리뷰, 식당|
-|<img src="https://user-images.githubusercontent.com/59721896/231936088-17f12ae7-d212-415a-8757-428b86fb4e6a.gif">|<img src="https://user-images.githubusercontent.com/59721896/231944103-8e13e8b7-17d0-4a2a-b4fe-c91b7eb4cf8f.gif">|
-|`전통주 지도` 양조장, 축제, 체험 프로그램|`나만의 전통주 추천` |
-|
+|<img src="https://github.com/user-attachments/assets/df4b4c78-5c1f-4c71-b338-4875beabb2a4" width="600px">|<img src="https://github.com/user-attachments/assets/4a88e2c5-950a-4408-ab91-0e63f216f674" width="580px">|
+|`메인 화면` 서비스 소개|`MY 저장소 페이지` Git Repository |
+|<img src="https://github.com/user-attachments/assets/c90ce4b7-b36a-4760-a22f-c14f75e8d9c1" width="600px" >|<img src="https://github.com/user-attachments/assets/eed14afc-18cb-4f1b-91f3-e689da4a35bc" width="580px">|
+|`취약점 DB 페이지` 취약점 기사|`취약점 핀 페이지` 핀 된 취약점 기사|
+|<img src="">|<img src="">|
+|`취약점 분석 페이지` 취약점 분석|`나만의 전통주 추천`|
+|<img src="">|<img src="">|
+|`취약점 분석 페이지` 취약점 분석|`나만의 전통주 추천`|
 
 
 <br />
