@@ -1,12 +1,21 @@
 "use client";
+
 import Image from "next/image";
 import sfacspace from "/public/images/sfacspace.svg";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import MainBackground from "../../../public/images/bg-circle.svg";
+import { setFixedZoom } from "@/lib/setFixedZoom";
+import { useEffect } from "react";
 
 function Footer() {
   const currentPath = usePathname();
+
+  // 문서 로드 시 배율 고정
+  // 컴포넌트가 마운트되자마자 배율 고정 함수 실행
+  useEffect(() => {
+    setFixedZoom();
+  }, []);
 
   //텍스트 스타일
   const textBaseClass = "text-center  text-base font-medium leading-normal";
@@ -99,3 +108,6 @@ function Footer() {
 }
 
 export default Footer;
+function useRouteLoader() {
+  throw new Error("Function not implemented.");
+}
