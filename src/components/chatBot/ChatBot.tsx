@@ -26,6 +26,7 @@ type CombinedMessage =
   | { type: "result"; data: TReposState };
 
 export default function ChatBot({ detailData }: DetailContentProps) {
+  detailData = detailData || null;
   const { userTextList, aiTextList, resultFolderList, loading } =
     chatBotStore();
 
