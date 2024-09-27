@@ -24,7 +24,7 @@ type MailOptionType = {
 
 export function sendEmail({ email, name, content }: ContactType) {
   const mailOptions: MailOptionType = {
-    to: "69a7a22b1a-7849fa@inbox.mailtrap.io" || "",
+    to: "69a7a22b1a-7849fa@inbox.mailtrap.io",
     from: email,
     subject: `[서비스문의]: ${name}`,
     html: `
