@@ -39,7 +39,7 @@ export default function AnalysisWrapper() {
     const updateSidebarHeight = () => {
       if (sidebarRef.current) {
         const rect = sidebarRef.current.getBoundingClientRect();
-        setSidebarHeight(rect.height);
+        setSidebarHeight(rect.height / 0.67);
       }
     };
 
@@ -52,8 +52,8 @@ export default function AnalysisWrapper() {
       if (mainRef.current) {
         const rect = mainRef.current.getBoundingClientRect();
         setToastPosition({
-          top: rect.top,
-          right: rect.right,
+          top: rect.top / 0.67,
+          right: rect.right / 0.67,
         });
       }
     };
