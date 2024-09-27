@@ -3,28 +3,74 @@
 import chat from "../../../public/images/chat.png";
 import Image from "next/image";
 import chatActive from "../../../public/images/chat-active.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import bgBug from "../../../public/images/bg-bug-icon.svg";
 import TextInput from "./TextInput";
 import chatBotStore from "@/store/chatBotStore";
 import AiResponse from "./AiResponse";
 
 import UserRequest from "./UserRequest";
+import FolderResult from "./FolderResult";
 
-export default function ChatBot() {
-  const { userTextList, aiTextList } = chatBotStore();
+import { DetailContentProps } from "@/types/vulnerability";
+import Loading from "./Loading";
+
+type TReposState = {
+  repoId: string;
+  repoName: string;
+  state: string;
+};
+
+type CombinedMessage =
+  | { type: "user" | "ai" | "loading"; text: string; loading?: boolean }
+  | { type: "result"; data: TReposState };
+
+export default function ChatBot({ detailData }: DetailContentProps) {
+  const { userTextList, aiTextList, resultFolderList, loading } =
+    chatBotStore();
+
   const [chatBotActive, setChatBotActive] = useState(false);
-  const maxLength = Math.max(userTextList.length, aiTextList.length); // 두 배열의 최대 길이 계산
 
-  const combinedTextList = []; // 두 리스트를 번갈아가며 결합
+  // 상태가 변경될 때마다 combinedTextList 생성
+
+  const maxLength = Math.max(
+    userTextList.length,
+    aiTextList.length,
+    resultFolderList.length,
+  );
+
+  const combinedList: CombinedMessage[] = [];
+
   for (let i = 0; i < maxLength; i++) {
     if (i < userTextList.length) {
-      combinedTextList.push({ type: "user", text: userTextList[i].text });
+      combinedList.push({ type: "user", text: userTextList[i].text });
+      combinedList.push({ type: "loading", text: "", loading: loading });
     }
-    if (i < aiTextList.length) {
-      combinedTextList.push({ type: "ai", text: aiTextList[i].text });
+    if (i < aiTextList.length && userTextList[i].text !== "검사결과") {
+      combinedList.pop();
+      combinedList.push({
+        type: "ai",
+        text: aiTextList[i].text,
+      });
+    } else if (userTextList[i].text === "검사결과") {
+      if (resultFolderList.length === 0) {
+        combinedList.pop();
+        combinedList.push({
+          type: "ai",
+          text: "검사결과가 없습니다.",
+        });
+      } else {
+        for (let j = 0; j < resultFolderList.length; j++) {
+          combinedList.pop();
+          combinedList.push({
+            type: "result",
+            data: resultFolderList[j],
+          });
+        }
+      }
     }
   }
+
   const today = new Date();
   let hours = today.getHours(); // 시
   let minutes = today.getMinutes(); // 분
@@ -85,16 +131,29 @@ export default function ChatBot() {
                   </div>
                 </div>
               </div>
-              {combinedTextList.map((item, index) => {
+
+              {combinedList?.map((item, index) => {
                 if (item.type === "user") {
-                  return <UserRequest key={index} text={item.text} />;
-                } else {
-                  return <AiResponse key={index} text={item.text} />;
+                  return <UserRequest key={index} text={item.text as string} />;
+                }
+                if (item.type === "loading") {
+                  return <Loading key={index} />;
+                }
+                if (item.type === "ai") {
+                  return <AiResponse key={index} text={item.text as string} />;
+                }
+                if (item.type === "result") {
+                  return (
+                    <FolderResult
+                      key={index}
+                      data={item?.data as TReposState}
+                    />
+                  );
                 }
               })}
             </div>
           </div>
-          <TextInput />
+          <TextInput detailData={detailData} dataId={""} />
         </div>
 
         <div

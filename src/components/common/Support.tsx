@@ -1,19 +1,15 @@
 "use client";
-import React from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import React, { useState } from "react";
+
 import SupportMessageModal from "../modal/SupportMessageModal";
 import useModalStore from "@/store/useModalStore";
+import { ContactType } from "@/hook/emailer";
 
-// 유효성 검사
-const schema = z.object({
-  name: z.string().min(1, "이름을 입력해주세요."),
-  email: z.string().email("유효한 이메일을 입력해주세요."),
-  message: z.string().min(1, "메시지를 입력해주세요."),
-});
-
-type FormData = z.infer<typeof schema>;
+const initialContent = {
+  name: "",
+  email: "",
+  content: "",
+};
 
 // 공용 스타일 변수
 const inputBaseStyles =
@@ -32,29 +28,66 @@ const labelStyles = " text-lg font-medium leading-[27px] text-black";
  * @returns {JSX.Element} 사용자 문의 폼을 렌더링하는 JSX 요소를 반환합니다.
  */
 function Support() {
+  const [content, setContent] = useState(initialContent);
+  const [errors, setErrors] = useState({ name: "", email: "", content: "" });
   // 모달
   const { setIsOpen, setModalContent } = useModalStore();
+  //onChange e.target으로 각 각 name email content를 입력받습니다.
+  function onChangeHandler(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) {
+    const { name, value } = e.target;
+    setContent((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+  //emailer api route POST방식으로 데이터를 요청합니다.
+  //그 후 서버에서는 요청값으로 email SMTP서버로 요청합니다.
+  async function sendEmailHandler(emailForm: ContactType) {
+    const response = await fetch(`/api/email`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(emailForm),
+    });
+    const data = await response.json();
+    return data;
+  }
 
-  // Form 관련 로직
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({
-    resolver: zodResolver(schema),
-  });
-
-  const onSubmit = (data: FormData) => {
-    setIsOpen && setIsOpen();
-    setModalContent && setModalContent(SupportMessageModal);
-    //console.log(data);
-    // 여기서 데이터 처리
-  };
+  async function onSubmitHandler(e: React.FormEvent<HTMLFormElement>) {
+    //유효성검사
+    let isValid = true;
+    e.preventDefault();
+    const newErrors = { name: "", email: "", content: "" };
+    if (content.name.length < 2) {
+      newErrors.name = "정확한 이름을 입력해주세요.";
+      console.log("실행");
+      isValid = false;
+    }
+    if (!content.email.includes("@")) {
+      newErrors.email = "정확한 이메일을 입력해주세요.";
+      isValid = false;
+    }
+    if (content.content.length < 5) {
+      newErrors.content = "정확한 메세지를 입력해주세요.";
+      isValid = false;
+    }
+    setErrors(newErrors);
+    //유효성통과시 이메일 send
+    if (isValid) {
+      sendEmailHandler(content);
+      setIsOpen && setIsOpen();
+      setModalContent && setModalContent(SupportMessageModal);
+    }
+  }
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={onSubmitHandler}
       className="inline-flex w-[985px] flex-col items-start justify-start gap-8 rounded-[40px] border border-primary-500 bg-white p-[60px]"
+      noValidate
     >
       {/* Header */}
       <div className="flex flex-col items-start justify-start gap-[23px]">
@@ -73,12 +106,15 @@ function Support() {
           Name
         </label>
         <input
+          onChange={onChangeHandler}
           id="name"
-          className={`${inputBaseStyles} ${inputFocusStyles} ${errors.name ? "border-red-500" : ""}`}
+          name="name"
+          value={content.name}
+          className={`${inputBaseStyles} ${inputFocusStyles} ${errors.name ? "border-red-500" : ""} `}
           placeholder="이름을 적어주세요."
-          {...register("name")}
         />
-        {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+
+        {errors?.name && <p className="text-red-500">{errors.name}</p>}
       </div>
 
       {/* Email Field */}
@@ -87,13 +123,15 @@ function Support() {
           Email
         </label>
         <input
+          onChange={onChangeHandler}
           id="email"
+          name="email"
+          value={content.email}
           type="email"
-          className={`${inputBaseStyles} ${inputFocusStyles} bg-[#f0f0f0] ${errors.email ? "border-red-500" : ""}`}
+          className={`${inputBaseStyles} ${inputFocusStyles} bg-[#f0f0f0]`}
           placeholder="justin@floatfactory.kr"
-          {...register("email")}
         />
-        {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+        {errors.email && <p className="text-red-500">{errors.email}</p>}
       </div>
 
       {/* Message Field */}
@@ -102,14 +140,14 @@ function Support() {
           Message
         </label>
         <textarea
+          onChange={onChangeHandler}
           id="message"
-          className={`${inputBaseStyles} ${inputFocusStyles} h-[226px] ${errors.message ? "border-red-500" : ""}`}
+          name="content"
+          value={content.content}
+          className={`${inputBaseStyles} ${inputFocusStyles} ${errors.content ? "border-red-500" : ""} h-[226px] resize-none`}
           placeholder="내용을 적어주세요."
-          {...register("message")}
         />
-        {errors.message && (
-          <p className="text-red-500">{errors.message.message}</p>
-        )}
+        {errors.content && <p className="text-red-500">{errors.content}</p>}
       </div>
 
       {/* Submit Button */}

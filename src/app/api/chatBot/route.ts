@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const body = await req.json();
-  // const [{ id, text }] = body;
 
   console.log(body);
   try {
@@ -26,14 +25,15 @@ export async function POST(req: Request) {
       },
       body: JSON.stringify({
         user_message: `${body}`,
-        temperature: 0.9,
-        top_p: 0.9,
+        temperature: 0.1,
+        top_p: 0.1,
       }),
     };
     const result = await fetch(
       `http://3.34.255.163:8000/generate`,
       resultRequest,
     ).then((res) => res.text());
+    console.log(result);
     return NextResponse.json(result);
   } catch (error) {
     console.log(error);
