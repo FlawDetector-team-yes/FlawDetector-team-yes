@@ -126,7 +126,8 @@ export const AnalysisModal: React.FC<any> = ({
           fileId: file.sha,
           name: file.name,
           content: file.content,
-          apiUrl: `/api/analyze/llm`,
+          // apiUrl: `/api/analyze/llm`,
+          apiUrl: `/api/analyze/gemini`,
           currState: currentStep,
         });
 
