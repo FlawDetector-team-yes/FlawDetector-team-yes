@@ -91,6 +91,7 @@ export default function FileAnalysisSideBar() {
 
         // JSON.parse가 가능한 형태로 만들기 위해 cleanedResult를 {}로 감싸서 변환
         const finalResult = `{${cleanedResult}}`;
+        console.log(finalResult);
 
         // JSON.parse를 사용해 문자열을 객체로 변환
         const parsedData = JSON.parse(finalResult);
@@ -102,6 +103,7 @@ export default function FileAnalysisSideBar() {
         // Zustand store에 데이터 업데이트
         setSecurityRes(securityData);
         setSuggestRes(suggestData);
+
         // error store 초기화
         setErrorMsg({ title: "", msg: "" });
       } catch (error) {

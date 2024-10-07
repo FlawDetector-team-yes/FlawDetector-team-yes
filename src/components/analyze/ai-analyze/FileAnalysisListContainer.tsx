@@ -29,7 +29,7 @@ function FileAnalysisListContainer() {
     const updateSidebarHeight = () => {
       if (sidebarRef.current) {
         const rect = sidebarRef.current.getBoundingClientRect();
-        setSidebarHeight(rect.height);
+        setSidebarHeight(rect.height / 0.67);
       }
     };
 
@@ -87,7 +87,7 @@ function FileAnalysisListContainer() {
       </section>
       <div
         className="flex w-full flex-col gap-8"
-        style={{ height: sidebarHeight }}
+        style={{ height: `${sidebarHeight}px` }}
       >
         <ResCodeViewer />
         <FileAnalysisList />
