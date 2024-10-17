@@ -37,4 +37,8 @@ body {
   .item-middle {
     @apply flex items-center justify-center;
   }
+
+  .cm-content {
+    all: unset;
+  }
 }
