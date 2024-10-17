@@ -2,7 +2,7 @@
 
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
-import { eclipse } from "@uiw/codemirror-theme-eclipse/esm/index";
+import { eclipse } from "@uiw/codemirror-theme-eclipse";
 import magnifier from "../../../public/images/magnifier.png";
 import {
   EditorView,

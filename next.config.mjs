@@ -13,6 +13,8 @@ const nextConfig = {
   experimental: {
     optimizeCss: true,
   },
+
+  assetPrefix: "./", // 정적 자원 경로를 명확하게 설정
 };
 
 export default nextConfig;
