@@ -3,6 +3,8 @@
 @tailwind utilities;
 
 @import "../components/common/button/button.css";
+
+
 :root {
   --font-family: var(--font-pretendard);
 }
@@ -36,9 +38,5 @@ body {
 @layer components {
   .item-middle {
     @apply flex items-center justify-center;
-  }
-
-  .cm-content {
-    all: unset;
   }
 }
